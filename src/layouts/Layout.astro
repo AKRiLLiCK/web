@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import Taskbar from '../components/Taskbar.astro';
+import Dock from '../components/Dock.astro';
 
 interface Props {
   title: string;
@@ -15,12 +15,29 @@ const { title } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-    <meta name="description" content="Acrilic NT Subsystem" />
+    <meta name="description" content="Acrilic Portfolio" />
   </head>
   <body>
-    <div class="desktop-ui">
+    <div class="chassis-ui">
+      <!-- Top Status Bar -->
+      <div class="status-bar">
+        <div class="status-icons">
+          <span title="Signal Strength">📶</span>
+          <span title="Internet">🌐</span>
+        </div>
+        <div class="status-clock">
+          12:00
+        </div>
+        <div class="status-battery">
+          <span title="Battery">🔋</span>
+        </div>
+      </div>
+      
+      <!-- Content Area (Screen) -->
       <slot />
+
+      <!-- Bottom Dock Navigation -->
+      <Dock activeWindow={title} />
     </div>
-    <Taskbar activeWindow={title} />
   </body>
 </html>

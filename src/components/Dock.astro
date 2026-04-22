@@ -1,0 +1,30 @@
+---
+interface Props {
+  activeWindow: string;
+}
+
+const { activeWindow } = Astro.props;
+
+// Helper to determine if an icon is active
+const isActive = (name: string) => activeWindow === name ? 'active' : '';
+---
+
+<div class="squircle-dock">
+  <a href="/web/" class={`squircle-icon ${isActive('Home')}`} title="Home">
+    <span>🏠</span>
+    Home
+  </a>
+  <a href="/web/projects" class={`squircle-icon ${isActive('Projects')}`} title="Projects">
+    <span>🚀</span>
+    Projects
+  </a>
+  <a href="/web/credentials" class={`squircle-icon ${isActive('Credentials')}`} title="Credentials">
+    <span>🎓</span>
+    Creds
+  </a>
+  <a href="/web/archive" class={`squircle-icon ${isActive('Archive')}`} title="Archive">
+    <span>📚</span>
+    Archive
+  </a>
+</div>
+

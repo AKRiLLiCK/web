@@ -1,37 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Window from '../components/Window.astro';
+import Screen from '../components/Screen.astro';
 ---
 
 <Layout title="Home">
-  <header>
-    <nav class="os-bevel-outset" style="padding: 0.5rem; margin-bottom: 2rem; display: flex; gap: 1rem;">
-      <a href="/web/">Home</a>
-      <a href="/web/projects">Projects</a>
-      <a href="/web/credentials">Credentials</a>
-      <a href="/web/archive">Archive</a>
-    </nav>
-  </header>
+  <Screen>
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1 style="font-size: 2rem; margin-bottom: 0.5rem; letter-spacing: 2px;">ACRILIC</h1>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0.25rem 0;">Computer Engineering Student</p>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0.25rem 0;">Polymath</p>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0.25rem 0;">Founder of Yutila</p>
+    </div>
 
-  <Window title="Identity" active={false}>
-    <h1 style="text-align: center; margin: 0 0 1rem 0;">Acrilic</h1>
-    <p style="text-align: center; margin-top: 0;">Computer Engineering Student & Polymath</p>
-  </Window>
+    <hr />
 
-  <Window title="Tech Stack" active={true}>
-    <pre class="os-bevel-inset" style="padding: 0.5rem; margin-bottom: 1rem;">Languages: Rust, C
-Systems: Linux (Arch/Debian/Kali/Nix), Windows
-Engines: Godot
-Hardware: Arduino
-Domain: Applied Physics</pre>
-  </Window>
-
-  <Window title="Links" active={false}>
-    <ul>
-      <li><a href="#">GitHub</a></li>
-      <li><a href="#">YouTube</a></li>
-      <li><a href="#">Ko-Fi</a></li>
-      <li><a href="#">ORCID</a></li>
-    </ul>
-  </Window>
+    <div style="text-align: center; margin-top: 2rem;">
+      <h2 style="font-size: 1.2rem; margin-bottom: 1rem;">Tech Stack</h2>
+      <img src="https://skillicons.dev/icons?i=rust,c,linux,godot,arduino,js" width="310" height="48" alt="Tech Stack Icons" style="image-rendering: auto;" />
+    </div>
+  </Screen>
 </Layout>

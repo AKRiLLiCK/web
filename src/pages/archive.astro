@@ -1,33 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Window from '../components/Window.astro';
+import Screen from '../components/Screen.astro';
 ---
 
 <Layout title="Archive">
-  <header>
-    <nav class="os-bevel-outset" style="padding: 0.5rem; margin-bottom: 2rem; display: flex; gap: 1rem;">
-      <a href="/web/">Home</a>
-      <a href="/web/projects">Projects</a>
-      <a href="/web/credentials">Credentials</a>
-      <a href="/web/archive">Archive</a>
-    </nav>
-  </header>
-
-  <Window title="Archive" active={true}>
-    <p style="margin-top: 0; margin-bottom: 1rem;">
-      Directory structure for reading material and technical drafts.
-    </p>
-    <div class="os-bevel-inset" style="padding: 10px; min-height: 200px; font-family: 'Fixedsys Excelsior', Courier, monospace;">
-      <div style="display: flex; gap: 1rem; margin-bottom: 5px;">
-        <span>📄</span>
-        <span style="flex-grow: 1;">Godel_Escher_Bach.pdf</span>
-        <span style="font-size: 0.9rem; color: #808080;">Book</span>
-      </div>
-      <div style="display: flex; gap: 1rem; margin-bottom: 5px;">
-        <span>📄</span>
-        <span style="flex-grow: 1;">Systems_Philosophy.txt</span>
-        <span style="font-size: 0.9rem; color: #808080;">Technical Essay</span>
-      </div>
+  <Screen>
+    <h1 style="font-size: 1.5rem; border-bottom: 1px solid #333; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Archive</h1>
+    
+    <div style="background: rgba(255,255,255,0.05); border: 1px solid #333; border-radius: 8px; padding: 1rem;">
+      <h2 style="font-size: 1.2rem; margin-bottom: 0.25rem;">The Architecture of Computing Systems</h2>
+      <span style="display: inline-block; background: #222; color: #aaa; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; margin-bottom: 1rem;">Technical Essay</span>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">
+        An exploratory technical essay detailing the structural paradigms of operating systems and their historical divergence.
+      </p>
+      <a href="#" style="display: inline-block; margin-top: 1rem; color: #fff; background: #333; padding: 4px 12px; border-radius: 4px; font-size: 0.8rem;">Read Essay</a>
     </div>
-  </Window>
+  </Screen>
 </Layout>
