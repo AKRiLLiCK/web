@@ -18,7 +18,9 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--bg-desktop);
+  background: var(--bg-desktop);
+  background-color: #000000; /* Fallback */
+  background: var(--bg-desktop);
   color: var(--text-window);
   font-family: 'MS Sans Serif', Tahoma, 'Fixedsys Excelsior', sans-serif;
   -webkit-font-smoothing: none;
