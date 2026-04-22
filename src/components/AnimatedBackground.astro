@@ -4,64 +4,12 @@ interface Props {
 }
 
 const { type } = Astro.props;
-
-// Generate 40 bubbles for "spice"
-const particles = Array.from({ length: 40 }).map((_, i) => ({
-  id: i,
-  left: Math.random() * 100,
-  delay: Math.random() * 30,
-  duration: 20 + Math.random() * 30,
-  size: 0.5 + Math.random() * 1.5,
-  opacity: 0.05 + Math.random() * 0.1,
-  // Random horizontal drift
-  drift: (Math.random() - 0.5) * 40,
-}));
 ---
 
 <div class="animated-background" transition:persist="background">
-  <!-- PS3 Style Flowing Ribbons -->
-  <svg class="ps3-ribbons" width="100%" height="100%" viewBox="0 0 1000 500" preserveAspectRatio="none">
-    <defs>
-      <linearGradient id="ribbonGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="rgba(255,255,255,0.3)" />
-        <stop offset="100%" stop-color="rgba(255,255,255,0.0)" />
-      </linearGradient>
-      <linearGradient id="ribbonGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="rgba(255,255,255,0.15)" />
-        <stop offset="100%" stop-color="rgba(255,255,255,0.0)" />
-      </linearGradient>
-    </defs>
-
-    <!-- Wave 1 (Background) -->
-    <path fill="url(#ribbonGrad2)" d="M0,200 C300,300 200,100 500,200 C800,300 700,100 1000,200 L1000,500 L0,500 Z" class="wave wave1" />
-    <path fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" d="M0,200 C300,300 200,100 500,200 C800,300 700,100 1000,200" class="wave wave1" />
-
-    <!-- Wave 2 (Middle) -->
-    <path fill="url(#ribbonGrad1)" d="M0,250 C200,150 300,350 500,250 C700,150 800,350 1000,250 L1000,500 L0,500 Z" class="wave wave2" />
-    <path fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" d="M0,250 C200,150 300,350 500,250 C700,150 800,350 1000,250" class="wave wave2" />
-
-    <!-- Wave 3 (Foreground) -->
-    <path fill="url(#ribbonGrad2)" d="M0,300 C250,400 250,200 500,300 C750,400 750,200 1000,300 L1000,500 L0,500 Z" class="wave wave3" />
-    <path fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1" d="M0,300 C250,400 250,200 500,300 C750,400 750,200 1000,300" class="wave wave3" />
-  </svg>
-
-  <!-- PS Vita Style Floating Bubbles -->
-  <div class="particles">
-    {particles.map((p) => (
-      <div 
-        class="particle bubble"
-        style={`
-          left: ${p.left}%; 
-          animation-duration: ${p.duration}s; 
-          animation-delay: -${p.delay}s; 
-          font-size: ${p.size}rem;
-          opacity: ${p.opacity};
-          --drift: ${p.drift}vw;
-        `}
-      >
-      </div>
-    ))}
-  </div>
+  <div class="css-wave wave-1"></div>
+  <div class="css-wave wave-2"></div>
+  <div class="css-wave wave-3"></div>
 </div>
 
 <style>
@@ -74,77 +22,54 @@ const particles = Array.from({ length: 40 }).map((_, i) => ({
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
-    /* Darker Gray/Black Background + Re-added Dots */
+    /* Darker Gray/Black Background + Dots */
     background: 
       radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px),
       linear-gradient(135deg, #0f0f0f 0%, #000000 100%);
     background-size: 4px 4px, 100% 100%;
   }
 
-  /* PS3 Style Waves using SVG */
-  .ps3-ribbons {
+  /* GPU-Accelerated CSS Waves */
+  .css-wave {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.8;
-  }
-
-  .wave {
-    transform-origin: center;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    border-radius: 40%;
     will-change: transform;
+    opacity: 0.15;
+    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+    animation: rotate-wave linear infinite;
   }
 
-  .wave1 { animation: sway 18s ease-in-out infinite alternate; }
-  .wave2 { animation: sway 12s ease-in-out infinite alternate-reverse; }
-  .wave3 { animation: sway 15s ease-in-out infinite alternate; }
-
-  @keyframes sway {
-    0% { transform: scale(1.1) translateX(-2%); }
-    100% { transform: scale(1.1) translateX(2%); }
+  .wave-1 {
+    animation-duration: 25s;
+    background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+    top: 30%;
+    left: -20%;
   }
 
-  /* PS Vita Style Particles */
-  .particles {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+  .wave-2 {
+    animation-duration: 35s;
+    background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%);
+    top: 40%;
+    left: 20%;
   }
 
-  .particle {
-    position: absolute;
-    bottom: -10%;
-    color: #fff;
-    animation: float-up linear infinite;
-    user-select: none;
-    text-shadow: 0 0 10px rgba(255,255,255,0.3);
-    will-change: transform, opacity;
+  .wave-3 {
+    animation-duration: 45s;
+    background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+    top: 50%;
+    left: -10%;
   }
 
-  /* Specific styling for pure bubbles */
-  .particle.bubble {
-    width: 1em;
-    height: 1em;
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.4);
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%);
-    box-shadow: inset 0 0 10px rgba(255,255,255,0.2), 0 0 15px rgba(255,255,255,0.1);
-  }
-
-  @keyframes float-up {
+  @keyframes rotate-wave {
     0% {
-      transform: translate(0, 0) rotate(0deg);
-      opacity: 0;
-    }
-    10% {
-      opacity: inherit; /* fades in to its inline opacity */
-    }
-    90% {
-      opacity: inherit;
+      transform: rotate(0deg);
     }
     100% {
-      transform: translate(var(--drift), -120vh) rotate(360deg);
-      opacity: 0;
+      transform: rotate(360deg);
     }
   }
 </style>
