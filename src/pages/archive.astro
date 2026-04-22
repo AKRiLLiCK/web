@@ -5,15 +5,17 @@ import Screen from '../components/Screen.astro';
 
 <Layout title="Archive">
   <Screen>
-    <h1 style="font-size: 1.5rem; border-bottom: 1px solid #333; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Archive</h1>
-    
-    <div style="background: rgba(255,255,255,0.05); border: 1px solid #333; border-radius: 8px; padding: 1rem;">
-      <h2 style="font-size: 1.2rem; margin-bottom: 0.25rem;">The Architecture of Computing Systems</h2>
-      <span style="display: inline-block; background: #222; color: #aaa; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; margin-bottom: 1rem;">Technical Essay</span>
-      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">
-        An exploratory technical essay detailing the structural paradigms of operating systems and their historical divergence.
-      </p>
-      <a href="#" style="display: inline-block; margin-top: 1rem; color: #fff; background: #333; padding: 4px 12px; border-radius: 4px; font-size: 0.8rem;">Read Essay</a>
+    <div class="banner">
+      <h1>Archive</h1>
+    </div>
+    <div class="page-content">
+      <div class="ui-card">
+        <img src="https://placehold.co/800x200/151515/444444?text=Archive+Banner" alt="Archive Banner" class="ui-card-banner" />
+        <h2>The Architecture of Computing Systems</h2>
+        <span class="ui-badge">Technical Essay</span>
+        <p>An exploratory technical essay detailing the structural paradigms of operating systems and their historical divergence.</p>
+        <a href="#" class="ui-button">Read Essay</a>
+      </div>
     </div>
   </Screen>
 </Layout>

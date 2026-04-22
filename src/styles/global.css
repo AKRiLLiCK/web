@@ -37,7 +37,7 @@ a:hover {
   background-color: var(--screen-bg);
   box-shadow: var(--screen-shadow);
   border: 2px solid #0a0a0a;
-  border-radius: 4px;
+  border-radius: 16px;
   color: var(--text-main);
   overflow: hidden;
 }
@@ -50,7 +50,7 @@ a:hover {
   max-width: 800px;
   margin: 0 auto;
   position: relative;
-  padding: 0.5rem;
+  padding: 1rem;
 }
 
 /* Status Bar */
@@ -58,11 +58,11 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.25rem 1rem;
+  padding: 0.4rem 1rem;
   font-size: 0.8rem;
   color: var(--text-muted);
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 4px 4px 0 0;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 8px 8px 0 0;
 }
 
 .status-icons {
@@ -74,11 +74,33 @@ a:hover {
 /* Main Display Area */
 .main-display {
   flex-grow: 1;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
   margin-bottom: 5rem; /* Space for the dock */
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 0;
+}
+
+.page-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.banner {
+  background: linear-gradient(180deg, #2a2a2a 0%, #111 100%);
+  border-bottom: 2px solid #0a0a0a;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+}
+
+.banner h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,1);
 }
 
 /* Bottom Squircle Dock */
@@ -137,3 +159,157 @@ hr {
   margin: 1.5rem 0;
 }
 
+/* Page Typography */
+.page-content h2 {
+  font-size: 1.2rem;
+  border-bottom: 2px solid #222;
+  padding-bottom: 0.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.page-content h3 {
+  font-size: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: #ddd;
+}
+
+.page-content p {
+  color: var(--text-muted);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.page-content ul {
+  padding-left: 1.5rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.page-content ul li {
+  margin-bottom: 0.5rem;
+}
+
+.page-content strong {
+  color: var(--text-main);
+}
+
+/* 3DS Grid System */
+.home-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 12px;
+  justify-items: center;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  border: 1px solid #111;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+}
+
+.home-menu-slot {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-slot {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 2px dotted rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.02);
+}
+
+/* 3DS Software Borders */
+.software-badge {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, #f0f0f0 0%, #d0d0d0 100%);
+  padding: 4px;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,1), 0 4px 6px rgba(0,0,0,0.6), 0 4px 0 #888;
+  transition: transform 0.1s, box-shadow 0.1s;
+  border: 1px solid #aaa;
+  cursor: pointer;
+  text-decoration: none;
+}
+.software-badge:active {
+  transform: translateY(4px);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.8), 0 0px 2px rgba(0,0,0,0.6), 0 0px 0 #888;
+}
+.software-badge img {
+  border-radius: 4px;
+  display: block;
+}
+
+/* 3DS UI Elements for Sub-Pages */
+.ui-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+
+.ui-card-banner {
+  width: calc(100% + 2rem);
+  margin: -1rem -1rem 1rem -1rem;
+  display: block;
+  border-bottom: 1px solid #333;
+  max-height: 120px;
+  object-fit: cover;
+  background: #111;
+}
+
+.ui-card h2 {
+  font-size: 1.2rem;
+  border: none;
+  padding: 0;
+  margin: 0 0 0.5rem 0;
+  color: #fff;
+}
+
+.ui-badge {
+  display: inline-block;
+  background: #222;
+  color: #aaa;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  margin-bottom: 0.8rem;
+  border: 1px solid #444;
+}
+
+.ui-button {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #fff;
+  background: linear-gradient(180deg, #444 0%, #222 100%);
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  border: 1px solid #555;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+  transition: transform 0.1s, box-shadow 0.1s;
+  text-decoration: none;
+}
+
+.ui-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 0px 2px rgba(0,0,0,0.5), inset 0 1px 0 rgba(0,0,0,0.1);
+  background: linear-gradient(180deg, #222 0%, #111 100%);
+}

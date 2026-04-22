@@ -5,18 +5,111 @@ import Screen from '../components/Screen.astro';
 
 <Layout title="Home">
   <Screen>
-    <div style="text-align: center; margin-bottom: 2rem;">
-      <h1 style="font-size: 2rem; margin-bottom: 0.5rem; letter-spacing: 2px;">ACRILIC</h1>
-      <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0.25rem 0;">Computer Engineering Student</p>
-      <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0.25rem 0;">Polymath</p>
-      <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0.25rem 0;">Founder of Yutila</p>
+    <div class="banner">
+      <h1>ACRILIC</h1>
     </div>
+    <div class="page-content">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <p style="text-align: center; margin-bottom: 1.5rem;">
+          <strong>He/Him • ES (Native) / EN (C1)</strong><br/><br/>
+          <strong>Computer Engineering Student</strong>, founder of Yutila, <strong>polymath</strong>, and multidisciplinary creator — exploring the full depth of the computing spectrum
+        </p>
 
-    <hr />
+        <div style="margin-top: 1rem;">
+          <a href="https://youtube.com/@AKRiLLiCK" class="software-badge">
+            <img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube" />
+          </a>
+          <a href="https://ko-fi.com/acrilic" class="software-badge">
+            <img src="https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white" alt="Ko-Fi" />
+          </a>
+        </div>
+      </div>
 
-    <div style="text-align: center; margin-top: 2rem;">
-      <h2 style="font-size: 1.2rem; margin-bottom: 1rem;">Tech Stack</h2>
-      <img src="https://skillicons.dev/icons?i=rust,c,linux,godot,arduino,js" width="310" height="48" alt="Tech Stack Icons" style="image-rendering: auto;" />
+      <hr />
+
+      <div class="identity-section">
+        <h2>◈ The Identity</h2>
+        <p>A creator bridging technical rigor and artistic expression. I operate through a faceless identity to prioritize ideas, logic, and craft. Currently building Yutila, a startup spanning software, games, and hardware.</p>
+        <p>My work lives at the intersection of hard engineering, philosophy, and design. I explore the full computing spectrum—from hardware physics to software logic—to build systems that foster digital autonomy and critical thinking.</p>
+      </div>
+
+      <hr />
+
+      <div class="scope-section">
+        <h2>⌖ The Scope</h2>
+        
+        <h3>Systems & Logic ▤</h3>
+        <ul>
+          <li><strong>Engineering Reality:</strong> Applied physics, hardware tinkering and embedded logic.</li>
+          <li><strong>The Deep Stack:</strong> Linux, containerization & virtualization and programming.</li>
+          <li><strong>Software Engineering:</strong> Python, Java, Bash, modern web (Astro) and secure CI/CD.</li>
+          <li><strong>Cybersecurity:</strong> Ethical hacking, digital defense and supply-chain validation.</li>
+        </ul>
+
+        <h3>Creative & Narrative ✧</h3>
+        <ul>
+          <li><strong>Game Dev:</strong> Godot.</li>
+          <li><strong>Design:</strong> UI/UX architecture & more.</li>
+          <li><strong>Media:</strong> Philosophy, writing and YouTube.</li>
+          <li><strong>Music:</strong> Composition & production.</li>
+        </ul>
+      </div>
+
+      <hr />
+
+      <div class="stack-section">
+         <h2>⚙ Working Ecosystem</h2>
+         <p>Whether I am structuring philosophical essays, producing audiovisual content, developing in Godot, or maintaining Yutila's security infrastructure (NixOS/Docker/Wazuh), my approach remains the same: technical rigor, privacy by design, and creative purpose.</p>
+         <p><strong>Operational Philosophy:</strong> Build to learn. Performance without compromising privacy.</p>
+      </div>
+
+      <hr />
+
+      <div style="text-align: center; margin-top: 2rem; overflow-x: auto;">
+        <h2 style="font-size: 1.2rem; margin-bottom: 1rem; border: none;">Tech Stack</h2>
+        
+        <div class="home-menu-grid" style="max-width: 600px; margin: 0 auto;">
+          <!-- Row 1: Languages -->
+          <div class="home-menu-slot" title="Rust"><div class="software-badge"><img src="https://skillicons.dev/icons?i=rust" width="48" height="48" alt="Rust" /></div></div>
+          <div class="home-menu-slot" title="C"><div class="software-badge"><img src="https://skillicons.dev/icons?i=c" width="48" height="48" alt="C" /></div></div>
+          <div class="home-menu-slot" title="Java"><div class="software-badge"><img src="https://skillicons.dev/icons?i=java" width="48" height="48" alt="Java" /></div></div>
+          <div class="home-menu-slot" title="Python"><div class="software-badge"><img src="https://skillicons.dev/icons?i=python" width="48" height="48" alt="Python" /></div></div>
+          <div class="home-menu-slot" title="Bash"><div class="software-badge"><img src="https://skillicons.dev/icons?i=bash" width="48" height="48" alt="Bash" /></div></div>
+          <div class="home-menu-slot" title="PowerShell"><div class="software-badge"><img src="https://skillicons.dev/icons?i=powershell" width="48" height="48" alt="PowerShell" /></div></div>
+
+          <!-- Row 2: Systems -->
+          <div class="home-menu-slot" title="Linux"><div class="software-badge"><img src="https://skillicons.dev/icons?i=linux" width="48" height="48" alt="Linux" /></div></div>
+          <div class="home-menu-slot" title="Arch Linux"><div class="software-badge"><img src="https://skillicons.dev/icons?i=arch" width="48" height="48" alt="Arch Linux" /></div></div>
+          <div class="home-menu-slot" title="Debian"><div class="software-badge"><img src="https://skillicons.dev/icons?i=debian" width="48" height="48" alt="Debian" /></div></div>
+          <div class="home-menu-slot" title="Kali Linux"><div class="software-badge"><img src="https://skillicons.dev/icons?i=kali" width="48" height="48" alt="Kali Linux" /></div></div>
+          <div class="home-menu-slot" title="NixOS"><div class="software-badge"><img src="https://skillicons.dev/icons?i=nix" width="48" height="48" alt="NixOS" /></div></div>
+          <div class="home-menu-slot" title="Windows"><div class="software-badge"><img src="https://skillicons.dev/icons?i=windows" width="48" height="48" alt="Windows" /></div></div>
+
+          <!-- Row 3: Web, Engines & Hardware -->
+          <div class="home-menu-slot" title="HTML"><div class="software-badge"><img src="https://skillicons.dev/icons?i=html" width="48" height="48" alt="HTML" /></div></div>
+          <div class="home-menu-slot" title="CSS"><div class="software-badge"><img src="https://skillicons.dev/icons?i=css" width="48" height="48" alt="CSS" /></div></div>
+          <div class="home-menu-slot" title="Astro"><div class="software-badge"><img src="https://skillicons.dev/icons?i=astro" width="48" height="48" alt="Astro" /></div></div>
+          <div class="home-menu-slot" title="Arduino"><div class="software-badge"><img src="https://skillicons.dev/icons?i=arduino" width="48" height="48" alt="Arduino" /></div></div>
+          <div class="home-menu-slot" title="Godot"><div class="software-badge"><img src="https://skillicons.dev/icons?i=godot" width="48" height="48" alt="Godot" /></div></div>
+          <div class="home-menu-slot"><div class="empty-slot"></div></div>
+
+          <!-- Row 4: Tools (Part 1) -->
+          <div class="home-menu-slot" title="Git"><div class="software-badge"><img src="https://skillicons.dev/icons?i=git" width="48" height="48" alt="Git" /></div></div>
+          <div class="home-menu-slot" title="GitHub"><div class="software-badge"><img src="https://skillicons.dev/icons?i=github" width="48" height="48" alt="GitHub" /></div></div>
+          <div class="home-menu-slot" title="Docker"><div class="software-badge"><img src="https://skillicons.dev/icons?i=docker" width="48" height="48" alt="Docker" /></div></div>
+          <div class="home-menu-slot" title="VSCode"><div class="software-badge"><img src="https://skillicons.dev/icons?i=vscode" width="48" height="48" alt="VSCode" /></div></div>
+          <div class="home-menu-slot" title="NeoVim"><div class="software-badge"><img src="https://skillicons.dev/icons?i=neovim" width="48" height="48" alt="NeoVim" /></div></div>
+          <div class="home-menu-slot" title="IntelliJ IDEA"><div class="software-badge"><img src="https://skillicons.dev/icons?i=idea" width="48" height="48" alt="IntelliJ IDEA" /></div></div>
+
+          <!-- Row 5: Tools (Part 2) & Empties -->
+          <div class="home-menu-slot" title="Obsidian"><div class="software-badge"><img src="https://skillicons.dev/icons?i=obsidian" width="48" height="48" alt="Obsidian" /></div></div>
+          <div class="home-menu-slot" title="Discord"><div class="software-badge"><img src="https://skillicons.dev/icons?i=discord" width="48" height="48" alt="Discord" /></div></div>
+          <div class="home-menu-slot"><div class="empty-slot"></div></div>
+          <div class="home-menu-slot"><div class="empty-slot"></div></div>
+          <div class="home-menu-slot"><div class="empty-slot"></div></div>
+          <div class="home-menu-slot"><div class="empty-slot"></div></div>
+        </div>
+      </div>
     </div>
   </Screen>
 </Layout>
