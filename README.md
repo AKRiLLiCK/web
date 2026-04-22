@@ -1,43 +1,41 @@
-# Astro Starter Kit: Minimal
+# Acrilic's Portfolio & Archive
+
+Maintained by a Computer Engineering Student and Polymath. Founder of Yutila.
+
+## Architecture
+
+This project is built using the Astro framework. The user interface utilizes a skeuomorphic "Nintendo 3DS Dark Mode" single-screen design pattern, implemented via raw CSS. 
+
+### Core Features
+- **3DS Navigation:** Fixed bottom dock and recessed screen container UI.
+- **OTA Archive:** A high-performance digital library catalog powered by Astro Content Collections, featuring strict metadata schema validation and optimized image rendering.
+- **Markdown Support:** Fully functional dynamic routing for technical essays, manuals, and documents.
+
+## Deployment
+
+The repository is configured for deployment to GitHub Pages.
+- **Base Path:** `/web`
+- **CI/CD:** Automated builds and deployments are handled via GitHub Actions.
+
+## Local Setup
+
+To run this project locally, execute the following commands from the repository root:
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+To create a production build:
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+npm run build
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## License & Copyright
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+**© 2026 Acrilic. All Rights Reserved.**
 
-Any static assets, like images, can be placed in the `public/` directory.
+The source code, visual design, and persona content of this website are proprietary. You may not reproduce, distribute, or create derivative works of the core website interface or codebase without explicit permission.
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+*Exception:* Documents, publications, and structural information explicitly hosted within the **OTA Archive** and marked with the OTA Declaration are governed by the **Open To All (OTA) Public License v1.0**.

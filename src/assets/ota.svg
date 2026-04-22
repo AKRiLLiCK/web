@@ -1,0 +1,16 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#151515" rx="32"/>
+
+  <!-- Broken Ring -->
+  <path d="
+    M256 96
+    A160 160 0 1 1 255.9 96
+    M256 136
+    A120 120 0 1 0 256.1 136
+  "
+  fill="none"
+  stroke="#FFFFFF"
+  stroke-width="32"
+  stroke-linecap="round"
+  stroke-dasharray="760 140"/>
+</svg>
