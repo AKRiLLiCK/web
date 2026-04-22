@@ -4,14 +4,13 @@ import Taskbar from '../components/Taskbar.astro';
 
 interface Props {
   title: string;
-  lang?: string;
 }
 
-const { title, lang = 'en' } = Astro.props;
+const { title } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang={lang}>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,6 +21,6 @@ const { title, lang = 'en' } = Astro.props;
     <div class="desktop-ui">
       <slot />
     </div>
-    <Taskbar lang={lang} activeWindow={title} />
+    <Taskbar activeWindow={title} />
   </body>
 </html>

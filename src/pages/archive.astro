@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Window from '../components/Window.astro';
+---
+
+<Layout title="Archive">
+  <header>
+    <nav class="os-bevel-outset" style="padding: 0.5rem; margin-bottom: 2rem; display: flex; gap: 1rem;">
+      <a href="/web/">Home</a>
+      <a href="/web/projects">Projects</a>
+      <a href="/web/credentials">Credentials</a>
+      <a href="/web/archive">Archive</a>
+    </nav>
+  </header>
+
+  <Window title="Archive" active={true}>
+    <p style="margin-top: 0; margin-bottom: 1rem;">
+      Directory structure for reading material and technical drafts.
+    </p>
+    <div class="os-bevel-inset" style="padding: 10px; min-height: 200px; font-family: 'Fixedsys Excelsior', Courier, monospace;">
+      <div style="display: flex; gap: 1rem; margin-bottom: 5px;">
+        <span>📄</span>
+        <span style="flex-grow: 1;">Godel_Escher_Bach.pdf</span>
+        <span style="font-size: 0.9rem; color: #808080;">Book</span>
+      </div>
+      <div style="display: flex; gap: 1rem; margin-bottom: 5px;">
+        <span>📄</span>
+        <span style="flex-grow: 1;">Systems_Philosophy.txt</span>
+        <span style="font-size: 0.9rem; color: #808080;">Technical Essay</span>
+      </div>
+    </div>
+  </Window>
+</Layout>

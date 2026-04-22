@@ -1,11 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="refresh" content="0;url=/web/en/" />
-  <title>Redirecting...</title>
-</head>
-<body style="background: black; color: white; font-family: monospace;">
-  Redirecting to <a href="/en/" style="color: teal;">/en/</a>...
-</body>
-</html>
+---
+import Layout from '../layouts/Layout.astro';
+import Window from '../components/Window.astro';
+---
+
+<Layout title="Home">
+  <header>
+    <nav class="os-bevel-outset" style="padding: 0.5rem; margin-bottom: 2rem; display: flex; gap: 1rem;">
+      <a href="/web/">Home</a>
+      <a href="/web/projects">Projects</a>
+      <a href="/web/credentials">Credentials</a>
+      <a href="/web/archive">Archive</a>
+    </nav>
+  </header>
+
+  <Window title="Identity" active={false}>
+    <h1 style="text-align: center; margin: 0 0 1rem 0;">Acrilic</h1>
+    <p style="text-align: center; margin-top: 0;">Computer Engineering Student & Polymath</p>
+  </Window>
+
+  <Window title="Tech Stack" active={true}>
+    <pre class="os-bevel-inset" style="padding: 0.5rem; margin-bottom: 1rem;">Languages: Rust, C
+Systems: Linux (Arch/Debian/Kali/Nix), Windows
+Engines: Godot
+Hardware: Arduino
+Domain: Applied Physics</pre>
+    <img src="https://skillicons.dev/icons?i=rust,c,linux,godot,arduino" alt="Tech Stack Icons" style="max-width: 100%; height: auto;" />
+  </Window>
+
+  <Window title="Links" active={false}>
+    <ul>
+      <li><a href="#">GitHub</a></li>
+      <li><a href="#">YouTube</a></li>
+      <li><a href="#">Ko-Fi</a></li>
+      <li><a href="#">ORCID</a></li>
+    </ul>
+  </Window>
+</Layout>

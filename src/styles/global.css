@@ -1,6 +1,6 @@
 :root {
-  --bg-desktop: #000000;
-  --bg-window: #222222;
+  --bg-desktop: radial-gradient(circle at center, #0a1128 0%, #000000 100%);
+  --bg-window: rgba(34, 34, 34, 0.75);
   --text-titlebar: #ffffff;
   --text-window: #c0c0c0;
   
@@ -39,13 +39,16 @@ a:hover {
   color: #ffffff;
 }
 
-/* 3D Beveling */
+/* 3D Beveling with Aero Glass */
 .os-bevel-outset {
-  background-color: var(--bg-window);
-  border-top: 2px solid var(--border-light);
-  border-left: 2px solid var(--border-light);
+  background: var(--bg-window);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
   border-bottom: 2px solid var(--border-dark);
   border-right: 2px solid var(--border-dark);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
 
 .os-bevel-inset {
