@@ -293,6 +293,7 @@ hr {
   margin: -1rem -1rem 1rem -1rem;
   display: block;
   border-bottom: 1px solid #333;
+  min-height: 120px;
   max-height: 120px;
   object-fit: cover;
   background: #111;
