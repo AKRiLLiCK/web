@@ -1,9 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Screen from '../../components/Screen.astro';
-import webring from '../../data/webring.json';
-
-const webringData = JSON.stringify(webring);
 ---
 
 <Layout title="OTA Webring Routing..." wide={true}>
@@ -18,34 +15,47 @@ const webringData = JSON.stringify(webring);
       </noscript>
     </div>
 
-    <script define:vars={{ webringData }}>
-      const webring = JSON.parse(webringData);
-      const params = new URLSearchParams(window.location.search);
-      const action = params.get('action');
-      const currentId = params.get('current');
+    <script>
+      async function route() {
+        const params = new URLSearchParams(window.location.search);
+        const action = params.get('action');
+        const currentId = params.get('current');
 
-      if (!action) {
-        window.location.replace('/web/webring/');
-      } else {
-        const currentIndex = webring.findIndex(member => member.id === currentId);
-        let targetUrl = '/web/webring/';
+        if (!action) {
+          window.location.replace('/web/webring/');
+          return;
+        }
 
-        if (currentIndex === -1 && action !== 'random') {
-          window.location.replace(targetUrl);
-        } else {
-          if (action === 'prev') {
-            const prevIndex = currentIndex === 0 ? webring.length - 1 : currentIndex - 1;
-            targetUrl = webring[prevIndex].url;
-          } else if (action === 'next') {
-            const nextIndex = currentIndex === webring.length - 1 ? 0 : currentIndex + 1;
-            targetUrl = webring[nextIndex].url;
-          } else if (action === 'random') {
-            const randomIndex = Math.floor(Math.random() * webring.length);
-            targetUrl = webring[randomIndex].url;
+        try {
+          const response = await fetch('/web/webring.json');
+          if (!response.ok) throw new Error('Failed to fetch webring data');
+          const webring = await response.json();
+
+          const currentIndex = webring.findIndex((member: any) => member.id === currentId);
+          let targetUrl = '/web/webring/';
+
+          if (currentIndex === -1 && action !== 'random') {
+            window.location.replace(targetUrl);
+          } else {
+            if (action === 'prev') {
+              const prevIndex = currentIndex === 0 ? webring.length - 1 : currentIndex - 1;
+              targetUrl = webring[prevIndex].url;
+            } else if (action === 'next') {
+              const nextIndex = currentIndex === webring.length - 1 ? 0 : currentIndex + 1;
+              targetUrl = webring[nextIndex].url;
+            } else if (action === 'random') {
+              const randomIndex = Math.floor(Math.random() * webring.length);
+              targetUrl = webring[randomIndex].url;
+            }
+            window.location.replace(targetUrl);
           }
-          window.location.replace(targetUrl);
+        } catch (error) {
+          console.error(error);
+          window.location.replace('/web/webring/');
         }
       }
+
+      route();
     </script>
 
     <style>
