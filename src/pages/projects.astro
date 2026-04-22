@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Screen from '../components/Screen.astro';
+
+const basePath = import.meta.env.BASE_URL;
 ---
 
 <Layout title="Projects">
@@ -10,10 +12,10 @@ import Screen from '../components/Screen.astro';
     </div>
     <div class="page-content">
       <div class="ui-card">
-        <img src="/projects/camelot-banner.png" alt="Camelot Banner" class="ui-card-banner" />
+        <img src={`${basePath}projects/camelot-banner.png`} alt="Camelot Banner" class="ui-card-banner" />
         <h2>Camelot</h2>
         <span class="ui-badge">C Framework</span>
-        <span class="ui-badge">License: OTA</span>
+        <span class="ui-badge">License: MPL-2.0</span>
         <p>An enterprise-grade C framework prioritizing long-term reliability, cross-platform interoperability, and transaction stability for mission-critical environments.</p>
         <a href="https://github.com/yutila-org/camelot" target="_blank" class="ui-button">View Repository</a>
       </div>
