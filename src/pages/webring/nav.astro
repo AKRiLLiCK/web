@@ -1,0 +1,97 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Screen from '../../components/Screen.astro';
+import webring from '../../data/webring.json';
+
+const webringData = JSON.stringify(webring);
+---
+
+<Layout title="OTA Webring Routing..." wide={true}>
+  <Screen>
+    <div class="routing-container">
+      <h1>Routing node...</h1>
+      <noscript>
+        <div class="noscript-fallback">
+          <p>JavaScript is disabled in your browser. Automatic webring routing requires JavaScript.</p>
+          <a href="/web/webring/" class="manual-link">Return to OTA Webring Directory</a>
+        </div>
+      </noscript>
+    </div>
+
+    <script define:vars={{ webringData }}>
+      const webring = JSON.parse(webringData);
+      const params = new URLSearchParams(window.location.search);
+      const action = params.get('action');
+      const currentId = params.get('current');
+
+      if (!action) {
+        window.location.replace('/web/webring/');
+      } else {
+        const currentIndex = webring.findIndex(member => member.id === currentId);
+        let targetUrl = '/web/webring/';
+
+        if (currentIndex === -1 && action !== 'random') {
+          window.location.replace(targetUrl);
+        } else {
+          if (action === 'prev') {
+            const prevIndex = currentIndex === 0 ? webring.length - 1 : currentIndex - 1;
+            targetUrl = webring[prevIndex].url;
+          } else if (action === 'next') {
+            const nextIndex = currentIndex === webring.length - 1 ? 0 : currentIndex + 1;
+            targetUrl = webring[nextIndex].url;
+          } else if (action === 'random') {
+            const randomIndex = Math.floor(Math.random() * webring.length);
+            targetUrl = webring[randomIndex].url;
+          }
+          window.location.replace(targetUrl);
+        }
+      }
+    </script>
+
+    <style>
+      .routing-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 50vh;
+        color: var(--text-muted);
+      }
+      .routing-container h1 {
+        font-family: monospace;
+        letter-spacing: 2px;
+        animation: pulse 1.5s infinite;
+      }
+      .noscript-fallback {
+        margin-top: 2rem;
+        background: #111;
+        border: 1px solid #ff4444;
+        padding: 1rem;
+        border-radius: 4px;
+        text-align: center;
+      }
+      .noscript-fallback p {
+        color: #ff4444;
+        margin-top: 0;
+      }
+      .manual-link {
+        display: inline-block;
+        background: #222;
+        color: #fff;
+        padding: 8px 16px;
+        text-decoration: none;
+        border: 1px solid #444;
+        border-radius: 4px;
+        transition: background 0.2s;
+      }
+      .manual-link:hover {
+        background: #333;
+      }
+      @keyframes pulse {
+        0% { opacity: 0.5; }
+        50% { opacity: 1; }
+        100% { opacity: 0.5; }
+      }
+    </style>
+  </Screen>
+</Layout>

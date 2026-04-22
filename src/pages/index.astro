@@ -1,6 +1,36 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Screen from '../components/Screen.astro';
+
+const techStack = [
+  { name: 'Rust', icon: 'rust' },
+  { name: 'C', icon: 'c' },
+  { name: 'Java', icon: 'java' },
+  { name: 'Python', icon: 'python' },
+  { name: 'Bash', icon: 'bash' },
+  { name: 'PowerShell', icon: 'powershell' },
+  { name: 'Linux', icon: 'linux' },
+  { name: 'Arch Linux', icon: 'arch' },
+  { name: 'Debian', icon: 'debian' },
+  { name: 'Kali Linux', icon: 'kali' },
+  { name: 'NixOS', icon: 'nix' },
+  { name: 'Windows', icon: 'windows' },
+  { name: 'HTML', icon: 'html' },
+  { name: 'CSS', icon: 'css' },
+  { name: 'Astro', icon: 'astro' },
+  { name: 'Arduino', icon: 'arduino' },
+  { name: 'Godot', icon: 'godot' },
+  { name: 'Git', icon: 'git' },
+  { name: 'GitHub', icon: 'github' },
+  { name: 'Docker', icon: 'docker' },
+  { name: 'VSCode', icon: 'vscode' },
+  { name: 'NeoVim', icon: 'neovim' },
+  { name: 'IntelliJ IDEA', icon: 'idea' },
+  { name: 'Obsidian', icon: 'obsidian' },
+  { name: 'Discord', icon: 'discord' },
+];
+
+const totalSlots = 30; // 5 rows of 6
 ---
 
 <Layout title="Home">
@@ -78,47 +108,19 @@ import Screen from '../components/Screen.astro';
 
       <div style="text-align: center; margin-top: 2rem; overflow-x: auto;">
         <h2 style="font-size: 1.2rem; margin-bottom: 1rem; border: none;">Tech Stack</h2>
-        
         <div class="home-menu-grid" style="max-width: 600px; margin: 0 auto;">
-          <!-- Row 1: Languages -->
-          <div class="home-menu-slot" title="Rust"><div class="software-badge"><img src="https://skillicons.dev/icons?i=rust" width="48" height="48" alt="Rust" /></div></div>
-          <div class="home-menu-slot" title="C"><div class="software-badge"><img src="https://skillicons.dev/icons?i=c" width="48" height="48" alt="C" /></div></div>
-          <div class="home-menu-slot" title="Java"><div class="software-badge"><img src="https://skillicons.dev/icons?i=java" width="48" height="48" alt="Java" /></div></div>
-          <div class="home-menu-slot" title="Python"><div class="software-badge"><img src="https://skillicons.dev/icons?i=python" width="48" height="48" alt="Python" /></div></div>
-          <div class="home-menu-slot" title="Bash"><div class="software-badge"><img src="https://skillicons.dev/icons?i=bash" width="48" height="48" alt="Bash" /></div></div>
-          <div class="home-menu-slot" title="PowerShell"><div class="software-badge"><img src="https://skillicons.dev/icons?i=powershell" width="48" height="48" alt="PowerShell" /></div></div>
-
-          <!-- Row 2: Systems -->
-          <div class="home-menu-slot" title="Linux"><div class="software-badge"><img src="https://skillicons.dev/icons?i=linux" width="48" height="48" alt="Linux" /></div></div>
-          <div class="home-menu-slot" title="Arch Linux"><div class="software-badge"><img src="https://skillicons.dev/icons?i=arch" width="48" height="48" alt="Arch Linux" /></div></div>
-          <div class="home-menu-slot" title="Debian"><div class="software-badge"><img src="https://skillicons.dev/icons?i=debian" width="48" height="48" alt="Debian" /></div></div>
-          <div class="home-menu-slot" title="Kali Linux"><div class="software-badge"><img src="https://skillicons.dev/icons?i=kali" width="48" height="48" alt="Kali Linux" /></div></div>
-          <div class="home-menu-slot" title="NixOS"><div class="software-badge"><img src="https://skillicons.dev/icons?i=nix" width="48" height="48" alt="NixOS" /></div></div>
-          <div class="home-menu-slot" title="Windows"><div class="software-badge"><img src="https://skillicons.dev/icons?i=windows" width="48" height="48" alt="Windows" /></div></div>
-
-          <!-- Row 3: Web, Engines & Hardware -->
-          <div class="home-menu-slot" title="HTML"><div class="software-badge"><img src="https://skillicons.dev/icons?i=html" width="48" height="48" alt="HTML" /></div></div>
-          <div class="home-menu-slot" title="CSS"><div class="software-badge"><img src="https://skillicons.dev/icons?i=css" width="48" height="48" alt="CSS" /></div></div>
-          <div class="home-menu-slot" title="Astro"><div class="software-badge"><img src="https://skillicons.dev/icons?i=astro" width="48" height="48" alt="Astro" /></div></div>
-          <div class="home-menu-slot" title="Arduino"><div class="software-badge"><img src="https://skillicons.dev/icons?i=arduino" width="48" height="48" alt="Arduino" /></div></div>
-          <div class="home-menu-slot" title="Godot"><div class="software-badge"><img src="https://skillicons.dev/icons?i=godot" width="48" height="48" alt="Godot" /></div></div>
-          <div class="home-menu-slot"><div class="empty-slot"></div></div>
-
-          <!-- Row 4: Tools (Part 1) -->
-          <div class="home-menu-slot" title="Git"><div class="software-badge"><img src="https://skillicons.dev/icons?i=git" width="48" height="48" alt="Git" /></div></div>
-          <div class="home-menu-slot" title="GitHub"><div class="software-badge"><img src="https://skillicons.dev/icons?i=github" width="48" height="48" alt="GitHub" /></div></div>
-          <div class="home-menu-slot" title="Docker"><div class="software-badge"><img src="https://skillicons.dev/icons?i=docker" width="48" height="48" alt="Docker" /></div></div>
-          <div class="home-menu-slot" title="VSCode"><div class="software-badge"><img src="https://skillicons.dev/icons?i=vscode" width="48" height="48" alt="VSCode" /></div></div>
-          <div class="home-menu-slot" title="NeoVim"><div class="software-badge"><img src="https://skillicons.dev/icons?i=neovim" width="48" height="48" alt="NeoVim" /></div></div>
-          <div class="home-menu-slot" title="IntelliJ IDEA"><div class="software-badge"><img src="https://skillicons.dev/icons?i=idea" width="48" height="48" alt="IntelliJ IDEA" /></div></div>
-
-          <!-- Row 5: Tools (Part 2) & Empties -->
-          <div class="home-menu-slot" title="Obsidian"><div class="software-badge"><img src="https://skillicons.dev/icons?i=obsidian" width="48" height="48" alt="Obsidian" /></div></div>
-          <div class="home-menu-slot" title="Discord"><div class="software-badge"><img src="https://skillicons.dev/icons?i=discord" width="48" height="48" alt="Discord" /></div></div>
-          <div class="home-menu-slot"><div class="empty-slot"></div></div>
-          <div class="home-menu-slot"><div class="empty-slot"></div></div>
-          <div class="home-menu-slot"><div class="empty-slot"></div></div>
-          <div class="home-menu-slot"><div class="empty-slot"></div></div>
+          {Array.from({ length: totalSlots }).map((_, i) => {
+            const tech = techStack[i];
+            return tech ? (
+              <div class="home-menu-slot" title={tech.name}>
+                <div class="software-badge">
+                  <img src={`https://skillicons.dev/icons?i=${tech.icon}`} width="48" height="48" alt={tech.name} loading="lazy" />
+                </div>
+              </div>
+            ) : (
+              <div class="home-menu-slot"><div class="empty-slot"></div></div>
+            );
+          })}
         </div>
       </div>
     </div>
