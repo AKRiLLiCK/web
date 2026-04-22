@@ -51,6 +51,11 @@ a:hover {
   margin: 0 auto;
   position: relative;
   padding: 1rem;
+  z-index: 1;
+}
+
+.wide-chassis {
+  max-width: 1000px;
 }
 
 /* Status Bar */
@@ -103,7 +108,6 @@ a:hover {
   text-shadow: 0 2px 4px rgba(0,0,0,1);
 }
 
-/* Bottom Squircle Dock */
 .squircle-dock {
   position: fixed;
   bottom: 0;
@@ -114,13 +118,25 @@ a:hover {
   display: flex;
   justify-content: space-around;
   padding: 1rem 0;
-  background: linear-gradient(to top, #000 0%, transparent 100%);
   z-index: 10;
 }
 
+.squircle-dock::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 100%;
+  background: linear-gradient(to top, #000 0%, transparent 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
 .squircle-icon {
-  width: 60px;
-  height: 60px;
+  width: 72px;
+  height: 64px;
   background: linear-gradient(135deg, #2a2a2a, #111);
   border: 2px solid #000;
   border-radius: 20px; /* Squircle appearance */
@@ -132,9 +148,10 @@ a:hover {
   cursor: pointer;
   transition: all 0.1s;
   color: var(--text-muted);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: bold;
   text-transform: uppercase;
+  text-align: center;
 }
 
 .squircle-icon:active,
@@ -145,8 +162,15 @@ a:hover {
 }
 
 .squircle-icon span {
-  font-size: 1.2rem;
-  margin-bottom: 0.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.squircle-icon svg {
+  width: 22px;
+  height: 22px;
 }
 
 /* Generic Content Styles */
