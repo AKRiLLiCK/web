@@ -1,0 +1,62 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Window from '../../components/Window.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } }
+  ];
+}
+
+const { lang } = Astro.params;
+
+// Translation dictionary
+const t = {
+  en: {
+    title: 'C:\\Desktop',
+    identityTitle: 'Identity.sys',
+    identityText: 'Polymath and Computer Engineering student prioritizing ideas and logic over a physical identity. Founder of Yutila (Software, Games, Hardware).',
+    stackTitle: 'TechStack.ini',
+    stackText: 'Rust, C, Java, Python, Bash, PowerShell, Linux (Arch/Debian/Kali/Nix), Astro, Docker, Git, Arduino, Godot.',
+    linksTitle: 'NetworkLinks.exe'
+  },
+  es: {
+    title: 'C:\\Escritorio',
+    identityTitle: 'Identidad.sys',
+    identityText: 'Estudiante de Ingeniería Informática y polímata priorizando ideas y lógica por encima de la identidad física. Fundador de Yutila (Software, Juegos, Hardware).',
+    stackTitle: 'TechStack.ini',
+    stackText: 'Rust, C, Java, Python, Bash, PowerShell, Linux (Arch/Debian/Kali/Nix), Astro, Docker, Git, Arduino, Godot.',
+    linksTitle: 'EnlacesRed.exe'
+  }
+}[lang as 'en' | 'es'];
+---
+
+<Layout title="Yutila Desktop" lang={lang}>
+  <header>
+    <h1>{t.title}</h1>
+    <nav class="os-bevel-outset" style="padding: 0.5rem; margin-bottom: 2rem; display: flex; gap: 1rem;">
+      <a href={`/${lang}/`}>Desktop</a>
+      <a href={`/${lang}/work`}>Explorer</a>
+      <a href={`/${lang}/credentials`}>Ctrl Panel</a>
+      <a href={`/${lang}/library`}>Notepad</a>
+    </nav>
+  </header>
+
+  <Window title={t.identityTitle}>
+    <p>{t.identityText}</p>
+  </Window>
+
+  <Window title={t.stackTitle}>
+    <p>{t.stackText}</p>
+  </Window>
+
+  <Window title={t.linksTitle}>
+    <ul>
+      <li><a href="#">GitHub</a></li>
+      <li><a href="#">YouTube</a></li>
+      <li><a href="#">Ko-Fi</a></li>
+      <li><a href="#">ORCID</a></li>
+    </ul>
+  </Window>
+</Layout>

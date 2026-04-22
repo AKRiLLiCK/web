@@ -1,0 +1,68 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Window from '../../components/Window.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } }
+  ];
+}
+
+const { lang } = Astro.params;
+
+const t = {
+  en: {
+    title: 'C:\\Work',
+    explorerTitle: 'File Explorer - Portfolio',
+    nav_desktop: 'Desktop',
+    nav_work: 'Explorer',
+    nav_credentials: 'Ctrl Panel',
+    nav_library: 'Notepad',
+    folders: [
+      { name: 'Yutila', desc: 'Software, Games, Hardware' },
+      { name: 'Applied Physics', desc: 'Research & Modding' },
+      { name: 'Cybersecurity', desc: 'Writeups & Tactics' },
+      { name: 'UI_UX', desc: 'Interface Design Layouts' }
+    ]
+  },
+  es: {
+    title: 'C:\\Trabajo',
+    explorerTitle: 'Explorador de Archivos - Portafolio',
+    nav_desktop: 'Escritorio',
+    nav_work: 'Explorador',
+    nav_credentials: 'Panel Ctrl',
+    nav_library: 'Bloc Notas',
+    folders: [
+      { name: 'Yutila', desc: 'Software, Juegos, Hardware' },
+      { name: 'Física Aplicada', desc: 'Investigación y Mods' },
+      { name: 'Ciberseguridad', desc: 'Tácticas y Reportes' },
+      { name: 'UI_UX', desc: 'Diseño de Interfaces' }
+    ]
+  }
+}[lang as 'en' | 'es'];
+---
+
+<Layout title={t.title} lang={lang}>
+  <header>
+    <h1>{t.title}</h1>
+    <nav class="os-bevel-outset" style="padding: 0.5rem; margin-bottom: 2rem; display: flex; gap: 1rem;">
+      <a href={`/${lang}/`}>{t.nav_desktop}</a>
+      <a href={`/${lang}/work`}>{t.nav_work}</a>
+      <a href={`/${lang}/credentials`}>{t.nav_credentials}</a>
+      <a href={`/${lang}/library`}>{t.nav_library}</a>
+    </nav>
+  </header>
+
+  <Window title={t.explorerTitle}>
+    <div class="grid-icons">
+      {t.folders.map(folder => (
+        <div class="icon-item">
+          <div class="icon-item-graphic">📁</div>
+          <strong>{folder.name}</strong>
+          <span style="font-size: 0.8rem">{folder.desc}</span>
+        </div>
+      ))}
+    </div>
+  </Window>
+</Layout>
