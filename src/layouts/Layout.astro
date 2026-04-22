@@ -3,6 +3,8 @@ import '../styles/global.css';
 import Dock from '../components/Dock.astro';
 import AnimatedBackground from '../components/AnimatedBackground.astro';
 
+import { ViewTransitions } from 'astro:transitions';
+
 interface Props {
   title: string;
   wide?: boolean;
@@ -18,6 +20,7 @@ const { title, wide = false } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content="Acrilic Portfolio" />
+    <ViewTransitions />
   </head>
   <body>
     <AnimatedBackground type={title} />

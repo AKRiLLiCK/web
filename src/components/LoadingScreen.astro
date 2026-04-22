@@ -1,0 +1,101 @@
+---
+---
+
+<div id="eshop-loader">
+  <div class="loader-content">
+    <div class="blocks">
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+    </div>
+    <div class="loading-text">Loading...</div>
+  </div>
+</div>
+
+<style>
+  #eshop-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  .loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .blocks {
+    display: flex;
+    gap: 8px;
+  }
+
+  .block {
+    width: 16px;
+    height: 16px;
+    background-color: #ffffff;
+    border-radius: 2px;
+    animation: waveBounce 1s infinite ease-in-out;
+  }
+
+  .block:nth-child(1) { animation-delay: 0.0s; }
+  .block:nth-child(2) { animation-delay: 0.15s; }
+  .block:nth-child(3) { animation-delay: 0.3s; }
+  .block:nth-child(4) { animation-delay: 0.45s; }
+
+  @keyframes waveBounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+
+  .loading-text {
+    color: var(--text-muted);
+    font-family: monospace;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    animation: blink 1s infinite steps(2, start);
+  }
+
+  @keyframes blink {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('astro:before-preparation', () => {
+    const loader = document.getElementById('eshop-loader');
+    if (loader) {
+      loader.style.opacity = '1';
+      loader.style.pointerEvents = 'all';
+    }
+  });
+
+  document.addEventListener('astro:page-load', () => {
+    const loader = document.getElementById('eshop-loader');
+    if (loader) {
+      loader.style.opacity = '0';
+      loader.style.pointerEvents = 'none';
+    }
+  });
+</script>

@@ -5,125 +5,116 @@ import Screen from '../components/Screen.astro';
 
 <Layout title="OTA Declaration" wide={true}>
   <Screen>
-    <div class="banner">
-      <h1>The OTA Declaration</h1>
-    </div>
-    <div class="page-content markdown-body">
-      <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #222; padding-bottom: 0.5rem; margin-bottom: 1rem; margin-top: 1rem;">
-        <h2 style="border: none; margin: 0; padding: 0;">The Open To All (OTA) Public License™</h2>
-        <a href="/web/OTA.md" download class="download-link">Download .md</a>
-      </div>
+    <div class="manifesto-container">
+      <svg viewBox="0 0 100 100" width="120px" xmlns="http://www.w3.org/2000/svg" class="monolith-logo">
+        <path d="M 25 25 A 35.35 35.35 0 1 0 75 25" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="square"/>
+        <rect x="46" y="5" width="8" height="60" fill="#FFFFFF"/>
+      </svg>
+
+      <h1>The Open To All (OTA) Declaration</h1>
+      <p class="version"><strong>Version:</strong> 1.0</p>
       
-      <p><strong>Version 1.1, 22 April 2026</strong><br/>
-      Copyleft 🄯 2026</p>
-      <p>Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.</p>
+      <h2>0. Preamble</h2>
+      <p>The Open To All (OTA) movement is built on a single, immutable axiom: knowledge is non-rivalrous and must not be artificially constrained. OTA extends the Free Software movement's framework to all forms of educational, scientific, and structural information.</p>
 
-      <h3>Preamble</h3>
-      <p>The Open To All (OTA) Public License™ is a free, copyleft license for knowledge, documentation, and structural information. It guarantees the end user's freedom to access, study, share, and modify the material, ensuring that knowledge remains a non-rivalrous public good.</p>
-      <p>Furthermore, this License enforces a binding ethical framework on the distribution and application of knowledge. It mandates that any system or material covered under this License must be developed and utilized with rigorous professional competence, absolute integrity, and an uncompromising commitment to privacy, fairness, and the safety of the general public. It is specifically intended for educational and knowledge works, including but not limited to courses (with or without issuing certificates or formal credentials), curricula, syllabi, textbooks, books, training programs, documentation, learning resources, and other forms of structured knowledge dissemination.</p>
+      <h2>1. The Core Freedoms:</h2>
+      <ul>
+        <li><strong>Freedom 0 (Access):</strong> To access, read, and ingest the material without financial or institutional barriers.</li>
+        <li><strong>Freedom 1 (Study):</strong> To study the structural logic, methodology, and underlying data.</li>
+        <li><strong>Freedom 2 (Redistribution):</strong> To mirror, host, and redistribute copies to ensure preservation.</li>
+        <li><strong>Freedom 3 (Modification):</strong> To translate, adapt, or build upon the material, provided derivations do not impose downstream restrictions.</li>
+      </ul>
 
-      <h3>TERMS AND CONDITIONS</h3>
+      <h2>2. Public Domain Dedication</h2>
+      <p>This document and the OTA symbol ("The Ascendant Monolith") are dedicated to the public domain (CC0 equivalent). No trademark or copyright is claimed over the geometric paths.</p>
 
-      <h4>0. Definitions</h4>
-      <p>"This License" refers to version 1.1 of the Open To All (OTA) Public License™.</p>
-      <p>"The Material" refers to any document, course, syllabus, textbook, book, article, training program, examination, certificate template, software, algorithm, dataset, or structural information that contains a notice placed by the copyright© holder stating that it is distributed under the terms of this License.</p>
-      <p>"Educational Use" refers to the use of the Material to design, deliver, or support courses, trainings, study programs, examinations, assessments, or credentials (including but not limited to certificates, diplomas, badges, or other marks of completion or competence).</p>
-      <p>"You" refers to the licensee.</p>
-
-      <h4>1. Core Freedoms and Public Benefit</h4>
-      <p>You are granted the irrevocable freedom to access, study, redistribute, and modify the Material. However, these freedoms are contingent upon your commitment to the public interest. Any application, compilation, or derivation of the Material must prioritize the physical safety, privacy, and well-being of the public. If the Material is utilized in systems that pose a credible threat to societal well-being or that lack a good-faith effort toward environmental sustainability, such usage constitutes a material breach of this License and terminates your rights under it.</p>
-
-      <h4>1A. Educational Uses, Courses, and Certificates</h4>
-      <p>When the Material is used for Educational Use, including in courses, trainings, or study programs, you may deliver such offerings with or without issuing certificates, diplomas, badges, or other credentials, and you may charge fees for participation, assessment, or certification. However:</p>
-      <p>(a) The core instructional content of the Material, including any modified versions you create, must remain available to participants under the terms of this License.</p>
-      <p>(b) You may not impose any additional legal or technical restrictions on recipients that would deny or restrict their freedoms under this License with respect to the Material itself.</p>
-      <p>(c) Criteria for access, participation, and evaluation in such Educational Uses must not violate the non-discrimination requirements of Section 3.</p>
-      <p>Nothing in this License creates any guarantee of accreditation, regulatory recognition, or acceptance of any certificates or credentials you issue. Such matters remain governed by external law and institutional policies.</p>
-
-      <h4>2. Privacy and Confidentiality</h4>
-      <p>The distribution and modification of the Material must align with the principles of Privacy by Design. If the Material constitutes software or infrastructural architecture, it must enforce data minimization, strict role-based access controls, and strong cryptography. You are prohibited from leveraging the Material to erode user privacy or to disclose confidential information unless explicitly required to prevent massive societal harm.</p>
-
-      <h4>3. Fairness and Equity</h4>
-      <p>The Material must not be employed to propagate systemic biases or discrimination based on race, gender, sexual orientation, religion, age, disability, or national origin. If the Material pertains to automated decision-making systems or algorithmic modeling, you carry the explicit burden of aggressively testing such derivations for unfair sociological outcomes.</p>
-
-      <h4>4. Competence and Rigour</h4>
-      <p>You represent and warrant that you will only deploy or materially modify the Material within domains where you possess, or have timely access to, the necessary technical competence, education, or training. A knowing and substantial violation of this representation constitutes a material breach of this License. You must not deliberately misrepresent the capabilities, limitations, or environmental footprint of any derivative works. All claims and defect reports regarding the Material must be accurate, rigorous, and strictly based on technical merit.</p>
-
-      <h4>5. Integrity and Intellectual Property</h4>
-      <p>Derivatives of the Material must be developed with absolute integrity. You must reject all forms of corruption or conflict of interest in your application of the Material, and rigorously disclose any perceived conflicts to affected parties. Furthermore, while this License grants broad freedoms, it does not permit the unauthorized incorporation of third-party proprietary algorithms, copyrighted© code, or patented concepts without explicit legal authorization.</p>
-
-      <h4>6. Conveying Verbatim and Modified Copies</h4>
-      <p>You may convey verbatim or modified copies of the Material in any medium, provided that you conspicuously publish on each copy an appropriate copyright© notice, keep intact all notices stating that this License applies, and give all recipients a copy of this License along with the Material. Any modified versions must be distributed under this exact License (Copyleft🄯 provision).</p>
-
-      <h4>7. Public Domain Dedication of Core Assets</h4>
-      <p>To ensure the underlying movement remains immune to intellectual property litigation, the official "Ascendant Monolith" insignia™ and the raw geometric paths constituting the symbol are dedicated to the public domain. No entity may claim exclusive trademark over them.</p>
-
-      <h4>8. Disclaimer of Warranty</h4>
-      <p>THERE IS NO WARRANTY FOR THE MATERIAL, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT© HOLDERS AND/OR OTHER PARTIES PROVIDE THE MATERIAL "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</p>
-
-      <h4>9. Limitation of Liability</h4>
-      <p>IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY COPYRIGHT© HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS THE MATERIAL AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE MATERIAL.</p>
-
-      <p><strong>END OF TERMS AND CONDITIONS</strong></p>
+      <h2>3. Implementation</h2>
+      <p>To apply the OTA framework, include a copy of this declaration within the root directory (e.g., <code>OTA.md</code>) or embed a direct reference in the metadata of the document.</p>
     </div>
-
-    <style>
-      .markdown-body {
-        color: var(--text-muted);
-        line-height: 1.7;
-        font-size: 0.95rem;
-      }
-      .markdown-body h2 {
-        color: #fff;
-        font-size: 1.5rem;
-      }
-      .markdown-body h3 {
-        color: #eee;
-        font-size: 1.2rem;
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-      }
-      .download-link {
-        background: #222;
-        color: var(--text-main);
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 0.85rem;
-        text-decoration: none;
-        font-weight: bold;
-        border: 1px solid #333;
-        transition: all 0.2s ease;
-      }
-      .download-link:hover {
-        background: #333;
-        border-color: #555;
-      }
-      .markdown-body h4 {
-        color: #ddd;
-        font-size: 1.05rem;
-        margin-top: 1.5rem;
-        margin-bottom: 0.5rem;
-      }
-      .markdown-body p {
-        margin-bottom: 1.2rem;
-      }
-      .markdown-body ul {
-        padding-left: 1.5rem;
-        margin-bottom: 1.5rem;
-      }
-      .markdown-body ul li {
-        margin-bottom: 0.5rem;
-      }
-      .markdown-body strong {
-        color: var(--text-main);
-      }
-      .markdown-body code {
-        background: #111;
-        padding: 2px 4px;
-        border-radius: 4px;
-        font-family: monospace;
-        border: 1px solid #333;
-      }
-    </style>
   </Screen>
 </Layout>
+
+<style>
+  .manifesto-container {
+    background-color: var(--screen-bg);
+    color: #eeeeee;
+    font-family: 'Courier New', Courier, Consolas, monospace;
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .monolith-logo {
+    display: block;
+    margin: 0 auto 2.5rem auto;
+  }
+
+  .manifesto-container h1 {
+    font-size: 1.8rem;
+    text-align: center;
+    border-bottom: 2px solid #333;
+    padding-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .version {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 3rem;
+    color: #aaaaaa;
+  }
+
+  .manifesto-container h2 {
+    font-size: 1.2rem;
+    color: #ffffff;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 1px dashed #444;
+    padding-bottom: 0.5rem;
+  }
+
+  .manifesto-container p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+  }
+
+  .manifesto-container ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 2rem;
+  }
+
+  .manifesto-container ul li {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+    position: relative;
+    text-align: justify;
+  }
+
+  .manifesto-container ul li::before {
+    content: ">>";
+    position: absolute;
+    left: 0;
+    color: #888;
+    font-weight: bold;
+  }
+
+  .manifesto-container strong {
+    color: #ffffff;
+  }
+
+  .manifesto-container code {
+    background-color: #111111;
+    padding: 0.2rem 0.4rem;
+    border: 1px solid #333;
+    border-radius: 3px;
+    color: #ffffff;
+  }
+</style>
