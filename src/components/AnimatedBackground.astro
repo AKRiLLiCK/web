@@ -33,55 +33,16 @@ const particles = Array.from({ length: 40 }).map((_, i) => ({
     </defs>
 
     <!-- Wave 1 (Background) -->
-    <path fill="url(#ribbonGrad2)">
-      <animate attributeName="d" 
-        values="M0,200 C300,300 200,100 500,200 C800,300 700,100 1000,200 L1000,500 L0,500 Z;
-                M0,200 C200,100 300,300 500,200 C700,100 800,300 1000,200 L1000,500 L0,500 Z;
-                M0,200 C300,300 200,100 500,200 C800,300 700,100 1000,200 L1000,500 L0,500 Z" 
-        dur="18s" repeatCount="indefinite" />
-    </path>
-    <!-- Wave 1 Top Line -->
-    <path fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5">
-      <animate attributeName="d" 
-        values="M0,200 C300,300 200,100 500,200 C800,300 700,100 1000,200;
-                M0,200 C200,100 300,300 500,200 C700,100 800,300 1000,200;
-                M0,200 C300,300 200,100 500,200 C800,300 700,100 1000,200" 
-        dur="18s" repeatCount="indefinite" />
-    </path>
+    <path fill="url(#ribbonGrad2)" d="M0,200 C300,300 200,100 500,200 C800,300 700,100 1000,200 L1000,500 L0,500 Z" class="wave wave1" />
+    <path fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" d="M0,200 C300,300 200,100 500,200 C800,300 700,100 1000,200" class="wave wave1" />
 
     <!-- Wave 2 (Middle) -->
-    <path fill="url(#ribbonGrad1)">
-      <animate attributeName="d" 
-        values="M0,250 C200,150 300,350 500,250 C700,150 800,350 1000,250 L1000,500 L0,500 Z;
-                M0,250 C250,350 250,150 500,250 C750,350 750,150 1000,250 L1000,500 L0,500 Z;
-                M0,250 C200,150 300,350 500,250 C700,150 800,350 1000,250 L1000,500 L0,500 Z" 
-        dur="12s" repeatCount="indefinite" />
-    </path>
-    <!-- Wave 2 Top Line -->
-    <path fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2">
-      <animate attributeName="d" 
-        values="M0,250 C200,150 300,350 500,250 C700,150 800,350 1000,250;
-                M0,250 C250,350 250,150 500,250 C750,350 750,150 1000,250;
-                M0,250 C200,150 300,350 500,250 C700,150 800,350 1000,250" 
-        dur="12s" repeatCount="indefinite" />
-    </path>
+    <path fill="url(#ribbonGrad1)" d="M0,250 C200,150 300,350 500,250 C700,150 800,350 1000,250 L1000,500 L0,500 Z" class="wave wave2" />
+    <path fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" d="M0,250 C200,150 300,350 500,250 C700,150 800,350 1000,250" class="wave wave2" />
 
     <!-- Wave 3 (Foreground) -->
-    <path fill="url(#ribbonGrad2)">
-      <animate attributeName="d" 
-        values="M0,300 C250,400 250,200 500,300 C750,400 750,200 1000,300 L1000,500 L0,500 Z;
-                M0,300 C200,200 300,400 500,300 C700,200 800,400 1000,300 L1000,500 L0,500 Z;
-                M0,300 C250,400 250,200 500,300 C750,400 750,200 1000,300 L1000,500 L0,500 Z" 
-        dur="15s" repeatCount="indefinite" />
-    </path>
-    <!-- Wave 3 Top Line -->
-    <path fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1">
-      <animate attributeName="d" 
-        values="M0,300 C250,400 250,200 500,300 C750,400 750,200 1000,300;
-                M0,300 C200,200 300,400 500,300 C700,200 800,400 1000,300;
-                M0,300 C250,400 250,200 500,300 C750,400 750,200 1000,300" 
-        dur="15s" repeatCount="indefinite" />
-    </path>
+    <path fill="url(#ribbonGrad2)" d="M0,300 C250,400 250,200 500,300 C750,400 750,200 1000,300 L1000,500 L0,500 Z" class="wave wave3" />
+    <path fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1" d="M0,300 C250,400 250,200 500,300 C750,400 750,200 1000,300" class="wave wave3" />
   </svg>
 
   <!-- PS Vita Style Floating Bubbles -->
@@ -130,6 +91,20 @@ const particles = Array.from({ length: 40 }).map((_, i) => ({
     opacity: 0.8;
   }
 
+  .wave {
+    transform-origin: center;
+    will-change: transform;
+  }
+
+  .wave1 { animation: sway 18s ease-in-out infinite alternate; }
+  .wave2 { animation: sway 12s ease-in-out infinite alternate-reverse; }
+  .wave3 { animation: sway 15s ease-in-out infinite alternate; }
+
+  @keyframes sway {
+    0% { transform: scale(1.1) translateX(-2%); }
+    100% { transform: scale(1.1) translateX(2%); }
+  }
+
   /* PS Vita Style Particles */
   .particles {
     position: absolute;
@@ -143,6 +118,7 @@ const particles = Array.from({ length: 40 }).map((_, i) => ({
     animation: float-up linear infinite;
     user-select: none;
     text-shadow: 0 0 10px rgba(255,255,255,0.3);
+    will-change: transform, opacity;
   }
 
   /* Specific styling for pure bubbles */
