@@ -9,13 +9,72 @@ import Screen from '../components/Screen.astro';
       <h1>Archive</h1>
     </div>
     <div class="page-content">
-      <div class="ui-card">
-        <img src="https://placehold.co/800x200/151515/444444?text=Archive+Banner" alt="Archive Banner" class="ui-card-banner" />
-        <h2>The Architecture of Computing Systems</h2>
-        <span class="ui-badge">Technical Essay</span>
-        <p>An exploratory technical essay detailing the structural paradigms of operating systems and their historical divergence.</p>
-        <a href="#" class="ui-button">Read Essay</a>
+      <div class="search-filter-bar">
+        <input type="text" id="archiveSearch" class="search-input" placeholder="Search archive..." />
+        <select id="archiveFilter" class="filter-dropdown">
+          <option value="all">All Types</option>
+          <option value="Technical Essay">Technical Essay</option>
+          <option value="Book">Book</option>
+          <option value="Research Paper">Research Paper</option>
+        </select>
+      </div>
+
+      <div class="archive-list" id="archiveList">
+        <div class="ui-card archive-item" data-type="Technical Essay">
+          <img src="https://placehold.co/800x200/151515/444444?text=Archive+Banner" alt="Archive Banner" class="ui-card-banner" />
+          <h2 class="archive-title">The Architecture of Computing Systems</h2>
+          <span class="ui-badge">Technical Essay</span>
+          <p class="archive-desc">An exploratory technical essay detailing the structural paradigms of operating systems and their historical divergence.</p>
+          <a href="#" class="ui-button">Read Essay</a>
+        </div>
+
+        <div class="ui-card archive-item" data-type="Book">
+          <img src="https://placehold.co/800x200/151515/444444?text=Book+Banner" alt="Book Banner" class="ui-card-banner" />
+          <h2 class="archive-title">Cybernetics and Digital Autonomy</h2>
+          <span class="ui-badge">Book</span>
+          <p class="archive-desc">A deep dive into the philosophy of open systems, user privacy, and building software that respects user agency.</p>
+          <a href="#" class="ui-button">Read Book</a>
+        </div>
+
+        <div class="ui-card archive-item" data-type="Research Paper">
+          <img src="https://placehold.co/800x200/151515/444444?text=Paper+Banner" alt="Paper Banner" class="ui-card-banner" />
+          <h2 class="archive-title">Supply Chain Validation Protocols</h2>
+          <span class="ui-badge">Research Paper</span>
+          <p class="archive-desc">Proposing new cryptographically secure methods for verifying third-party package integrity in CI/CD pipelines.</p>
+          <a href="#" class="ui-button">Read Paper</a>
+        </div>
       </div>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('archiveSearch');
+        const filterDropdown = document.getElementById('archiveFilter');
+        const archiveItems = document.querySelectorAll('.archive-item');
+
+        function filterItems() {
+          const query = searchInput.value.toLowerCase();
+          const selectedType = filterDropdown.value;
+
+          archiveItems.forEach(item => {
+            const title = item.querySelector('.archive-title').textContent.toLowerCase();
+            const desc = item.querySelector('.archive-desc').textContent.toLowerCase();
+            const type = item.getAttribute('data-type');
+
+            const matchesQuery = title.includes(query) || desc.includes(query);
+            const matchesType = selectedType === 'all' || selectedType === type;
+
+            if (matchesQuery && matchesType) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        }
+
+        searchInput.addEventListener('input', filterItems);
+        filterDropdown.addEventListener('change', filterItems);
+      });
+    </script>
   </Screen>
 </Layout>
