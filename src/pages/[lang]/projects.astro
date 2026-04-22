@@ -13,29 +13,25 @@ const { lang } = Astro.params;
 
 const t = {
   en: {
-    title: 'Credentials',
-    controlTitle: 'Credentials',
+    title: 'Projects',
+    explorerTitle: 'Portfolio',
     nav_home: 'Home',
     nav_projects: 'Projects',
     nav_credentials: 'Credentials',
     nav_archive: 'Archive',
-    categories: [
-      { name: 'Computer Engineering BSc', status: 'In Progress' },
-      { name: 'CompTIA Security+', status: 'Certificate' },
-      { name: 'Advanced Rust Systems', status: 'Course' }
+    items: [
+      { icon: '📁', name: 'Yutila', desc: 'Software, Games, and Hardware' }
     ]
   },
   es: {
-    title: 'Credenciales',
-    controlTitle: 'Credenciales',
+    title: 'Proyectos',
+    explorerTitle: 'Portafolio',
     nav_home: 'Inicio',
     nav_projects: 'Proyectos',
     nav_credentials: 'Credenciales',
     nav_archive: 'Archivo',
-    categories: [
-      { name: 'Grado en Ingeniería Informática', status: 'En Curso' },
-      { name: 'CompTIA Security+', status: 'Certificado' },
-      { name: 'Sistemas Avanzados en Rust', status: 'Curso' }
+    items: [
+      { icon: '📁', name: 'Yutila', desc: 'Software, Juegos y Hardware' }
     ]
   }
 }[lang as 'en' | 'es'];
@@ -51,15 +47,15 @@ const t = {
     </nav>
   </header>
 
-  <Window title={t.controlTitle} active={true}>
-    <div class="os-bevel-inset" style="padding: 1rem; min-height: 200px;">
-      <ul style="list-style-type: square; padding-left: 20px; margin: 0;">
-        {t.categories.map(cat => (
-          <li style="margin-bottom: 10px;">
-            <strong>{cat.name}</strong> - [{cat.status}]
-          </li>
-        ))}
-      </ul>
+  <Window title={t.explorerTitle} active={true}>
+    <div class="grid-icons os-bevel-inset" style="padding: 1rem; min-height: 200px;">
+      {t.items.map(folder => (
+        <div class="icon-item" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.5rem; padding: 0.5rem;">
+          <div class="icon-item-graphic" style="font-size: 2.5rem;">{folder.icon}</div>
+          <strong>{folder.name}</strong>
+          <span style="font-size: 0.8rem; color: #c0c0c0;">{folder.desc}</span>
+        </div>
+      ))}
     </div>
   </Window>
 </Layout>

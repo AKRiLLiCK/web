@@ -1,0 +1,68 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Window from '../../components/Window.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } }
+  ];
+}
+
+const { lang } = Astro.params;
+
+const t = {
+  en: {
+    title: 'Archive',
+    notebookTitle: 'Archive',
+    nav_home: 'Home',
+    nav_projects: 'Projects',
+    nav_credentials: 'Credentials',
+    nav_archive: 'Archive',
+    intro: 'Directory structure for reading material and technical drafts.',
+    files: [
+      { name: 'Godel_Escher_Bach.pdf', type: 'Book' },
+      { name: 'Systems_Philosophy.txt', type: 'Technical Essay' }
+    ]
+  },
+  es: {
+    title: 'Archivo',
+    notebookTitle: 'Archivo',
+    nav_home: 'Inicio',
+    nav_projects: 'Proyectos',
+    nav_credentials: 'Credenciales',
+    nav_archive: 'Archivo',
+    intro: 'Estructura de directorio para material de lectura y borradores.',
+    files: [
+      { name: 'Godel_Escher_Bach.pdf', type: 'Libro' },
+      { name: 'Filosofia_De_Sistemas.txt', type: 'Ensayo Técnico' }
+    ]
+  }
+}[lang as 'en' | 'es'];
+---
+
+<Layout title={t.title} lang={lang}>
+  <header>
+    <nav class="os-bevel-outset" style="padding: 0.5rem; margin-bottom: 2rem; display: flex; gap: 1rem; background-color: var(--bg-window);">
+      <a href={`/${lang}/`}>{t.nav_home}</a>
+      <a href={`/${lang}/projects`}>{t.nav_projects}</a>
+      <a href={`/${lang}/credentials`}>{t.nav_credentials}</a>
+      <a href={`/${lang}/archive`}>{t.nav_archive}</a>
+    </nav>
+  </header>
+
+  <Window title={t.notebookTitle} active={true}>
+    <p style="margin-top: 0; margin-bottom: 1rem;">
+      {t.intro}
+    </p>
+    <div class="os-bevel-inset" style="padding: 10px; min-height: 200px; font-family: 'Fixedsys Excelsior', Courier, monospace;">
+      {t.files.map(f => (
+        <div style="display: flex; gap: 1rem; margin-bottom: 5px;">
+          <span>📄</span>
+          <span style="flex-grow: 1;">{f.name}</span>
+          <span style="font-size: 0.9rem; color: #808080;">{f.type}</span>
+        </div>
+      ))}
+    </div>
+  </Window>
+</Layout>

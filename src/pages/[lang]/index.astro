@@ -11,47 +11,55 @@ export function getStaticPaths() {
 
 const { lang } = Astro.params;
 
-// Translation dictionary
 const t = {
   en: {
-    title: 'C:\\Desktop',
-    identityTitle: 'Identity.sys',
-    identityText: 'Polymath and Computer Engineering student prioritizing ideas and logic over a physical identity. Founder of Yutila (Software, Games, Hardware).',
-    stackTitle: 'TechStack.ini',
-    stackText: 'Rust, C, Java, Python, Bash, PowerShell, Linux (Arch/Debian/Kali/Nix), Astro, Docker, Git, Arduino, Godot.',
-    linksTitle: 'NetworkLinks.exe'
+    title: 'Home',
+    nav_home: 'Home',
+    nav_projects: 'Projects',
+    nav_credentials: 'Credentials',
+    nav_archive: 'Archive',
+    identityTitle: 'Identity',
+    identityText: 'Computer Engineering Student & Polymath',
+    stackTitle: 'Tech Stack',
+    stackText: 'Languages: Rust, C\nSystems: Linux (Arch/Debian/Kali/Nix), Windows\nEngines: Godot\nHardware: Arduino\nDomain: Applied Physics',
+    linksTitle: 'Links'
   },
   es: {
-    title: 'C:\\Escritorio',
-    identityTitle: 'Identidad.sys',
-    identityText: 'Estudiante de Ingeniería Informática y polímata priorizando ideas y lógica por encima de la identidad física. Fundador de Yutila (Software, Juegos, Hardware).',
-    stackTitle: 'TechStack.ini',
-    stackText: 'Rust, C, Java, Python, Bash, PowerShell, Linux (Arch/Debian/Kali/Nix), Astro, Docker, Git, Arduino, Godot.',
-    linksTitle: 'EnlacesRed.exe'
+    title: 'Inicio',
+    nav_home: 'Inicio',
+    nav_projects: 'Proyectos',
+    nav_credentials: 'Credenciales',
+    nav_archive: 'Archivo',
+    identityTitle: 'Identidad',
+    identityText: 'Estudiante de Ingeniería Informática y Polímata',
+    stackTitle: 'Stack Tecnológico',
+    stackText: 'Lenguajes: Rust, C\nSistemas: Linux (Arch/Debian/Kali/Nix), Windows\nMotores: Godot\nHardware: Arduino\nDominio: Física Aplicada',
+    linksTitle: 'Enlaces'
   }
 }[lang as 'en' | 'es'];
 ---
 
-<Layout title="Yutila Desktop" lang={lang}>
+<Layout title={t.title} lang={lang}>
   <header>
-    <h1>{t.title}</h1>
-    <nav class="os-bevel-outset" style="padding: 0.5rem; margin-bottom: 2rem; display: flex; gap: 1rem;">
-      <a href={`/${lang}/`}>Desktop</a>
-      <a href={`/${lang}/work`}>Explorer</a>
-      <a href={`/${lang}/credentials`}>Ctrl Panel</a>
-      <a href={`/${lang}/library`}>Notepad</a>
+    <nav class="os-bevel-outset" style="padding: 0.5rem; margin-bottom: 2rem; display: flex; gap: 1rem; background-color: var(--bg-window);">
+      <a href={`/${lang}/`}>{t.nav_home}</a>
+      <a href={`/${lang}/projects`}>{t.nav_projects}</a>
+      <a href={`/${lang}/credentials`}>{t.nav_credentials}</a>
+      <a href={`/${lang}/archive`}>{t.nav_archive}</a>
     </nav>
   </header>
 
-  <Window title={t.identityTitle}>
-    <p>{t.identityText}</p>
+  <Window title={t.identityTitle} active={false}>
+    <h1 style="text-align: center; margin: 0 0 1rem 0;">Acrilic</h1>
+    <p style="text-align: center; margin-top: 0;">{t.identityText}</p>
   </Window>
 
-  <Window title={t.stackTitle}>
-    <p>{t.stackText}</p>
+  <Window title={t.stackTitle} active={true}>
+    <pre class="os-bevel-inset" style="padding: 0.5rem; margin-bottom: 1rem;">{t.stackText}</pre>
+    <img src="https://skillicons.dev/icons?i=rust,c,linux,godot,arduino" alt="Tech Stack Icons" style="max-width: 100%; height: auto;" />
   </Window>
 
-  <Window title={t.linksTitle}>
+  <Window title={t.linksTitle} active={false}>
     <ul>
       <li><a href="#">GitHub</a></li>
       <li><a href="#">YouTube</a></li>

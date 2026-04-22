@@ -1,0 +1,165 @@
+---
+interface Props {
+  lang: string;
+  activeWindow: string;
+}
+
+const { lang, activeWindow } = Astro.props;
+
+const t = {
+  en: {
+    start: 'Start',
+    status: 'SYS: OK',
+    nav_home: 'Home',
+    nav_projects: 'Projects',
+    nav_credentials: 'Credentials',
+    nav_archive: 'Archive'
+  },
+  es: {
+    start: 'Inicio',
+    status: 'SIST: OK',
+    nav_home: 'Inicio',
+    nav_projects: 'Proyectos',
+    nav_credentials: 'Credenciales',
+    nav_archive: 'Archivo'
+  }
+}[lang as 'en' | 'es'];
+---
+
+<div class="taskbar os-bevel-outset">
+  <div class="taskbar-left">
+    <div class="start-wrapper">
+      <button class="os-btn start-btn" id="start-button"><span style="margin-right:4px;">❖</span><strong>{t.start}</strong></button>
+      <div class="start-menu os-bevel-outset" id="start-menu">
+        <div class="start-menu-sidebar">
+          <strong>Acrilic</strong>
+        </div>
+        <div class="start-menu-items">
+          <a href={`/${lang}/`} class="start-menu-item">{t.nav_home}</a>
+          <a href={`/${lang}/projects`} class="start-menu-item">{t.nav_projects}</a>
+          <a href={`/${lang}/credentials`} class="start-menu-item">{t.nav_credentials}</a>
+          <a href={`/${lang}/archive`} class="start-menu-item">{t.nav_archive}</a>
+        </div>
+      </div>
+    </div>
+    <div class="window-tab os-bevel-inset">
+      <span class="tab-text">{activeWindow}</span>
+    </div>
+  </div>
+  <div class="taskbar-right os-bevel-inset tray">
+    <span>{t.status}</span>
+    <span>12:00</span>
+  </div>
+</div>
+
+<script>
+  const startBtn = document.getElementById('start-button');
+  const startMenu = document.getElementById('start-menu');
+
+  if (startBtn && startMenu) {
+    startBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      startMenu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!startMenu.contains(e.target as Node) && e.target !== startBtn) {
+        startMenu.classList.remove('open');
+      }
+    });
+  }
+</script>
+
+<style>
+  .taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 38px;
+    background-color: #c0c0c0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 4px;
+    z-index: 9999;
+    border-top: 2px solid var(--border-light);
+  }
+  .taskbar-left {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    height: 100%;
+  }
+  .start-wrapper {
+    position: relative;
+    height: 100%;
+  }
+  .start-btn {
+    height: 100%;
+    padding: 0 10px;
+    font-size: 0.95rem;
+    font-family: 'MS Sans Serif', Tahoma, sans-serif;
+  }
+  .start-menu {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    width: 200px;
+    background-color: #c0c0c0;
+    flex-direction: row;
+    z-index: 10000;
+  }
+  .start-menu.open {
+    display: flex;
+  }
+  .start-menu-sidebar {
+    background: var(--titlebar-bg-active);
+    color: #ffffff;
+    padding: 5px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 1.2rem;
+  }
+  .start-menu-items {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 2px;
+  }
+  .start-menu-item {
+    padding: 10px;
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .start-menu-item:hover {
+    background-color: #000080;
+    color: #ffffff;
+  }
+  .window-tab {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 15px;
+    min-width: 150px;
+    background-color: #dfdfdf;
+    color: #000;
+    font-weight: bold;
+    cursor: default;
+  }
+  .tray {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+    padding: 0 10px;
+    font-size: 0.8rem;
+    color: #000;
+    background-color: #dfdfdf;
+  }
+</style>

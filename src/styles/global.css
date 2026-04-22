@@ -1,27 +1,26 @@
 :root {
   --bg-desktop: #000000;
-  --bg-window: #404040;
-  --text-primary: #c0c0c0;
+  --bg-window: #222222;
+  --text-titlebar: #ffffff;
   --text-window: #c0c0c0;
   
-  --border-light: #808080;
+  --border-light: #dfdfdf;
   --border-dark: #000000;
+  --border-grey: #808080;
   
-  --titlebar-bg-active: #008080;
-  --titlebar-text-active: #ffffff;
+  --titlebar-bg-active: linear-gradient(90deg, #000080, #1084d0);
+  --titlebar-bg-inactive: #808080;
 
-  --titlebar-bg-inactive: #2b2b2b;
-  --titlebar-text-inactive: #808080;
-
-  --btn-bg: #404040;
+  --btn-bg: #c0c0c0;
+  --btn-text: #000000;
 }
 
 body {
   margin: 0;
   padding: 0;
   background-color: var(--bg-desktop);
-  color: var(--text-primary);
-  font-family: 'MS Sans Serif', Tahoma, sans-serif;
+  color: var(--text-window);
+  font-family: 'MS Sans Serif', Tahoma, 'Fixedsys Excelsior', sans-serif;
   -webkit-font-smoothing: none;
   -moz-osx-font-smoothing: none;
   font-smooth: never;
@@ -32,14 +31,15 @@ body {
 }
 
 a {
-  color: inherit;
+  color: #c0c0c0;
   text-decoration: underline;
 }
 
 a:hover {
-  color: var(--titlebar-text-active);
+  color: #ffffff;
 }
 
+/* 3D Beveling */
 .os-bevel-outset {
   background-color: var(--bg-window);
   border-top: 2px solid var(--border-light);
@@ -49,32 +49,43 @@ a:hover {
 }
 
 .os-bevel-inset {
-  background-color: var(--bg-window);
+  background-color: #000000;
   border-top: 2px solid var(--border-dark);
   border-left: 2px solid var(--border-dark);
   border-bottom: 2px solid var(--border-light);
   border-right: 2px solid var(--border-light);
+  color: #c0c0c0;
 }
 
-/* Base structural layout */
 .desktop-ui {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: calc(100vh - 40px);
   padding: 2rem;
   gap: 2rem;
+  padding-bottom: 60px; /* Space for taskbar */
+  justify-content: center;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .title-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--titlebar-bg-active);
-  color: var(--titlebar-text-active);
-  padding: 2px 2px 2px 4px;
+  padding: 3px 4px 3px 6px;
   font-weight: bold;
   font-size: 0.9rem;
   letter-spacing: 0.5px;
+  color: var(--text-titlebar);
+}
+
+.title-bar.active {
+  background: var(--titlebar-bg-active);
+}
+
+.title-bar.inactive {
+  background: var(--titlebar-bg-inactive);
 }
 
 .title-bar-controls {
@@ -84,12 +95,12 @@ a:hover {
 
 .os-btn {
   background-color: var(--btn-bg);
-  color: var(--text-window);
+  color: var(--btn-text);
   border-top: 2px solid var(--border-light);
   border-left: 2px solid var(--border-light);
   border-bottom: 2px solid var(--border-dark);
   border-right: 2px solid var(--border-dark);
-  padding: 1px 6px;
+  padding: 2px 6px;
   font-family: 'MS Sans Serif', Tahoma, sans-serif;
   font-size: 0.8rem;
   font-weight: bold;
@@ -104,7 +115,7 @@ a:hover {
   border-left: 2px solid var(--border-dark);
   border-bottom: 2px solid var(--border-light);
   border-right: 2px solid var(--border-light);
-  padding: 2px 5px 0px 7px; /* Shift content slightly on click */
+  padding: 3px 5px 1px 7px;
 }
 
 .window-content {
@@ -128,19 +139,10 @@ a:hover {
 }
 
 .icon-item:hover {
-  background-color: var(--titlebar-bg-active);
-  color: var(--titlebar-text-active);
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
 }
 
 .icon-item-graphic {
-  width: 48px;
-  height: 48px;
-  background-color: var(--bg-window);
-  border-top: 2px solid var(--border-light);
-  border-left: 2px solid var(--border-light);
-  border-bottom: 2px solid var(--border-dark);
-  border-right: 2px solid var(--border-dark);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-size: 2.5rem;
 }
