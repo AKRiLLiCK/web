@@ -24,9 +24,28 @@ const tools: { image: string; alt: string; title: string; badges: string[]; desc
       <h1>Projects</h1>
     </div>
     <div class="page-content">
-      <div class="projects-nav" style="margin-bottom: 2rem; text-align: center;">
-        <a href="#frameworks" class="ui-button" style="margin-right: 1rem;">Frameworks ({frameworks.length})</a>
-        <a href="#tools" class="ui-button">Tools & Utilities ({tools.length})</a>
+      <div class="recruiter-glance" style="background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+        <h2 style="margin-top: 0; border: none; font-size: 1.3rem;">At a Glance</h2>
+        <p style="margin-bottom: 1rem;">Core focus in systems programming (C, Rust), scripting (Python, Bash), and architecture. Seeking roles emphasizing low-level engineering, security, and open-source infrastructure.</p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="/web/credentials" class="ui-button" style="margin-top: 0;">View Credentials</a>
+          <a href="/web/contact" class="ui-button" style="margin-top: 0;">Contact</a>
+        </div>
+      </div>
+
+      <div class="projects-nav" style="margin-bottom: 2rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+        <div style="display: flex; gap: 1rem;">
+          <a href="#frameworks" class="ui-button" style="margin-top: 0;">Frameworks ({frameworks.length})</a>
+          <a href="#tools" class="ui-button" style="margin-top: 0;">Tools & Utilities ({tools.length})</a>
+        </div>
+        <noscript>
+          <div style="color: #ffb3ba; font-size: 0.85rem; padding: 0.5rem; border: 1px dashed #ffb3ba; border-radius: 4px; text-align: center;">
+            JavaScript is disabled. Displaying all projects below.
+          </div>
+        </noscript>
+        <div id="search-container" class="search-filter-bar" style="width: 100%; max-width: 600px; margin-bottom: 0;">
+          <input type="text" id="projectSearch" class="search-input" placeholder="Search projects by name, badge, or keyword..." />
+        </div>
       </div>
 
       <h2 id="frameworks" style="margin-top: 0; padding-top: 1rem;">Frameworks ({frameworks.length})</h2>
@@ -34,7 +53,7 @@ const tools: { image: string; alt: string; title: string; badges: string[]; desc
       {frameworks.length > 0 ? (
         <div class="gallery-grid">
           {frameworks.map(fw => (
-            <div class="ui-card">
+            <div class="ui-card project-card" data-title={fw.title.toLowerCase()} data-badges={fw.badges.join(' ').toLowerCase()} data-desc={fw.description.toLowerCase()}>
               <img src={fw.image} alt={fw.alt} class="ui-card-banner" />
               <h2>{fw.title}</h2>
               {fw.badges.map(b => <span class="ui-badge" style="margin-right: 4px;">{b}</span>)}
@@ -52,7 +71,7 @@ const tools: { image: string; alt: string; title: string; badges: string[]; desc
       {tools.length > 0 ? (
         <div class="gallery-grid">
           {tools.map(tool => (
-            <div class="ui-card">
+            <div class="ui-card project-card" data-title={tool.title.toLowerCase()} data-badges={tool.badges.join(' ').toLowerCase()} data-desc={tool.description.toLowerCase()}>
               <img src={tool.image} alt={tool.alt} class="ui-card-banner" />
               <h2>{tool.title}</h2>
               {tool.badges.map(b => <span class="ui-badge" style="margin-right: 4px;">{b}</span>)}
@@ -65,5 +84,35 @@ const tools: { image: string; alt: string; title: string; badges: string[]; desc
         <p style="text-align: center; color: #888; font-style: italic;">More tools coming soon.</p>
       )}
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('projectSearch');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        if (!searchInput) return;
+
+        searchInput.addEventListener('input', (e) => {
+          const target = e.target as HTMLInputElement;
+          const query = target.value.toLowerCase();
+
+          projectCards.forEach(card => {
+            const title = card.getAttribute('data-title') || '';
+            const badges = card.getAttribute('data-badges') || '';
+            const desc = card.getAttribute('data-desc') || '';
+
+            if (title.includes(query) || badges.includes(query) || desc.includes(query)) {
+              (card as HTMLElement).style.display = '';
+            } else {
+              (card as HTMLElement).style.display = 'none';
+            }
+          });
+        });
+      });
+    </script>
+    <style>
+      noscript + #search-container {
+        display: none !important;
+      }
+    </style>
   </Screen>
 </Layout>

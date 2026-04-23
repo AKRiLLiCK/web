@@ -463,3 +463,62 @@ hr {
 .pastel-badge.pink { color: var(--pastel-pink); border-color: rgba(255,179,186,0.3); }
 .pastel-badge.green { color: var(--pastel-green); border-color: rgba(186,255,201,0.3); }
 .pastel-badge.purple { color: var(--pastel-purple); border-color: rgba(224,176,255,0.3); }
+
+/* 3DS Interactive Toggles */
+details.ds-toggle {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid #333;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+details.ds-toggle[open] {
+  background: rgba(0,0,0,0.4);
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+  border-color: #555;
+}
+
+details.ds-toggle > summary {
+  padding: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  background: linear-gradient(180deg, #2a2a2a 0%, #151515 100%);
+  border-bottom: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none; /* Hide default arrow */
+  user-select: none;
+}
+
+details.ds-toggle > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.ds-toggle[open] > summary {
+  border-bottom-color: #333;
+  background: linear-gradient(180deg, #222 0%, #111 100%);
+}
+
+details.ds-toggle > summary::before {
+  content: '?';
+  font-size: 0.8rem;
+  color: #888;
+  transition: transform 0.2s ease-in-out;
+}
+
+details.ds-toggle[open] > summary::before {
+  transform: rotate(90deg);
+  color: var(--text-main);
+}
+
+.ds-toggle-content {
+  padding: 1rem;
+  border-top: 1px solid #111;
+  background: transparent;
+}

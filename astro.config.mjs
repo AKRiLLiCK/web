@@ -6,4 +6,15 @@ export default defineConfig({
   base: '/web',
   integrations: [mdx()],
   trailingSlash: 'always',
+  vite: {
+    optimizeDeps: {
+      include: [
+        'astro/runtime/client/dev-toolbar/entrypoint.js',
+        'astro/virtual-modules/transitions-router.js',
+        'astro/virtual-modules/transitions-types.js',
+        'astro/virtual-modules/transitions-events.js',
+        'astro/virtual-modules/transitions-swap-functions.js',
+      ],
+    },
+  },
 });
