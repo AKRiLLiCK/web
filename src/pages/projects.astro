@@ -24,14 +24,7 @@ const tools: { image: string; alt: string; title: string; badges: string[]; desc
       <h1>Projects</h1>
     </div>
     <div class="page-content">
-      <div class="recruiter-glance" style="background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
-        <h2 style="margin-top: 0; border: none; font-size: 1.3rem;">At a Glance</h2>
-        <p style="margin-bottom: 1rem;">Core focus in systems programming (C, Rust), scripting (Python, Bash), and architecture. Seeking roles emphasizing low-level engineering, security, and open-source infrastructure.</p>
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-          <a href="/web/credentials" class="ui-button" style="margin-top: 0;">View Credentials</a>
-          <a href="/web/contact" class="ui-button" style="margin-top: 0;">Contact</a>
-        </div>
-      </div>
+
 
       <div class="projects-nav" style="margin-bottom: 2rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
         <div style="display: flex; gap: 1rem;">
@@ -48,8 +41,7 @@ const tools: { image: string; alt: string; title: string; badges: string[]; desc
         </div>
       </div>
 
-      <h2 id="frameworks" style="margin-top: 0; padding-top: 1rem;">Frameworks ({frameworks.length})</h2>
-      <hr style="margin-bottom: 1.5rem;" />
+      <h2 id="frameworks" style="margin-top: 0; padding-top: 1rem; margin-bottom: 1.5rem;">Frameworks ({frameworks.length})</h2>
       {frameworks.length > 0 ? (
         <div class="gallery-grid">
           {frameworks.map(fw => (
@@ -66,8 +58,7 @@ const tools: { image: string; alt: string; title: string; badges: string[]; desc
         <p style="text-align: center; color: #888; font-style: italic;">No frameworks listed yet.</p>
       )}
 
-      <h2 id="tools" style="padding-top: 1rem; margin-top: 2rem;">Tools & Utilities ({tools.length})</h2>
-      <hr style="margin-bottom: 1.5rem;" />
+      <h2 id="tools" style="padding-top: 1rem; margin-top: 2rem; margin-bottom: 1.5rem;">Tools & Utilities ({tools.length})</h2>
       {tools.length > 0 ? (
         <div class="gallery-grid">
           {tools.map(tool => (
@@ -85,7 +76,7 @@ const tools: { image: string; alt: string; title: string; badges: string[]; desc
       )}
     </div>
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener('astro:page-load', () => {
         const searchInput = document.getElementById('projectSearch');
         const projectCards = document.querySelectorAll('.project-card');
 
