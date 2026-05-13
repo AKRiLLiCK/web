@@ -31,8 +31,9 @@ const formattedDate = publishDate.toISOString().split('T')[0];
             <Image 
               src={coverImage} 
               alt={`Cover of ${title}`} 
-              width={300} 
-              height={420} 
+              width={600} 
+              height={840} 
+              densities={[1.5, 2]}
               class="detail-cover" 
             />
           </div>
