@@ -48,8 +48,9 @@ const basePath = import.meta.env.BASE_URL;
               <Image 
                 src={entry.data.coverImage} 
                 alt={`Cover of ${entry.data.title}`} 
-                width={200} 
-                height={280} 
+                width={400} 
+                height={560} 
+                densities={[1.5, 2]}
                 class="card-cover" 
               />
             </div>
