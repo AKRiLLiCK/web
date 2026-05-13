@@ -4,7 +4,7 @@ author: "Acrilic"
 publishDate: 2026-05-12
 docType: "Paper"
 description: "A comparative study exploring the implementations of Office Open XML (OOXML) and Open Document Format (ODF)."
-coverImage: "../../assets/A Comparative Study of OOXML and ODF Implementations cover.png"
+coverImage: "../../assets/covers/A Comparative Study of OOXML and ODF Implementations cover.png"
 downloadUrl: "/web/archive/A Comparative Study of OOXML and ODF Implementations.pdf"
 ---
 
