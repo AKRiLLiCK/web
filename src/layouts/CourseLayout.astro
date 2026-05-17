@@ -44,11 +44,8 @@ const basePath = import.meta.env.BASE_URL;
 
                 <div class="progress-bar-container">
                     <div class="progress-bar-header">
-                        <span class="progress-label">Course Audit Progress</span
-                        >
-                        <span class="progress-percent" id="progress-percent"
-                            >0% Complete</span
-                        >
+                        <span class="progress-label">Course Audit Progress</span>
+                        <span class="progress-percent" id="progress-percent">0% Complete</span>
                     </div>
                     <div class="progress-track">
                         <div class="progress-fill" id="progress-fill"></div>
@@ -85,7 +82,8 @@ const basePath = import.meta.env.BASE_URL;
                             href={`${basePath}OTA.md`}
                             target="_blank"
                             rel="noopener noreferrer">OTA (Open To All)</a
-                        > public license. Copyleft 🄯 {new Date().getFullYear()}.
+                        > public license.
+                        Copyleft 🄯 {new Date().getFullYear()}.
                     </p>
                 </footer>
             </div>
@@ -124,6 +122,7 @@ const basePath = import.meta.env.BASE_URL;
                 checkbox.addEventListener("change", (e: Event) => {
                     const target = e.target as HTMLInputElement;
                     const isChecked = target.checked;
+
                     taskStates[taskId] = isChecked;
                     localStorage.setItem(
                         "course_progress_electronegativity",
@@ -230,7 +229,7 @@ const basePath = import.meta.env.BASE_URL;
         background: linear-gradient(
             180deg,
             var(--ctp-mantle) 0%,
-            var(--ctp-crust) 100%
+            var(--ctp-crust) 100
         ) !important;
         border-bottom: 2px solid var(--ctp-surface0) !important;
         box-shadow: 0 4px 12px rgba(17, 17, 27, 0.8) !important;
@@ -240,12 +239,18 @@ const basePath = import.meta.env.BASE_URL;
         text-shadow: 0 2px 4px rgba(17, 17, 27, 0.8) !important;
     }
 
+    .page-content {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
     .progress-bar-container {
         background: rgba(17, 17, 27, 0.6);
         border: 1px solid var(--ctp-surface0);
         border-radius: 6px;
         padding: 1rem;
-        margin-bottom: 2rem;
         box-shadow: inset 0 0 12px rgba(17, 17, 27, 0.8);
     }
     .progress-bar-header {
@@ -281,7 +286,7 @@ const basePath = import.meta.env.BASE_URL;
         background: linear-gradient(
             90deg,
             var(--ctp-blue) 0%,
-            var(--ctp-mauve) 100%
+            var(--ctp-mauve) 100
         );
         border-radius: 4px;
         transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
@@ -291,7 +296,7 @@ const basePath = import.meta.env.BASE_URL;
     .markdown-body h2 {
         font-size: 1.5rem;
         color: var(--ctp-text);
-        margin-top: 2.5rem;
+        margin-top: 2rem;
         margin-bottom: 1.2rem;
         border-bottom: 2px solid var(--ctp-surface0);
         padding-bottom: 0.5rem;
@@ -307,7 +312,7 @@ const basePath = import.meta.env.BASE_URL;
         background: linear-gradient(
             90deg,
             var(--ctp-blue) 0%,
-            var(--ctp-mauve) 100%
+            var(--ctp-mauve) 100
         );
         box-shadow: 0 0 6px rgba(203, 166, 247, 0.8);
     }
@@ -353,7 +358,7 @@ const basePath = import.meta.env.BASE_URL;
         border: 1px solid var(--ctp-surface0);
         border-radius: 6px;
         padding: 1.2rem;
-        margin: 1rem 0 2rem 0;
+        margin: 1rem 0 1.5rem 0;
         box-shadow: inset 0 0 12px rgba(17, 17, 27, 0.8);
     }
     .markdown-body ol li {
@@ -462,7 +467,6 @@ const basePath = import.meta.env.BASE_URL;
         width: 100%;
         aspect-ratio: 16 / 9;
         max-height: 450px;
-        margin-bottom: 2rem;
         border: 2px solid var(--ctp-surface0);
         border-radius: 8px;
         background: var(--ctp-crust);
@@ -506,7 +510,6 @@ const basePath = import.meta.env.BASE_URL;
         border: 1px solid var(--ctp-surface0);
         border-radius: 6px;
         padding: 1.5rem;
-        margin-bottom: 2rem;
         box-shadow: inset 0 0 10px rgba(17, 17, 27, 0.6);
     }
     .course-title {
@@ -550,6 +553,6 @@ const basePath = import.meta.env.BASE_URL;
     }
     .separator {
         border-color: var(--ctp-surface0);
-        margin: 2rem 0;
+        margin: 1rem 0;
     }
 </style>
