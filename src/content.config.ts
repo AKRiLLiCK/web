@@ -15,6 +15,20 @@ const archiveCollection = defineCollection({
   }),
 });
 
+const coursesCollection = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/courses" }),
+  schema: ({ image }) => z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    tags: z.array(z.string()),
+    layout: z.string(),
+    bannerImage: image().optional(),
+  }),
+});
+
 export const collections = {
   'archive': archiveCollection,
+  'courses': coursesCollection,
 };
+

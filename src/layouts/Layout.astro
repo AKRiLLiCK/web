@@ -8,9 +8,10 @@ import { ClientRouter } from 'astro:transitions';
 interface Props {
   title: string;
   wide?: boolean;
+  activeWindow?: string;
 }
 
-const { title, wide = false } = Astro.props;
+const { title, wide = false, activeWindow = title } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -44,7 +45,7 @@ const { title, wide = false } = Astro.props;
       <slot />
 
       <!-- Bottom Dock Navigation -->
-      <Dock activeWindow={title} />
+      <Dock activeWindow={activeWindow} />
     </div>
 
     <script>

@@ -1,0 +1,341 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import Screen from '../components/Screen.astro';
+
+const courses = await getCollection('courses');
+courses.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const basePath = import.meta.env.BASE_URL;
+---
+
+<Layout title="Arcadia Academy" wide={true}>
+  <Screen>
+    <div class="mocha-academy-container">
+      <div class="banner courses-banner">
+          <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="courses-logo">
+            <defs>
+              <!-- Neon Gradient: Mauve to Blue -->
+              <linearGradient id="cyber-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#cba6f7" />
+                <stop offset="50%" stop-color="#b4befe" />
+                <stop offset="100%" stop-color="#89b4fa" />
+              </linearGradient>
+              <!-- Accent Gradient: Pink to Mauve -->
+              <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f5c2e7" />
+                <stop offset="100%" stop-color="#cba6f7" />
+              </linearGradient>
+              <!-- Glow Filter -->
+              <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            
+            <!-- Cyber Security Outer Shield (Semi-Transparent Outline) -->
+            <path d="M60 10 L102 28 L102 70 C102 88 60 106 60 106 C60 106 18 88 18 70 L18 28 Z" 
+                  stroke="url(#cyber-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                  stroke-dasharray="4 2" opacity="0.4" />
+
+            <!-- Core Cyber Shield -->
+            <path d="M60 14 L96 30 L96 66 C96 82 60 98 60 98 C60 98 24 82 24 66 L24 30 Z" 
+                  stroke="url(#cyber-grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" 
+                  filter="url(#neon-glow)" />
+
+            <!-- Futuristic Graduation Cap Top (Diamond) -->
+            <path d="M60 32 L88 44 L60 56 L32 44 Z" 
+                  fill="url(#accent-grad)" fill-opacity="0.15"
+                  stroke="url(#accent-grad)" stroke-width="2" stroke-linejoin="round" />
+            
+            <!-- Inner Cap Diamond Accent -->
+            <path d="M60 37 L78 44 L60 51 L42 44 Z" 
+                  fill="url(#cyber-grad)" fill-opacity="0.1" 
+                  stroke="url(#cyber-grad)" stroke-width="1" />
+
+            <!-- Graduation Cap Base/Band -->
+            <path d="M44 51 L44 62 C44 67 76 67 76 62 L76 51" 
+                  stroke="url(#cyber-grad)" stroke-width="2" stroke-linecap="round" />
+
+            <!-- Hanging Tassel with Exploit Node -->
+            <path d="M60 44 L78 51 L78 68" 
+                  stroke="#f5c2e7" stroke-width="1.5" stroke-linecap="round" />
+            <circle cx="78" cy="72" r="3" fill="#f5c2e7" filter="url(#neon-glow)" />
+
+            <!-- Cybernetic Nodes (Academia / Security Matrix Connected Lines) -->
+            <circle cx="60" cy="14" r="2.5" fill="#89b4fa" />
+            <circle cx="24" cy="30" r="2.5" fill="#cba6f7" />
+            <circle cx="96" cy="30" r="2.5" fill="#cba6f7" />
+            <line x1="60" y1="14" x2="60" y2="32" stroke="url(#cyber-grad)" stroke-width="1.5" stroke-dasharray="2 2" />
+          </svg>
+        <div class="banner-content">
+          <h1 class="courses-title">Arcadia Academy</h1>
+          <p class="courses-description">
+            A structured repository of architectural security courses, static analysis methodologies and advanced exploit engineering materials.
+          </p>
+        </div>
+      </div>
+      
+      <div class="page-content">
+        <div class="search-filter-bar">
+          <input type="text" id="courseSearch" class="search-input" placeholder="Search courses..." />
+        </div>
+
+        <div class="courses-grid" id="coursesList">
+          {courses.map((course) => (
+            <a href={`${basePath}arcadia-academy/${course.id}/`} class="course-card catalog-row">
+              {course.data.bannerImage ? (
+                <div class="course-card-banner-wrapper">
+                  <Image 
+                    src={course.data.bannerImage} 
+                    alt={`Banner for ${course.data.title}`} 
+                    width={600} 
+                    height={337} 
+                    class="course-card-banner"
+                  />
+                </div>
+              ) : (
+                <div class="course-card-accent"></div>
+              )}
+              <div class="course-card-content">
+                <h2 class="course-card-title">{course.data.title}</h2>
+                <p class="course-card-desc">{course.data.description}</p>
+                <div class="course-card-meta">
+                  <span class="course-card-date">
+                    {course.data.date.toISOString().split('T')[0]}
+                  </span>
+                  <div class="course-card-tags">
+                    {course.data.tags.map(tag => (
+                      <span class="tag">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <style>
+      /* Catppuccin Mocha Color Palette */
+      :root {
+        --ctp-base: #1e1e2e;
+        --ctp-mantle: #181825;
+        --ctp-crust: #11111b;
+        --ctp-text: #cdd6f4;
+        --ctp-subtext1: #bac2de;
+        --ctp-subtext0: #a6adc8;
+        --ctp-surface0: #313244;
+        --ctp-surface1: #45475a;
+        --ctp-surface2: #585b70;
+        --ctp-mauve: #cba6f7;
+        --ctp-blue: #89b4fa;
+        --ctp-lavender: #b4befe;
+        --ctp-green: #a6e3a1;
+      }
+
+      /* Parent Screen Background Override */
+      :global(.screen-inset:has(.mocha-academy-container)) {
+        background-color: var(--ctp-base) !important;
+        border-color: var(--ctp-surface0) !important;
+        box-shadow: inset 0 0 30px rgba(17, 17, 27, 0.9) !important;
+      }
+
+      .course-card-banner-wrapper {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        background: var(--ctp-crust);
+        border-bottom: 2px solid var(--ctp-surface0);
+        position: relative;
+        overflow: hidden;
+      }
+      .course-card-banner {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .courses-banner {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        padding: 2rem 1rem 1.5rem 1rem;
+        width: 100%;
+        background: linear-gradient(180deg, var(--ctp-mantle) 0%, var(--ctp-crust) 100%);
+        border-bottom: 2px solid var(--ctp-surface0);
+        box-shadow: 0 4px 12px rgba(17, 17, 27, 0.8);
+      }
+      .banner-icon {
+        flex-shrink: 0;
+      }
+      .courses-logo {
+        height: 64px;
+        width: auto;
+        color: var(--ctp-mauve);
+        filter: drop-shadow(0 0 8px rgba(203, 166, 247, 0.4));
+      }
+      .banner-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+      }
+      .courses-title {
+        margin: 0 0 0.5rem 0;
+        font-size: 2.5rem;
+        color: var(--ctp-text);
+        letter-spacing: 2px;
+        text-shadow: 0 2px 4px rgba(17, 17, 27, 0.8);
+      }
+      .courses-description {
+        color: var(--ctp-subtext1);
+        font-size: 0.85rem;
+        max-width: 500px;
+        margin: 0;
+        line-height: 1.5;
+      }
+      
+      .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        padding: 1rem;
+        background: rgba(24, 24, 37, 0.4);
+        border: 1px solid var(--ctp-surface0);
+        border-radius: 8px;
+        box-shadow: inset 0 0 15px rgba(17, 17, 27, 0.9);
+      }
+      
+      .course-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(180deg, var(--ctp-mantle) 0%, var(--ctp-crust) 100%);
+        border: 2px solid var(--ctp-surface0);
+        border-radius: 8px;
+        overflow: hidden;
+        text-decoration: none;
+        transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+        box-shadow: 0 4px 8px rgba(17, 17, 27, 0.5), inset 0 1px 0 rgba(255,255,255,0.02);
+      }
+      
+      .course-card-accent {
+        height: 4px;
+        background: linear-gradient(90deg, var(--ctp-mauve) 0%, var(--ctp-blue) 100%);
+        width: 100%;
+      }
+      
+      .course-card-content {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        flex-grow: 1;
+      }
+      
+      .course-card-title {
+        color: var(--ctp-text);
+        font-size: 1.2rem;
+        font-weight: bold;
+        line-height: 1.3;
+        margin: 0;
+        border: none;
+        padding: 0;
+      }
+      
+      .course-card-desc {
+        color: var(--ctp-subtext1);
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin: 0;
+        flex-grow: 1;
+      }
+      
+      .course-card-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px dashed var(--ctp-surface0);
+        padding-top: 0.8rem;
+        margin-top: auto;
+      }
+      
+      .course-card-date {
+        color: var(--ctp-subtext0);
+        font-size: 0.8rem;
+        font-family: monospace;
+      }
+      
+      .course-card-tags {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+      
+      .tag {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-family: monospace;
+        border: 1px solid rgba(203, 166, 247, 0.15);
+        background: rgba(203, 166, 247, 0.05);
+        color: var(--ctp-mauve);
+        transition: all 0.2s ease;
+      }
+ 
+      .course-card:hover, .course-card:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(17, 17, 27, 0.8), inset 0 1px 0 rgba(255,255,255,0.05);
+        outline: none;
+        border-color: var(--ctp-mauve);
+      }
+      .course-card:hover .tag {
+        color: var(--ctp-text);
+        border-color: rgba(203, 166, 247, 0.4);
+        background: rgba(203, 166, 247, 0.15);
+      }
+      .course-card:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 4px rgba(17, 17, 27, 0.9), inset 0 2px 4px rgba(17, 17, 27, 0.7);
+      }
+    </style>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('courseSearch');
+        const catalogRows = document.querySelectorAll('.catalog-row');
+
+        function filterItems() {
+          const query = searchInput?.value?.toLowerCase() || '';
+
+          catalogRows.forEach(row => {
+            const titleElement = row.querySelector('.course-card-title');
+            const descElement = row.querySelector('.course-card-desc');
+            const title = titleElement ? titleElement.textContent.toLowerCase() : '';
+            const desc = descElement ? descElement.textContent.toLowerCase() : '';
+
+            const matchesQuery = title.includes(query) || desc.includes(query);
+
+            if (matchesQuery) {
+              row.style.display = 'flex';
+            } else {
+              row.style.display = 'none';
+            }
+          });
+        }
+
+        if (searchInput) {
+          searchInput.addEventListener('input', filterItems);
+        }
+      });
+    </script>
+  </Screen>
+</Layout>
