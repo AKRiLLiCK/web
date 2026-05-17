@@ -12,7 +12,7 @@ This course covers the structural auditing of Electron applications using Doyens
 
 ---
 
-## Core Core Resources & Documentation
+## Core Resources & Documentation
 Before beginning, bookmark and review the foundational specifications:
 * **Framework Standard:** [Electron Official Security Guidelines](https://www.electronjs.org/docs/latest/tutorial/security)
 * **Auditing Standard:** [Doyensec Electron Security Checklist Whitepaper](https://doyensec.com/research.html)
@@ -67,3 +67,12 @@ Before beginning, bookmark and review the foundational specifications:
 **Practical Tasks & Resources:**
 1. Audit `preload.js` and trace all endpoints exposed via `contextBridge.exposeInMainWorld` using the [Electronegativity Preload Script Rules](https://github.com/doyensec/electronegativity/wiki/PRELOAD_JS_CHECK).
 2. Build a proof-of-concept payload targeting a detected `shell.openExternal()` misconfiguration, using test links found on the [Electronegativity Open External Exploit Wiki](https://github.com/doyensec/electronegativity/wiki/OPEN_EXTERNAL_JS_CHECK) to attempt to run local executable protocols (`file://` or custom deep links).
+
+### Module 6: Exploit Weaponization & Remediation Validation
+* **6.1 Proof of Concept Generation:** Translating theoretical AST alerts into viable exploit chains (e.g., escalating Cross-Site Scripting to Remote Code Execution).
+* **6.2 Patch Validation:** Re-auditing configurations post-remediation to ensure context bridges are securely implemented without exposing native Node.js functionality.
+
+**Practical Tasks & Resources:**
+1. Select a vulnerable IPC channel identified in DVEA. Draft a functional JavaScript payload that leverages a frontend XSS vulnerability to execute arbitrary system commands via the exposed bridge.
+2. Patch the vulnerability in the DVEA source code by implementing robust `contextBridge` validation and strictly typing the allowed IPC channels.
+3. Re-run the Electronegativity static analysis pipeline against your patched source directory to confirm the alert is fully resolved.
