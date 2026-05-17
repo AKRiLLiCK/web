@@ -10,6 +10,9 @@ bannerImage: "../../assets/covers/automated-electron-security-auditing-with-elec
 ## Course Overview
 This course covers the structural auditing of Electron applications using Doyensec's Electronegativity static analysis engine. It focuses on isolating process vulnerabilities, identifying AST/DOM security anti-patterns, mapping configuration defects to remote execution vectors, and executing practical verification labs.
 
+**Recommended Introductory Watch:** 
+* [An Intro to Electron Application Penetration Testing (Payatu Webinar)](https://www.youtube.com/watch?v=-fsrkIlFKvs)
+
 ---
 
 ## Core Resources & Documentation
@@ -64,6 +67,9 @@ Before beginning, bookmark and review the foundational specifications:
 * **5.2 Command Injection Sinks (`OPEN_EXTERNAL_JS_CHECK`):** Analyzing `shell.openExternal()` integration for unsanitized URI scheme execution. See [Electron Shell Module Documentation](https://www.electronjs.org/docs/latest/api/shell).
 * **5.3 Deep Linking Flaws (`PROTOCOL_HANDLER_JS_CHECK`):** Auditing `setAsDefaultProtocolClient` parameters against argument injection vectors. Reference the [Electron Custom Protocol Tutorial](https://www.electronjs.org/docs/latest/tutorial/launch-app-from-url-in-another-app).
 
+**Video Material:**
+* [Black Hat: Preloading Insecurity In Your Electron](https://www.youtube.com/watch?v=Hw6JShd8Jxw) - Deep dive into contextBridge and preload misconfigurations.
+
 **Practical Tasks & Resources:**
 1. Audit `preload.js` and trace all endpoints exposed via `contextBridge.exposeInMainWorld` using the [Electronegativity Preload Script Rules](https://github.com/doyensec/electronegativity/wiki/PRELOAD_JS_CHECK).
 2. Build a proof-of-concept payload targeting a detected `shell.openExternal()` misconfiguration, using test links found on the [Electronegativity Open External Exploit Wiki](https://github.com/doyensec/electronegativity/wiki/OPEN_EXTERNAL_JS_CHECK) to attempt to run local executable protocols (`file://` or custom deep links).
@@ -71,6 +77,9 @@ Before beginning, bookmark and review the foundational specifications:
 ### Module 6: Exploit Weaponization & Remediation Validation
 * **6.1 Proof of Concept Generation:** Translating theoretical AST alerts into viable exploit chains (e.g., escalating Cross-Site Scripting to Remote Code Execution).
 * **6.2 Patch Validation:** Re-auditing configurations post-remediation to ensure context bridges are securely implemented without exposing native Node.js functionality.
+
+**Video Material:**
+* [Hacking Modern Desktop apps with XSS and RCE Workshop](https://www.youtube.com/watch?v=xILfQGkLXQo) - Step-by-step weaponization of XSS into native payload execution.
 
 **Practical Tasks & Resources:**
 1. Select a vulnerable IPC channel identified in DVEA. Draft a functional JavaScript payload that leverages a frontend XSS vulnerability to execute arbitrary system commands via the exposed bridge.
