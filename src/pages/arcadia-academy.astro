@@ -126,12 +126,25 @@ const basePath = import.meta.env.BASE_URL;
         background-color: var(--ctp-base) !important;
         border-color: var(--ctp-surface0) !important;
         box-shadow: inset 0 0 30px rgba(17, 17, 27, 0.9) !important;
+        overflow-y: auto !important;
+      }
+
+      :global(.screen-inset:has(.mocha-academy-container))::-webkit-scrollbar {
+        width: 6px;
+      }
+      :global(.screen-inset:has(.mocha-academy-container))::-webkit-scrollbar-track {
+        background: var(--ctp-crust);
+      }
+      :global(.screen-inset:has(.mocha-academy-container))::-webkit-scrollbar-thumb {
+        background: var(--ctp-surface1);
+        border-radius: 3px;
+      }
+      :global(.screen-inset:has(.mocha-academy-container))::-webkit-scrollbar-thumb:hover {
+        background: var(--ctp-mauve);
       }
 
       .mocha-academy-container {
-        height: 100%;
         width: 100%;
-        overflow-y: auto;
         display: flex;
         flex-direction: column;
       }
