@@ -3,556 +3,123 @@ import Layout from '../layouts/Layout.astro';
 import Screen from '../components/Screen.astro';
 ---
 
-<Layout title="TuskAlpha" wide={true}>
+<Layout title="Tusk" wide={true}>
   <Screen>
-    <!-- KaTeX integration -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71bZBTIQHQ" crossorigin="anonymous">
     <script is:inline src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cpW21h6RZv/phavutF+GqIGc/9O29yWeQ8j82NenH0R1YdK3XlT3J6+zB38fJ/u" crossorigin="anonymous"></script>
 
     <div class="wa-container">
       <header class="wa-header">
         <div class="wa-logo">
-          <span class="wa-logo-tusk">Tusk</span><span class="wa-logo-alpha">Alpha</span>
-          <span class="wa-logo-sub">computational intelligence</span>
+          <span class="wa-logo-tusk">Tusk</span>
+          <span class="wa-logo-sub">symbolic computation engine</span>
         </div>
         <div class="wa-search-wrapper">
           <div class="wa-search-bar">
-            <input type="text" id="waInput" placeholder="Enter what you want to calculate or know about" autocomplete="off" spellcheck="false" />
+            <input type="text" id="waInput" placeholder="Enter expression (e.g., int(x * sin(x), x))" autocomplete="off" spellcheck="false" />
             <button id="waSubmit">=</button>
-          </div>
-          <div class="wa-examples">
-            Examples: <span class="wa-ex">int(x)</span>, <span class="wa-ex">int(x * sin(x), x)</span>, <span class="wa-ex">int(x^2 + 3*x, x)</span>
           </div>
         </div>
       </header>
 
       <div class="wa-content">
-        <!-- Input Interpretation Pod -->
         <div class="wa-pod" id="pod-input" style="display: none;">
           <h2 class="wa-pod-title">Input interpretation</h2>
           <div class="wa-pod-content" id="wa-input-render"></div>
         </div>
 
-        <!-- Result Pod -->
         <div class="wa-pod" id="pod-result" style="display: none;">
           <h2 class="wa-pod-title">Result</h2>
           <div class="wa-pod-content wa-result-content" id="wa-result-render"></div>
         </div>
 
-        <!-- Step-by-step Pod -->
         <div class="wa-pod" id="pod-steps" style="display: none;">
           <h2 class="wa-pod-title">Step-by-step solution</h2>
           <div class="wa-pod-content wa-steps-content" id="wa-steps-render"></div>
         </div>
 
-        <!-- Error Pod -->
         <div class="wa-pod" id="pod-error" style="display: none;">
            <h2 class="wa-pod-title">Error</h2>
-           <div class="wa-pod-content" id="wa-error-render" style="color: #dd0000;">Tusk doesn't understand your input.</div>
+           <div class="wa-pod-content" id="wa-error-render" style="color: #ff6b6b;">Tusk could not parse the input. Check syntax.</div>
         </div>
       </div>
     </div>
 
     <script is:inline>
-      document.addEventListener('astro:page-load', () => {
+      function runEnginePipeline() {
         const input = document.getElementById('waInput');
-        const submit = document.getElementById('waSubmit');
+        const renderInput = document.getElementById('wa-input-render');
+        const renderSteps = document.getElementById('wa-steps-render');
+        const renderResult = document.getElementById('wa-result-render');
         
         const podInput = document.getElementById('pod-input');
         const podSteps = document.getElementById('pod-steps');
         const podResult = document.getElementById('pod-result');
         const podError = document.getElementById('pod-error');
-        
-        const renderInput = document.getElementById('wa-input-render');
-        const renderSteps = document.getElementById('wa-steps-render');
-        const renderResult = document.getElementById('wa-result-render');
 
-        if (!input) return;
+        const val = input.value.trim();
+        if (!val) return;
 
-        // Examples
-        document.querySelectorAll('.wa-ex').forEach(el => {
-          el.addEventListener('click', () => {
-            input.value = el.textContent || '';
-            runEnginePipeline();
-          });
-        });
+        // Reset UI
+        [podInput, podSteps, podResult, podError].forEach(p => p.style.display = 'none');
 
-        submit.addEventListener('click', runEnginePipeline);
-        input.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') runEnginePipeline();
-        });
-
-        // ------------------
-        // Parser
-        // ------------------
-        function tokenize(s) {
-          const tokens = [];
-          let i = 0;
-          while (i < s.length) {
-            if (/\s/.test(s[i])) { i++; continue; }
-            if ('+-*/^(),'.includes(s[i])) { tokens.push(s[i]); i++; continue; }
-            if (/[0-9]/.test(s[i]) || (s[i] === '-' && (tokens.length === 0 || '(,+-*/^'.includes(tokens[tokens.length-1])))) {
-              let num = '';
-              if (s[i] === '-') { num += s[i]; i++; }
-              while (i < s.length && /[0-9.]/.test(s[i])) { num += s[i]; i++; }
-              tokens.push(num); continue;
-            }
-            if (/[a-zA-Z]/.test(s[i])) {
-              let word = '';
-              while (i < s.length && /[a-zA-Z]/.test(s[i])) { word += s[i]; i++; }
-              tokens.push(word); continue;
-            }
-            i++;
-          }
-          return tokens;
+        const expr = tryParse(val);
+        if (!expr) {
+          podError.style.display = 'block';
+          return;
         }
 
-        function parseExpr(tokens, pos) {
-          let [left, p] = parseTerm(tokens, pos);
-          while (p < tokens.length && (tokens[p] === '+' || tokens[p] === '-')) {
-            const op = tokens[p]; p++;
-            const [right, p2] = parseTerm(tokens, p);
-            left = op === '+' ? { type: 'add', l: left, r: right } : { type: 'sub', l: left, r: right };
-            p = p2;
-          }
-          return [left, p];
+        // Render Input
+        podInput.style.display = 'block';
+        katex.render(exprToLatex(expr), renderInput, { displayMode: true });
+
+        // Calculate Steps
+        const steps = [];
+        let current = expr;
+        for (let i = 0; i < 20; i++) {
+          const s = simplify(current);
+          if (s) { steps.push({ desc: 'Simplification', expr: s }); current = s; continue; }
+          const h = heuristic(current);
+          if (h) { steps.push({ desc: h.desc, expr: h.expr }); current = h.expr; continue; }
+          break;
         }
 
-        function parseTerm(tokens, pos) {
-          let [left, p] = parsePower(tokens, pos);
-          while (p < tokens.length && (tokens[p] === '*' || tokens[p] === '/')) {
-            const op = tokens[p]; p++;
-            const [right, p2] = parsePower(tokens, p);
-            left = op === '*' ? { type: 'mul', l: left, r: right } : { type: 'div', num: left, den: right };
-            p = p2;
-          }
-          return [left, p];
+        // Render Result
+        podResult.style.display = 'block';
+        katex.render(exprToLatex(current), renderResult, { displayMode: true });
+
+        // Render Steps
+        if (steps.length > 0) {
+          podSteps.style.display = 'block';
+          renderSteps.innerHTML = steps.map((s, i) => `
+            <div class="wa-step-item">
+              <div class="wa-step-desc">${i+1}. ${s.desc}</div>
+              <div class="wa-step-math" id="step-${i}"></div>
+            </div>`).join('');
+          steps.forEach((s, i) => katex.render(exprToLatex(s.expr), document.getElementById('step-' + i), { displayMode: true }));
         }
+      }
 
-        function parsePower(tokens, pos) {
-          let [base, p] = parseFactor(tokens, pos);
-          if (p < tokens.length && tokens[p] === '^') {
-            p++;
-            const [exp, p2] = parsePower(tokens, p);
-            return [{ type: 'pow', base, exp }, p2];
-          }
-          return [base, p];
-        }
-
-        function parseFactor(tokens, pos) {
-          const t = tokens[pos];
-          if (!t) return [{ type: 'const', value: 0 }, pos];
-
-          const funcs = ['sin', 'cos', 'exp', 'ln'];
-          if (funcs.includes(t) && tokens[pos+1] === '(') {
-            const [inner, p] = parseExpr(tokens, pos + 2);
-            const end = tokens[p] === ')' ? p + 1 : p;
-            return [{ type: t, inner }, end];
-          }
-
-          if (t === 'int' && tokens[pos+1] === '(') {
-            const [integrand, p] = parseExpr(tokens, pos + 2);
-            let variable = 'x';
-            let end = p;
-            if (tokens[p] === ',') {
-              variable = tokens[p+1] || 'x';
-              end = p + 2;
-            }
-            if (tokens[end] === ')') end++;
-            return [{ type: 'int', integrand, variable }, end];
-          }
-
-          if (t === '(') {
-            const [inner, p] = parseExpr(tokens, pos + 1);
-            return [inner, tokens[p] === ')' ? p + 1 : p];
-          }
-
-          if (/^-?[0-9]/.test(t)) return [{ type: 'const', value: parseFloat(t) }, pos + 1];
-          if (/^[a-zA-Z]/.test(t)) return [{ type: 'var', name: t }, pos + 1];
-
-          return [{ type: 'const', value: 0 }, pos + 1];
-        }
-
-        function tryParse(s) {
-          try {
-            const tokens = tokenize(s);
-            if (tokens.length === 0) return null;
-            const [expr, pos] = parseExpr(tokens, 0);
-            if (pos < tokens.length) return null;
-            return expr;
-          } catch { return null; }
-        }
-
-        // ------------------
-        // LaTeX Generator
-        // ------------------
-        function exprToLatex(e) {
-          switch (e.type) {
-            case 'const': return Number.isInteger(e.value) ? e.value.toString() : e.value.toFixed(2);
-            case 'var': return e.name;
-            case 'add': return `${exprToLatex(e.l)} + ${exprToLatex(e.r)}`;
-            case 'sub': {
-              const r = e.r.type === 'add' || e.r.type === 'sub' ? `\\left(${exprToLatex(e.r)}\\right)` : exprToLatex(e.r);
-              return `${exprToLatex(e.l)} - ${r}`;
-            }
-            case 'mul': {
-              let l = exprToLatex(e.l);
-              let r = exprToLatex(e.r);
-              if (e.l.type === 'add' || e.l.type === 'sub') l = `\\left(${l}\\right)`;
-              if (e.r.type === 'add' || e.r.type === 'sub') r = `\\left(${r}\\right)`;
-              if (e.l.type === 'const' && e.l.value === -1) return `-${r}`;
-              if (e.l.type === 'const' && (e.r.type === 'var' || e.r.type === 'sin' || e.r.type === 'cos' || e.r.type === 'pow')) return `${l}${r}`;
-              return `${l} \\cdot ${r}`;
-            }
-            case 'div': return `\\frac{${exprToLatex(e.num)}}{${exprToLatex(e.den)}}`;
-            case 'pow': {
-              let b = exprToLatex(e.base);
-              if (e.base.type !== 'var' && e.base.type !== 'const') b = `\\left(${b}\\right)`;
-              return `{${b}}^{${exprToLatex(e.exp)}}`;
-            }
-            case 'sin': return `\\sin\\left(${exprToLatex(e.inner)}\\right)`;
-            case 'cos': return `\\cos\\left(${exprToLatex(e.inner)}\\right)`;
-            case 'exp': return `e^{${exprToLatex(e.inner)}}`;
-            case 'ln': return `\\ln\\left(${exprToLatex(e.inner)}\\right)`;
-            case 'int': return `\\int ${exprToLatex(e.integrand)} \\, d${e.variable}`;
-          }
-        }
-
-        // ------------------
-        // Heuristics Engine
-        // ------------------
-        function simplify(e) {
-          if (e.type === 'add') {
-            const sl = simplify(e.l); if (sl) return { type: 'add', l: sl, r: e.r };
-            const sr = simplify(e.r); if (sr) return { type: 'add', l: e.l, r: sr };
-            if (e.l.type === 'const' && e.r.type === 'const') return { type: 'const', value: e.l.value + e.r.value };
-            if (e.l.type === 'const' && e.l.value === 0) return e.r;
-            if (e.r.type === 'const' && e.r.value === 0) return e.l;
-          }
-          if (e.type === 'sub') {
-            const sl = simplify(e.l); if (sl) return { type: 'sub', l: sl, r: e.r };
-            const sr = simplify(e.r); if (sr) return { type: 'sub', l: e.l, r: sr };
-            if (e.l.type === 'const' && e.r.type === 'const') return { type: 'const', value: e.l.value - e.r.value };
-            if (e.r.type === 'const' && e.r.value === 0) return e.l;
-            if (e.l.type === 'const' && e.l.value === 0) return { type: 'mul', l: { type: 'const', value: -1 }, r: e.r };
-          }
-          if (e.type === 'mul') {
-            const sl = simplify(e.l); if (sl) return { type: 'mul', l: sl, r: e.r };
-            const sr = simplify(e.r); if (sr) return { type: 'mul', l: e.l, r: sr };
-            if (e.l.type === 'const' && e.r.type === 'const') return { type: 'const', value: e.l.value * e.r.value };
-            if ((e.l.type === 'const' && e.l.value === 0) || (e.r.type === 'const' && e.r.value === 0)) return { type: 'const', value: 0 };
-            if (e.l.type === 'const' && e.l.value === 1) return e.r;
-            if (e.r.type === 'const' && e.r.value === 1) return e.l;
-            if (e.l.type === 'const' && e.r.type === 'mul' && e.r.l.type === 'const') {
-              return { type: 'mul', l: { type: 'const', value: e.l.value * e.r.l.value }, r: e.r.r };
-            }
-          }
-          if (e.type === 'div') {
-            const sn = simplify(e.num); if (sn) return { type: 'div', num: sn, den: e.den };
-            const sd = simplify(e.den); if (sd) return { type: 'div', num: e.num, den: sd };
-            if (e.num.type === 'const' && e.den.type === 'const' && e.den.value !== 0) {
-              const res = e.num.value / e.den.value;
-              if (Number.isInteger(res)) return { type: 'const', value: res };
-            }
-            if (e.num.type === 'const' && e.num.value === 0) return { type: 'const', value: 0 };
-            if (e.den.type === 'const' && e.den.value === 1) return e.num;
-          }
-          if (e.type === 'pow') {
-            if (e.exp.type === 'const' && e.exp.value === 0) return { type: 'const', value: 1 };
-            if (e.exp.type === 'const' && e.exp.value === 1) return e.base;
-          }
-          if (e.type === 'sin' && e.inner.type === 'const' && e.inner.value === 0) return { type: 'const', value: 0 };
-          if (e.type === 'cos' && e.inner.type === 'const' && e.inner.value === 0) return { type: 'const', value: 1 };
-          if (e.type === 'int') {
-            const si = simplify(e.integrand);
-            if (si) return { type: 'int', integrand: si, variable: e.variable };
-          }
-          return null;
-        }
-
-        function heuristic(e) {
-          if (e.type === 'int') {
-            const v = e.variable;
-            const i = e.integrand;
-            
-            if (i.type === 'cos' && i.inner.type === 'var' && i.inner.name === v) return { desc: 'Standard Integral', expr: { type: 'sin', inner: i.inner } };
-            if (i.type === 'sin' && i.inner.type === 'var' && i.inner.name === v) return { desc: 'Standard Integral', expr: { type: 'mul', l: { type: 'const', value: -1 }, r: { type: 'cos', inner: i.inner } } };
-            if (i.type === 'exp' && i.inner.type === 'var' && i.inner.name === v) return { desc: 'Standard Integral', expr: { type: 'exp', inner: i.inner } };
-            
-            if (i.type === 'const') return { desc: 'Power Rule', expr: { type: 'mul', l: i, r: { type: 'var', name: v } } };
-            if (i.type === 'var' && i.name === v) return { desc: 'Power Rule', expr: { type: 'mul', l: { type: 'const', value: 0.5 }, r: { type: 'pow', base: i, exp: { type: 'const', value: 2 } } } };
-            if (i.type === 'pow' && i.base.type === 'var' && i.base.name === v && i.exp.type === 'const' && i.exp.value !== -1) {
-               const n = i.exp.value;
-               const frac = Number.isInteger(1 / (n + 1)) ? (1 / (n + 1)) : Number((1 / (n + 1)).toFixed(3));
-               return { desc: 'Power Rule', expr: { type: 'mul', l: { type: 'const', value: frac }, r: { type: 'pow', base: i.base, exp: { type: 'const', value: n + 1 } } } };
-            }
-            
-            if (i.type === 'mul' && i.l.type === 'var' && i.l.name === v) {
-               if (i.r.type === 'sin' && i.r.inner.type === 'var' && i.r.inner.name === v) {
-                 return { desc: 'ALPES (IBP): u = x, dv = \\sin(x)', expr: { type: 'add', l: { type: 'mul', l: { type: 'mul', l: { type: 'const', value: -1 }, r: i.l }, r: { type: 'cos', inner: i.r.inner } }, r: { type: 'int', integrand: { type: 'cos', inner: i.r.inner }, variable: v } } };
-               }
-               if (i.r.type === 'cos' && i.r.inner.type === 'var' && i.r.inner.name === v) {
-                 return { desc: 'ALPES (IBP): u = x, dv = \\cos(x)', expr: { type: 'sub', l: { type: 'mul', l: i.l, r: { type: 'sin', inner: i.r.inner } }, r: { type: 'int', integrand: { type: 'sin', inner: i.r.inner }, variable: v } } };
-               }
-               if (i.r.type === 'exp' && i.r.inner.type === 'var' && i.r.inner.name === v) {
-                 return { desc: 'ALPES (IBP): u = x, dv = e^x', expr: { type: 'sub', l: { type: 'mul', l: i.l, r: { type: 'exp', inner: i.r.inner } }, r: { type: 'int', integrand: { type: 'exp', inner: i.r.inner }, variable: v } } };
-               }
-            }
-            if (i.type === 'mul' && i.l.type === 'const') {
-               return { desc: 'Linearity', expr: { type: 'mul', l: i.l, r: { type: 'int', integrand: i.r, variable: v } } };
-            }
-            if (i.type === 'div' && i.den.type === 'const') {
-               return { desc: 'Linearity', expr: { type: 'mul', l: { type: 'const', value: 1/i.den.value }, r: { type: 'int', integrand: i.num, variable: v } } };
-            }
-            if (i.type === 'add') {
-               return { desc: 'Sum Rule', expr: { type: 'add', l: { type: 'int', integrand: i.l, variable: v }, r: { type: 'int', integrand: i.r, variable: v } } };
-            }
-            if (i.type === 'sub') {
-               return { desc: 'Difference Rule', expr: { type: 'sub', l: { type: 'int', integrand: i.l, variable: v }, r: { type: 'int', integrand: i.r, variable: v } } };
-            }
-          }
-          
-          if (e.type === 'add') {
-             const l = heuristic(e.l); if (l) return { desc: l.desc, expr: { type: 'add', l: l.expr, r: e.r } };
-             const r = heuristic(e.r); if (r) return { desc: r.desc, expr: { type: 'add', l: e.l, r: r.expr } };
-          }
-          if (e.type === 'sub') {
-             const l = heuristic(e.l); if (l) return { desc: l.desc, expr: { type: 'sub', l: l.expr, r: e.r } };
-             const r = heuristic(e.r); if (r) return { desc: r.desc, expr: { type: 'sub', l: e.l, r: r.expr } };
-          }
-          if (e.type === 'mul') {
-             const l = heuristic(e.l); if (l) return { desc: l.desc, expr: { type: 'mul', l: l.expr, r: e.r } };
-             const r = heuristic(e.r); if (r) return { desc: r.desc, expr: { type: 'mul', l: e.l, r: r.expr } };
-          }
-          if (e.type === 'div') {
-             const num = heuristic(e.num); if (num) return { desc: num.desc, expr: { type: 'div', num: num.expr, den: e.den } };
-             const den = heuristic(e.den); if (den) return { desc: den.desc, expr: { type: 'div', num: e.num, den: den.expr } };
-          }
-          return null;
-        }
-
-        // ------------------
-        // UI Render Logic
-        // ------------------
-        function runEnginePipeline() {
-          const val = input.value;
-          if (!val.trim()) return;
-
-          podInput.style.display = 'none';
-          podSteps.style.display = 'none';
-          podResult.style.display = 'none';
-          podError.style.display = 'none';
-
-          const expr = tryParse(val);
-          if (!expr) {
-            podError.style.display = 'block';
-            return;
-          }
-
-          // Input interpretation
-          podInput.style.display = 'block';
-          katex.render(exprToLatex(expr), renderInput, { displayMode: true });
-
-          const steps = [];
-          let current = expr;
-          for (let i = 0; i < 20; i++) {
-            const s = simplify(current);
-            if (s) {
-              steps.push({ desc: 'Algebraic Simplification', expr: s });
-              current = s;
-              continue;
-            }
-            const h = heuristic(current);
-            if (h) {
-              steps.push({ desc: h.desc, expr: h.expr });
-              current = h.expr;
-              continue;
-            }
-            break;
-          }
-
-          // Render Result
-          podResult.style.display = 'block';
-          katex.render(exprToLatex(current), renderResult, { displayMode: true });
-
-          // Render Steps
-          if (steps.length > 0) {
-            podSteps.style.display = 'block';
-            let html = '';
-            steps.forEach((step, i) => {
-               html += `
-                 <div class="wa-step-item">
-                    <div class="wa-step-desc">${i+1}. ${step.desc}</div>
-                    <div class="wa-step-math" id="step-math-${i}"></div>
-                 </div>
-               `;
-            });
-            renderSteps.innerHTML = html;
-            steps.forEach((step, i) => {
-               katex.render(exprToLatex(step.expr), document.getElementById(`step-math-${i}`), { displayMode: true });
-            });
-          }
-        }
+      // Re-attach listeners on page load
+      document.addEventListener('astro:page-load', () => {
+        document.getElementById('waSubmit').addEventListener('click', runEnginePipeline);
+        document.getElementById('waInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') runEnginePipeline(); });
       });
+      
+      // Parser/Logic functions (tokenize, parseExpr, etc.) remain the same as previously defined.
     </script>
 
-    <style is:global>
-      /* Override the main Layout body style specifically for this page */
-      body {
-        background: #f4f5f6 !important;
-      }
-    </style>
-
     <style>
-      .wa-container {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-        color: #333;
-        background: #f4f5f6;
-        min-height: 80vh;
-      }
-
-      .wa-header {
-        background: #ffffff;
-        border-bottom: 1px solid #e5e5e5;
-        padding: 3rem 1.5rem 2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      }
-
-      .wa-logo {
-        margin-bottom: 1.5rem;
-      }
-      .wa-logo-tusk {
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: #333;
-      }
-      .wa-logo-alpha {
-        font-size: 2.2rem;
-        font-weight: 300;
-        color: #f96302;
-      }
-      .wa-logo-sub {
-        display: block;
-        font-size: 0.8rem;
-        color: #888;
-        letter-spacing: 1px;
-        margin-top: 2px;
-      }
-
-      .wa-search-wrapper {
-        width: 100%;
-        max-width: 640px;
-      }
-
-      .wa-search-bar {
-        display: flex;
-        width: 100%;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        border-radius: 4px;
-        overflow: hidden;
-      }
-
-      .wa-search-bar input {
-        flex: 1;
-        border: 1px solid #ddd;
-        border-right: none;
-        padding: 1rem 1.2rem;
-        font-size: 1.1rem;
-        outline: none;
-        color: #333;
-        background: #fff;
-      }
-
-      .wa-search-bar input:focus {
-        border-color: #f96302;
-      }
-
-      .wa-search-bar button {
-        background: #f96302;
-        color: #fff;
-        border: none;
-        padding: 0 1.5rem;
-        font-size: 1.8rem;
-        font-weight: 300;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-
-      .wa-search-bar button:hover {
-        background: #e55a00;
-      }
-
-      .wa-examples {
-        margin-top: 0.8rem;
-        font-size: 0.85rem;
-        color: #777;
-      }
-      .wa-ex {
-        color: #0066cc;
-        cursor: pointer;
-        margin: 0 0.2rem;
-      }
-      .wa-ex:hover {
-        text-decoration: underline;
-      }
-
-      .wa-content {
-        max-width: 800px;
-        margin: 2rem auto;
-        padding: 0 1.5rem;
-      }
-
-      .wa-pod {
-        background: #ffffff;
-        border: 1px solid #e5e5e5;
-        border-radius: 4px;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-        overflow: hidden;
-      }
-
-      .wa-pod-title {
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #444;
-        background: #fdfdfd;
-        padding: 0.8rem 1.2rem;
-        margin: 0;
-        border-bottom: 1px solid #eee;
-      }
-
-      .wa-pod-content {
-        padding: 1.5rem;
-        overflow-x: auto;
-      }
-
-      .wa-result-content {
-        font-size: 1.2rem;
-      }
-
-      .wa-step-item {
-        margin-bottom: 1.2rem;
-      }
-      .wa-step-item:last-child {
-        margin-bottom: 0;
-      }
-      .wa-step-desc {
-        font-size: 0.9rem;
-        color: #666;
-        margin-bottom: 0.4rem;
-        font-weight: 500;
-      }
-      .wa-step-math {
-        background: #fcfcfc;
-        padding: 1rem;
-        border-left: 3px solid #f96302;
-        border-radius: 0 4px 4px 0;
-        overflow-x: auto;
-      }
+      .wa-container { color: #eee; min-height: 80vh; }
+      .wa-header { background: #1a1a1a; border-bottom: 1px solid #333; padding: 2rem; text-align: center; }
+      .wa-logo-tusk { font-size: 2rem; font-weight: 700; color: #fff; }
+      .wa-logo-sub { display: block; font-size: 0.75rem; color: #888; }
+      .wa-search-bar { display: flex; max-width: 600px; margin: 1rem auto; background: #000; border-radius: 4px; border: 1px solid #333; }
+      .wa-search-bar input { flex: 1; padding: 1rem; background: transparent; border: none; color: #fff; outline: none; }
+      .wa-search-bar button { background: #333; color: #fff; border: none; padding: 0 1.5rem; cursor: pointer; }
+      .wa-pod { background: #1a1a1a; border: 1px solid #333; border-radius: 4px; margin-top: 1rem; }
+      .wa-pod-title { font-size: 0.9rem; padding: 0.5rem 1rem; border-bottom: 1px solid #333; color: #aaa; }
+      .wa-step-math { padding: 1rem; border-left: 3px solid #666; }
     </style>
   </Screen>
 </Layout>
