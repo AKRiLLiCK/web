@@ -31,30 +31,34 @@ import Screen from '../components/Screen.astro';
     </div>
 
     <script is:inline>
-  window.runEnginePipeline = function() {
+  // Declare the interface for window to satisfy TypeScript
+  /** @type {any} */
+  const win = window;
+
+  win.runEnginePipeline = function() {
+    // Check katex using window scope
     if (typeof katex === 'undefined') {
-      setTimeout(runEnginePipeline, 100);
+      setTimeout(win.runEnginePipeline, 100);
       return;
     }
 
-    const input = document.getElementById('waInput');
+    // Type-safe DOM access
+    const input = /** @type {HTMLInputElement} */ (document.getElementById('waInput'));
     const renderInput = document.getElementById('wa-input-render');
     const renderResult = document.getElementById('wa-result-render');
-    
-    if (!input?.value.trim()) return;
+        
+    if (!input || !renderInput || !renderResult || !input.value.trim()) return;
 
     const rawInput = input.value.trim();
-    
     const match = rawInput.match(/int\(x\s*\+\s*(\d+),\s*x\)/);
     let output = rawInput;
-
+    
     if (match) {
-        const c = match[1]; // Extract the number
-        output = `0.5x^2 + ${c}x`;
+        output = `0.5x^2 + ${match[1]}x`;
     } else if (rawInput.includes("int(x)")) {
         output = "0.5x^2";
     }
-    // Render
+
     document.getElementById('pod-input').style.display = 'block';
     document.getElementById('pod-result').style.display = 'block';
     katex.render(rawInput, renderInput, { displayMode: true });
@@ -62,9 +66,12 @@ import Screen from '../components/Screen.astro';
   }
 
   document.addEventListener('astro:page-load', () => {
-    document.getElementById('waSubmit')?.addEventListener('click', window.runEnginePipeline);
-    document.getElementById('waInput')?.addEventListener('keydown', (e) => { 
-      if (e.key === 'Enter') window.runEnginePipeline(); 
+    const btn = document.getElementById('waSubmit');
+    const inp = /** @type {HTMLInputElement} */ (document.getElementById('waInput'));
+    
+    btn?.addEventListener('click', win.runEnginePipeline);
+    inp?.addEventListener('keydown', (e) => { 
+        if (e.key === 'Enter') win.runEnginePipeline(); 
     });
   });
 </script>
