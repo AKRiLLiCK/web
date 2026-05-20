@@ -28,43 +28,43 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <script type="module">
-    // IMPORT YOUR ACTUAL RUST LOGIC
-    import init, { solve } from '/web/pkg/tusk.js';
+  // IMPORT YOUR ACTUAL RUST LOGIC
+  import init, { solve } from `${import.meta.env.BASE_URL}pkg/tusk.js`;
 
-    async function loadEngine() {
-      try {
-        await init();
-        console.log("Rust Engine Loaded.");
-      } catch (e) {
-        console.error("Wasm Init Failed:", e);
-      }
+  async function loadEngine() {
+    try {
+      await init();
+      console.log("Rust Engine Loaded.");
+    } catch (e) {
+      console.error("Wasm Init Failed:", e);
     }
-    loadEngine();
+  }
+  loadEngine();
 
-    window.runEnginePipeline = function() {
-      const input = document.getElementById('waInput');
-      const renderInput = document.getElementById('wa-input-render');
-      const renderResult = document.getElementById('wa-result-render');
-      
-      if (!input || !input.value.trim()) return;
-      const rawInput = input.value.trim();
+  window.runEnginePipeline = function() {
+    const input = document.getElementById('waInput');
+    const renderInput = document.getElementById('wa-input-render');
+    const renderResult = document.getElementById('wa-result-render');
+    
+    if (!input || !input.value.trim()) return;
+    const rawInput = input.value.trim();
+    
+    // EXECUTE RUST CODE
+    const result = solve(rawInput);
 
-      // EXECUTE RUST CODE
-      const result = solve(rawInput);
+    document.getElementById('pod-input').style.display = 'block';
+    document.getElementById('pod-result').style.display = 'block';
+    renderInput.innerText = rawInput;
+    renderResult.innerText = result; // This is the output from your Rust solve() function
+  }
 
-      document.getElementById('pod-input').style.display = 'block';
-      document.getElementById('pod-result').style.display = 'block';
-      renderInput.innerText = rawInput;
-      renderResult.innerText = result; // This is the output from your Rust solve() function
-    }
-
-    document.addEventListener('astro:page-load', () => {
-      document.getElementById('waSubmit')?.addEventListener('click', window.runEnginePipeline);
-      document.getElementById('waInput')?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') window.runEnginePipeline();
-      });
+  document.addEventListener('astro:page-load', () => {
+    document.getElementById('waSubmit')?.addEventListener('click', window.runEnginePipeline);
+    document.getElementById('waInput')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') window.runEnginePipeline();
     });
-  </script>
+  });
+</script>
 
   <style>
     .tusk-app { min-height: 100vh; width: 100%; background: #111; color: #eee; display: flex; flex-direction: column; align-items: center; padding: 4rem 1rem; }
