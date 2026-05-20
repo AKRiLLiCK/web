@@ -48,7 +48,7 @@ import Screen from '../components/Screen.astro';
         // Perform Calculation
         // Note: Replace these with your actual logic
         const rawInput = input.value.trim();
-        const output = rawInput === "int(x)" ? "0.5x^2" : rawInput;
+        const output = window.TuskEngine.solve(val);
 
         // Render
         document.getElementById('pod-input').style.display = 'block';
