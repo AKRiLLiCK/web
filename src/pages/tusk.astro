@@ -6,95 +6,69 @@ import Screen from '../components/Screen.astro';
 <Layout title="Tusk" wide={true}>
   <Screen>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71bZBTIQHQ" crossorigin="anonymous">
-    <script is:inline src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cpW21h6RZv/phavutF+GqIGc/9O29yWeQ8j82NenH0R1YdK3XlT3J6+zB38fJ/u" crossorigin="anonymous"></script>
+    <script is:inline defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cpW21h6RZv/phavutF+GqIGc/9O29yWeQ8j82NenH0R1YdK3XlT3J6+zB38fJ/u" crossorigin="anonymous"></script>
 
     <div class="wa-container">
       <header class="banner">
         <h1>Tusk</h1>
         <span class="wa-logo-sub">computational intelligence</span>
         
-        <div class="wa-search-wrapper">
-          <div class="wa-search-bar">
-            <input type="text" id="waInput" placeholder="Enter expression (e.g., int(x * sin(x), x))" autocomplete="off" spellcheck="false" />
-            <button id="waSubmit">=</button>
-          </div>
+        <div class="wa-search-bar">
+          <input type="text" id="waInput" placeholder="Enter expression..." />
+          <button id="waSubmit">=</button>
         </div>
       </header>
 
       <div class="wa-content">
         <div class="wa-pod" id="pod-input" style="display: none;">
-          <h2 class="wa-pod-title">Input interpretation</h2>
+          <h2 class="wa-pod-title">Input</h2>
           <div class="wa-pod-content" id="wa-input-render"></div>
         </div>
-
         <div class="wa-pod" id="pod-result" style="display: none;">
           <h2 class="wa-pod-title">Result</h2>
-          <div class="wa-pod-content wa-result-content" id="wa-result-render"></div>
-        </div>
-
-        <div class="wa-pod" id="pod-steps" style="display: none;">
-          <h2 class="wa-pod-title">Step-by-step solution</h2>
-          <div class="wa-pod-content wa-steps-content" id="wa-steps-render"></div>
-        </div>
-
-        <div class="wa-pod" id="pod-error" style="display: none;">
-           <h2 class="wa-pod-title">Error</h2>
-           <div class="wa-pod-content" id="wa-error-render" style="color: #ff6b6b;">Tusk could not parse the input. Check syntax.</div>
+          <div class="wa-pod-content" id="wa-result-render"></div>
         </div>
       </div>
     </div>
 
     <script is:inline>
-      // Global scope functions - No syntax errors
-      window.tryParse = function(s) { /* your logic here */ return { type: 'const', value: 0 }; };
-      window.exprToLatex = function(e) { return "0"; };
-      
-      function runEnginePipeline() {
-        const input = document.getElementById('waInput');
-        if (!input || !input.value.trim()) return;
-
-        // Reset UI
-        ['pod-input', 'pod-steps', 'pod-result', 'pod-error'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.style.display = 'none';
-        });
-
-        const expr = window.tryParse(input.value);
-        if (!expr) {
-          document.getElementById('pod-error').style.display = 'block';
+      window.runEnginePipeline = function() {
+        // Check if katex is loaded
+        if (typeof katex === 'undefined') {
+          console.error("KaTeX not ready");
           return;
         }
+        
+        const input = document.getElementById('waInput');
+        const renderInput = document.getElementById('wa-input-render');
+        const renderResult = document.getElementById('wa-result-render');
+        
+        if (!input?.value.trim()) return;
 
+        // Render with KaTeX
         document.getElementById('pod-input').style.display = 'block';
-        katex.render(window.exprToLatex(expr), document.getElementById('wa-input-render'), { displayMode: true });
+        katex.render(input.value, renderInput, { displayMode: true });
+        
         document.getElementById('pod-result').style.display = 'block';
-        katex.render(window.exprToLatex(expr), document.getElementById('wa-result-render'), { displayMode: true });
-      }
+        katex.render(input.value, renderResult, { displayMode: true });
+      };
 
       document.addEventListener('astro:page-load', () => {
-        const btn = document.getElementById('waSubmit');
-        if (btn) btn.addEventListener('click', runEnginePipeline);
+        document.getElementById('waSubmit')?.addEventListener('click', window.runEnginePipeline);
       });
     </script>
 
     <style>
-      /* Ensure pods match the global 3DS theme */
-      .wa-container { padding: 0; min-height: 80vh; }
-      .wa-content { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+      /* Wolfram Dark Mode Aesthetic */
+      .wa-container { background: #111; color: #eee; min-height: 100vh; }
+      .banner { background: #1a1a1a; border-bottom: 1px solid #333; padding: 2rem; text-align: center; }
+      .wa-search-bar { display: flex; max-width: 600px; margin: 1rem auto; background: #000; border: 1px solid #444; border-radius: 4px; }
+      .wa-search-bar input { flex: 1; padding: 1rem; background: transparent; border: none; color: #fff; }
+      .wa-search-bar button { background: #f96302; color: white; border: none; padding: 0 1.5rem; }
       
-      .wa-pod {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid #333;
-        border-radius: 8px;
-        margin-bottom: 1.5rem;
-      }
-      .wa-pod-title {
-        font-size: 0.9rem;
-        padding: 0.8rem 1rem;
-        border-bottom: 1px solid #333;
-        color: #aaa;
-        margin: 0;
-      }
+      .wa-pod { background: #1a1a1a; border: 1px solid #333; border-radius: 4px; margin: 1rem auto; max-width: 800px; }
+      .wa-pod-title { background: #222; padding: 0.5rem 1rem; font-size: 0.8rem; color: #888; border-bottom: 1px solid #333; }
+      .wa-pod-content { padding: 1rem; }
     </style>
   </Screen>
 </Layout>
