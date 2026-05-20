@@ -1,0 +1,36 @@
+Acrilic&#39;s Master Integration Engine
+.preview-content[data-astro-cid-u5nswtzn]{display:flex;flex-direction:column}.split-view[data-astro-cid-u5nswtzn]{display:grid;grid-template-columns:minmax(180px,1fr) 2fr;gap:2rem;margin-bottom:1.5rem}@media(max-width:600px){.split-view[data-astro-cid-u5nswtzn]{grid-template-columns:1fr}}.cover-container[data-astro-cid-u5nswtzn]{border:4px solid #222;border-radius:4px;background:#000;box-shadow:0 4px 8px #000c,inset 0 0 5px #ffffff1a;overflow:hidden}.detail-cover[data-astro-cid-u5nswtzn]{width:100%;height:auto;display:block}.metadata-column[data-astro-cid-u5nswtzn]{display:flex;flex-direction:column;justify-content:flex-start}.detail-title[data-astro-cid-u5nswtzn]{font-size:1.6rem;color:var(--text-main);margin-bottom:1rem;line-height:1.2;border-bottom:2px solid #222;padding-bottom:.5rem}.metadata-table[data-astro-cid-u5nswtzn]{display:flex;flex-direction:column;gap:.8rem;background:#0006;border:1px solid #333;border-radius:6px;padding:1rem;box-shadow:inset 0 0 10px #0009}.meta-row[data-astro-cid-u5nswtzn]{display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed #333;padding-bottom:.4rem}.meta-row[data-astro-cid-u5nswtzn]:last-child{border-bottom:none;padding-bottom:0}.meta-label[data-astro-cid-u5nswtzn]{color:#777;font-size:.85rem;text-transform:uppercase;font-weight:700;letter-spacing:1px}.meta-value[data-astro-cid-u5nswtzn]{color:var(--text-main);font-size:.95rem;text-align:right}.separator[data-astro-cid-u5nswtzn]{border-color:#333;margin:2rem 0}.tag[data-astro-cid-u5nswtzn]{display:inline-block;padding:4px 10px;border-radius:4px;font-size:.85rem;font-family:monospace;border:1px solid}.tag-book[data-astro-cid-u5nswtzn]{color:#bae1ff;border-color:#bae1ff4d;background:#bae1ff1a}.tag-paper[data-astro-cid-u5nswtzn]{color:#ffffba;border-color:#ffffba4d;background:#ffffba1a}.tag-essay[data-astro-cid-u5nswtzn]{color:#baffc9;border-color:#baffc94d;background:#baffc91a}.tag-manual[data-astro-cid-u5nswtzn]{color:#ffdfba;border-color:#ffdfba4d;background:#ffdfba1a}.tag-devlog[data-astro-cid-u5nswtzn]{color:#e0b0ff;border-color:#e0b0ff4d;background:#e0b0ff1a}.markdown-body[data-astro-cid-u5nswtzn]{color:var(--text-muted);line-height:1.7;font-size:.95rem;flex-grow:1}.markdown-body[data-astro-cid-u5nswtzn] p[data-astro-cid-u5nswtzn]{margin-bottom:1.2rem}.download-section[data-astro-cid-u5nswtzn]{margin-top:1.5rem;display:flex;justify-content:flex-end}.squircle-btn[data-astro-cid-u5nswtzn]{display:inline-flex;align-items:center;justify-content:center;padding:12px 28px;background:linear-gradient(180deg,#3a3a3a,#111);border:2px solid #000;border-radius:12px;box-shadow:inset 0 2px 4px #ffffff1a,0 4px 6px #00000080,0 0 0 1px #444;color:var(--text-main);font-weight:700;text-transform:uppercase;font-size:.95rem;letter-spacing:1px;cursor:pointer;transition:all .1s;text-decoration:none}.squircle-btn[data-astro-cid-u5nswtzn]:active{box-shadow:inset 0 4px 8px #000c,0 0 0 1px #222;background:linear-gradient(180deg,#111,#2a2a2a);transform:translateY(2px)}
+ıll
+12:00
+[■■■]
+Archive
+Acrilic&#39;s Master Integration Engine
+Author
+Acrilic
+Published
+2026-05-20
+Type
+Manual
+Access
+Acrilic’s Master Integration Engine is a structured, practical handbook designed to transform integration from a trial-and-error guessing game into a systematic, logical process. It lays out a step-by-step roadmap—beginning with essential cleanup operations, mapping out core integration base cases, and providing a deterministic decision engine for selecting advanced techniques.
+Core Sections Covered
+Phase Zero: The “Clean Up”:
+Techniques for algebraic expansion, fraction splitting, and trigonometric reduction to simplify integrands before applying complex methods.
+Choosing Your Path (The Decision Engine):
+A tactical selection guide covering substitution, integration by parts (using the ALPES order), partial fraction decomposition, and trigonometric substitution.
+The Riemann Integral &#x26; Fundamental Theorems:
+Rigorous foundations of definite integrals and the Fundamental Theorem of Calculus.
+Improper Integrals:
+Criteria for identifying and analyzing Species I (infinite intervals) and Species II (infinite discontinuities) improper integrals.
+Introduction to Ordinary Differential Equations (ODEs):
+Fundamental methods for solving separable and first-order linear ODEs, including real-world applications like Newton’s Law of Cooling.
+Geometric Applications:
+Calculating exact areas under curves and bounded between intersecting functions.
+Loading...
+document.addEventListener("astro:before-preparation",()=>{const e=document.getElementById("eshop-loader");e&&(e.style.opacity="1",e.style.pointerEvents="all")});document.addEventListener("astro:page-load",()=>{const e=document.getElementById("eshop-loader");e&&(e.style.opacity="0",e.style.pointerEvents="none")});
+Home
+Projects
+Creds
+Academy
+Archive
+function e(){const t=document.getElementById("topbar-clock");if(t){const n=new Date,o=n.getHours().toString().padStart(2,"0"),c=n.getMinutes().toString().padStart(2,"0");t.textContent=`${o}:${c}`}}e();setInterval(e,1e3);
