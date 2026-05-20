@@ -24,8 +24,8 @@ import Screen from '../components/Screen.astro';
         </div>
       </div>
 
-      <!-- Interactive Demo -->
-      <h2 id="demo">Interactive Demo</h2>
+      <!-- Live Web Engine -->
+      <h2 id="demo">Live Web Engine</h2>
       <div class="tusk-terminal" id="tuskTerminal">
         <div class="term-titlebar">
           <span class="term-dot red"></span>
@@ -40,7 +40,7 @@ import Screen from '../components/Screen.astro';
             <span class="term-ghost" id="tuskGhost"></span>
           </div>
           <div class="term-output" id="tuskOutput">
-            <div class="term-hint">Try: <code>x + 0</code>, <code>sin(0)</code>, <code>3 * 1</code>, <code>x^0</code></div>
+            <div class="term-hint">Try clicking: <code class="clickable-hint">x + 0</code>, <code class="clickable-hint">int(x * sin(x), x)</code>, <code class="clickable-hint">int(x * exp(x), x)</code></div>
           </div>
         </div>
       </div>
@@ -280,7 +280,10 @@ import Screen from '../components/Screen.astro';
             case 'var': return e.name;
             case 'add': return `(${exprToStr(e.l)} + ${exprToStr(e.r)})`;
             case 'sub': return `(${exprToStr(e.l)} - ${exprToStr(e.r)})`;
-            case 'mul': return `(${exprToStr(e.l)} · ${exprToStr(e.r)})`;
+            case 'mul': {
+              if (e.l.type === 'const' && e.l.value === -1) return `-${exprToStr(e.r)}`;
+              return `(${exprToStr(e.l)} · ${exprToStr(e.r)})`;
+            }
             case 'pow': return `${exprToStr(e.base)}^${exprToStr(e.exp)}`;
             case 'sin': return `sin(${exprToStr(e.inner)})`;
             case 'cos': return `cos(${exprToStr(e.inner)})`;
@@ -300,6 +303,13 @@ import Screen from '../components/Screen.astro';
             if (e.l.type === 'const' && e.l.value === 0) return e.r;
             if (e.r.type === 'const' && e.r.value === 0) return e.l;
           }
+          if (e.type === 'sub') {
+            const sl = simplify(e.l); if (sl) return { type: 'sub', l: sl, r: e.r };
+            const sr = simplify(e.r); if (sr) return { type: 'sub', l: e.l, r: sr };
+            if (e.l.type === 'const' && e.r.type === 'const') return { type: 'const', value: e.l.value - e.r.value };
+            if (e.r.type === 'const' && e.r.value === 0) return e.l;
+            if (e.l.type === 'const' && e.l.value === 0) return { type: 'mul', l: { type: 'const', value: -1 }, r: e.r };
+          }
           if (e.type === 'mul') {
             const sl = simplify(e.l); if (sl) return { type: 'mul', l: sl, r: e.r };
             const sr = simplify(e.r); if (sr) return { type: 'mul', l: e.l, r: sr };
@@ -307,6 +317,9 @@ import Screen from '../components/Screen.astro';
             if ((e.l.type === 'const' && e.l.value === 0) || (e.r.type === 'const' && e.r.value === 0)) return { type: 'const', value: 0 };
             if (e.l.type === 'const' && e.l.value === 1) return e.r;
             if (e.r.type === 'const' && e.r.value === 1) return e.l;
+            if (e.l.type === 'const' && e.r.type === 'mul' && e.r.l.type === 'const') {
+              return { type: 'mul', l: { type: 'const', value: e.l.value * e.r.l.value }, r: e.r.r };
+            }
           }
           if (e.type === 'pow') {
             if (e.exp.type === 'const' && e.exp.value === 0) return { type: 'const', value: 1 };
@@ -321,28 +334,81 @@ import Screen from '../components/Screen.astro';
           return null;
         }
 
+        function heuristic(e: Expr): { expr: Expr, desc: string } | null {
+          if (e.type === 'int') {
+            const v = e.variable;
+            const i = e.integrand;
+            
+            if (i.type === 'cos' && i.inner.type === 'var' && i.inner.name === v) return { desc: 'Standard Integral', expr: { type: 'sin', inner: i.inner } };
+            if (i.type === 'sin' && i.inner.type === 'var' && i.inner.name === v) return { desc: 'Standard Integral', expr: { type: 'mul', l: { type: 'const', value: -1 }, r: { type: 'cos', inner: i.inner } } };
+            if (i.type === 'exp' && i.inner.type === 'var' && i.inner.name === v) return { desc: 'Standard Integral', expr: { type: 'exp', inner: i.inner } };
+            if (i.type === 'const') return { desc: 'Power Rule', expr: { type: 'mul', l: i, r: { type: 'var', name: v } } };
+            
+            if (i.type === 'mul' && i.l.type === 'var' && i.l.name === v) {
+               if (i.r.type === 'sin' && i.r.inner.type === 'var' && i.r.inner.name === v) {
+                 return { desc: 'ALPES (IBP): u = x, dv = sin(x)', expr: { type: 'add', l: { type: 'mul', l: { type: 'mul', l: { type: 'const', value: -1 }, r: i.l }, r: { type: 'cos', inner: i.r.inner } }, r: { type: 'int', integrand: { type: 'cos', inner: i.r.inner }, variable: v } } };
+               }
+               if (i.r.type === 'cos' && i.r.inner.type === 'var' && i.r.inner.name === v) {
+                 return { desc: 'ALPES (IBP): u = x, dv = cos(x)', expr: { type: 'sub', l: { type: 'mul', l: i.l, r: { type: 'sin', inner: i.r.inner } }, r: { type: 'int', integrand: { type: 'sin', inner: i.r.inner }, variable: v } } };
+               }
+               if (i.r.type === 'exp' && i.r.inner.type === 'var' && i.r.inner.name === v) {
+                 return { desc: 'ALPES (IBP): u = x, dv = exp(x)', expr: { type: 'sub', l: { type: 'mul', l: i.l, r: { type: 'exp', inner: i.r.inner } }, r: { type: 'int', integrand: { type: 'exp', inner: i.r.inner }, variable: v } } };
+               }
+            }
+            if (i.type === 'mul' && i.l.type === 'const') {
+               return { desc: 'Linearity', expr: { type: 'mul', l: i.l, r: { type: 'int', integrand: i.r, variable: v } } };
+            }
+            if (i.type === 'add') {
+               return { desc: 'Sum Rule', expr: { type: 'add', l: { type: 'int', integrand: i.l, variable: v }, r: { type: 'int', integrand: i.r, variable: v } } };
+            }
+          }
+          
+          if (e.type === 'add') {
+             const l = heuristic(e.l); if (l) return { desc: l.desc, expr: { type: 'add', l: l.expr, r: e.r } };
+             const r = heuristic(e.r); if (r) return { desc: r.desc, expr: { type: 'add', l: e.l, r: r.expr } };
+          }
+          if (e.type === 'sub') {
+             const l = heuristic(e.l); if (l) return { desc: l.desc, expr: { type: 'sub', l: l.expr, r: e.r } };
+             const r = heuristic(e.r); if (r) return { desc: r.desc, expr: { type: 'sub', l: e.l, r: r.expr } };
+          }
+          if (e.type === 'mul') {
+             const l = heuristic(e.l); if (l) return { desc: l.desc, expr: { type: 'mul', l: l.expr, r: e.r } };
+             const r = heuristic(e.r); if (r) return { desc: r.desc, expr: { type: 'mul', l: e.l, r: r.expr } };
+          }
+          return null;
+        }
+
         function runEngine(expr: Expr): Step[] {
           const steps: Step[] = [];
           let current = expr;
           for (let i = 0; i < 20; i++) {
             const s = simplify(current);
-            if (!s) break;
-            steps.push({ desc: 'Phase Zero: Algebraic Simplification', expr: s });
-            current = s;
+            if (s) {
+              steps.push({ desc: 'Phase Zero', expr: s });
+              current = s;
+              continue;
+            }
+            const h = heuristic(current);
+            if (h) {
+              steps.push({ desc: h.desc, expr: h.expr });
+              current = h.expr;
+              continue;
+            }
+            break;
           }
           return steps;
         }
 
         function renderSteps(steps: Step[], final_expr: Expr) {
           if (steps.length === 0) {
-            output!.innerHTML = `<div class="step-row final"><span class="step-marker">✓</span>&nbsp;<span class="step-desc">Parsed:</span>&nbsp;<span class="step-expr">${exprToStr(final_expr)}</span></div>`;
+            output!.innerHTML = `<div class="step-row final"><span class="step-marker">✓</span> <span class="step-desc">Parsed:</span> <span class="step-expr">${exprToStr(final_expr)}</span></div>`;
             return;
           }
           let html = '';
           steps.forEach((s, i) => {
-            html += `<div class="step-row"><span class="step-num">[${i+1}/${steps.length}]</span>&nbsp;<span class="step-desc">${s.desc}:</span>&nbsp;<span class="step-expr">${exprToStr(s.expr)}</span></div>`;
+            html += `<div class="step-row"><span class="step-num">[${i+1}/${steps.length}]</span> <span class="step-desc">${s.desc}:</span> <span class="step-expr">${exprToStr(s.expr)}</span></div>`;
           });
-          html += `<div class="step-row final"><span class="step-marker">✓</span>&nbsp;<span class="step-desc">Final Result:</span>&nbsp;<span class="step-expr">${exprToStr(final_expr)}</span></div>`;
+          html += `<div class="step-row final"><span class="step-marker">✓</span> <span class="step-desc">Final Result:</span> <span class="step-expr">${exprToStr(final_expr)}</span></div>`;
           output!.innerHTML = html;
         }
 
@@ -351,13 +417,26 @@ import Screen from '../components/Screen.astro';
           ghost!.textContent = getSuggestion(val);
           const expr = tryParse(val);
           if (!expr || val.trim() === '') {
-            output!.innerHTML = '<div class="term-hint">Try: <code>x + 0</code>, <code>sin(0)</code>, <code>3 * 1</code>, <code>x^0</code></div>';
+            output!.innerHTML = '<div class="term-hint">Try clicking: <code class="clickable-hint">x + 0</code>, <code class="clickable-hint">int(x * sin(x), x)</code>, <code class="clickable-hint">int(x * exp(x), x)</code></div>';
+            bindHints();
             return;
           }
           const steps = runEngine(expr);
           const final_expr = steps.length > 0 ? steps[steps.length - 1].expr : expr;
           renderSteps(steps, final_expr);
         });
+
+        function bindHints() {
+          document.querySelectorAll('.clickable-hint').forEach(el => {
+            el.addEventListener('click', () => {
+              input.value = el.textContent || '';
+              input.dispatchEvent(new Event('input'));
+            });
+            el.style.cursor = 'pointer';
+            el.style.textDecoration = 'underline';
+          });
+        }
+        bindHints();
 
         input.addEventListener('keydown', (e: KeyboardEvent) => {
           if (e.key === 'Tab') {
