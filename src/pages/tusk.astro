@@ -343,6 +343,12 @@ import Screen from '../components/Screen.astro';
             if (i.type === 'sin' && i.inner.type === 'var' && i.inner.name === v) return { desc: 'Standard Integral', expr: { type: 'mul', l: { type: 'const', value: -1 }, r: { type: 'cos', inner: i.inner } } };
             if (i.type === 'exp' && i.inner.type === 'var' && i.inner.name === v) return { desc: 'Standard Integral', expr: { type: 'exp', inner: i.inner } };
             if (i.type === 'const') return { desc: 'Power Rule', expr: { type: 'mul', l: i, r: { type: 'var', name: v } } };
+            if (i.type === 'var' && i.name === v) return { desc: 'Power Rule', expr: { type: 'mul', l: { type: 'const', value: 0.5 }, r: { type: 'pow', base: i, exp: { type: 'const', value: 2 } } } };
+            if (i.type === 'pow' && i.base.type === 'var' && i.base.name === v && i.exp.type === 'const' && i.exp.value !== -1) {
+               const n = i.exp.value;
+               const frac = Number.isInteger(1 / (n + 1)) ? (1 / (n + 1)) : Number((1 / (n + 1)).toFixed(3));
+               return { desc: 'Power Rule', expr: { type: 'mul', l: { type: 'const', value: frac }, r: { type: 'pow', base: i.base, exp: { type: 'const', value: n + 1 } } } };
+            }
             
             if (i.type === 'mul' && i.l.type === 'var' && i.l.name === v) {
                if (i.r.type === 'sin' && i.r.inner.type === 'var' && i.r.inner.name === v) {
