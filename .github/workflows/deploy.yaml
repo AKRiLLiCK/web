@@ -29,7 +29,9 @@ jobs:
           curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
       - name: Build Wasm Engine
-        run: wasm-pack build --target web --out-dir public/pkg
+        working-directory: ./tusk
+        run: |
+          wasm-pack build --target web --out-dir ../public/pkg
 
       - name: Install dependencies
         run: npm install
