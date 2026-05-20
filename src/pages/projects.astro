@@ -15,7 +15,16 @@ const frameworks = [
   }
 ];
 
-const tools: { image: string; alt: string; title: string; badges: string[]; description: string; link: string; }[] = [];
+const tools = [
+  {
+    image: `${basePath}projects/tusk-banner.png`,
+    alt: "Tusk Banner",
+    title: "Tusk",
+    badges: ["Rust", "TUI", "License: MIT"],
+    description: "A pure Rust TUI calculus engine that visualizes integration step-by-step using heuristic transformations and the Risch algorithm.",
+    link: "/web/tusk/"
+  }
+];
 ---
 
 <Layout title="Projects">
