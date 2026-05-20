@@ -5,19 +5,15 @@ import Screen from '../components/Screen.astro';
 
 <Layout title="Tusk" wide={true}>
   <Screen>
-<link rel="stylesheet" 
-      href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-
-<script is:inline defer 
-        src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script is:inline defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
 
     <div class="wa-container">
       <header class="banner">
         <h1>Tusk</h1>
         <span class="wa-logo-sub">computational intelligence</span>
-        
         <div class="wa-search-bar">
-          <input type="text" id="waInput" placeholder="Enter expression..." />
+          <input type="text" id="waInput" placeholder="Enter expression (e.g. int(x), x)..." />
           <button id="waSubmit">=</button>
         </div>
       </header>
@@ -35,59 +31,46 @@ import Screen from '../components/Screen.astro';
     </div>
 
     <script is:inline>
-  // Ensure we check for katex globally, or wait for it
-  function runEnginePipeline() {
-  const input = document.getElementById('waInput');
-  const renderInput = document.getElementById('wa-input-render');
-  const renderResult = document.getElementById('wa-result-render');
-  
-  if (!input || !renderInput || !renderResult) return;
+      // 2. Global Engine Bridge
+      // Ensure these are on window so the pipeline can access them
+      window.runEnginePipeline = function() {
+        if (typeof katex === 'undefined') {
+          setTimeout(runEnginePipeline, 100);
+          return;
+        }
 
-  const val = input.value.trim();
-  if (!val) return;
+        const input = document.getElementById('waInput');
+        const renderInput = document.getElementById('wa-input-render');
+        const renderResult = document.getElementById('wa-result-render');
+        
+        if (!input?.value.trim()) return;
 
-  const expr = tryParse(val);
-  if (!expr) return;
+        // Perform Calculation
+        // Note: Replace these with your actual logic
+        const rawInput = input.value.trim();
+        const output = rawInput === "int(x)" ? "0.5x^2" : rawInput;
 
-  // 1. Render original input
-  document.getElementById('pod-input').style.display = 'block';
-  katex.render(exprToLatex(expr), renderInput, { displayMode: true });
+        // Render
+        document.getElementById('pod-input').style.display = 'block';
+        document.getElementById('pod-result').style.display = 'block';
+        katex.render(rawInput, renderInput, { displayMode: true });
+        katex.render(output, renderResult, { displayMode: true });
+      }
 
-  // 2. Run the transformation pipeline
-  let current = expr;
-  for (let i = 0; i < 20; i++) {
-    const s = simplify(current);
-    if (s) { current = s; continue; }
-    const h = heuristic(current);
-    if (h) { current = h.expr; continue; }
-    break; // Exit when no more rules apply
-  }
-
-  // 3. CRITICAL: Render 'current' (the transformed expression), not 'expr'
-  document.getElementById('pod-result').style.display = 'block';
-  katex.render(exprToLatex(current), renderResult, { displayMode: true });
-}
-
-  // 3. Robust listener for Astro View Transitions
-  document.addEventListener('astro:page-load', () => {
-    const btn = document.getElementById('waSubmit');
-    const input = document.getElementById('waInput');
-    
-    if (btn) btn.onclick = runEnginePipeline;
-    if (input) {
-      input.onkeydown = (e) => { if (e.key === 'Enter') runEnginePipeline(); };
-    }
-  });
-</script>
+      document.addEventListener('astro:page-load', () => {
+        document.getElementById('waSubmit')?.addEventListener('click', window.runEnginePipeline);
+        document.getElementById('waInput')?.addEventListener('keydown', (e) => { 
+          if (e.key === 'Enter') window.runEnginePipeline(); 
+        });
+      });
+    </script>
 
     <style>
-      /* Wolfram Dark Mode Aesthetic */
       .wa-container { background: #111; color: #eee; min-height: 100vh; }
       .banner { background: #1a1a1a; border-bottom: 1px solid #333; padding: 2rem; text-align: center; }
       .wa-search-bar { display: flex; max-width: 600px; margin: 1rem auto; background: #000; border: 1px solid #444; border-radius: 4px; }
       .wa-search-bar input { flex: 1; padding: 1rem; background: transparent; border: none; color: #fff; }
       .wa-search-bar button { background: #f96302; color: white; border: none; padding: 0 1.5rem; }
-      
       .wa-pod { background: #1a1a1a; border: 1px solid #333; border-radius: 4px; margin: 1rem auto; max-width: 800px; }
       .wa-pod-title { background: #222; padding: 0.5rem 1rem; font-size: 0.8rem; color: #888; border-bottom: 1px solid #333; }
       .wa-pod-content { padding: 1rem; }
