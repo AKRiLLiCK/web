@@ -29,9 +29,13 @@ jobs:
           curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
       - name: Build Wasm Engine
-        working-directory: ./tusk
-        run: |
-          wasm-pack build --target web --out-dir ../public/pkg
+        run: wasm-pack build ./tusk --target web --out-dir ../public/pkg
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Astro Site
+        run: npm run build
 
       - name: Install dependencies
         run: npm install
