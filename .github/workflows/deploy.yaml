@@ -23,10 +23,18 @@ jobs:
           node-version: 22
           cache: 'npm'
 
+      - name: Setup Rust & wasm-pack
+        run: |
+          rustup target add wasm32-unknown-unknown
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+      - name: Build Wasm Engine
+        run: wasm-pack build --target web --out-dir public/pkg
+
       - name: Install dependencies
         run: npm install
 
-      - name: Build
+      - name: Build Astro Site
         run: npm run build
 
       - name: Upload artifact
