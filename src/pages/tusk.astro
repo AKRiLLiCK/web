@@ -32,31 +32,45 @@ import Screen from '../components/Screen.astro';
     </div>
 
     <script is:inline>
-      window.runEnginePipeline = function() {
-        // Check if katex is loaded
-        if (typeof katex === 'undefined') {
-          console.error("KaTeX not ready");
-          return;
-        }
-        
-        const input = document.getElementById('waInput');
-        const renderInput = document.getElementById('wa-input-render');
-        const renderResult = document.getElementById('wa-result-render');
-        
-        if (!input?.value.trim()) return;
+  // Ensure we check for katex globally, or wait for it
+  function runEnginePipeline() {
+    // 1. Check if KaTeX is loaded
+    if (typeof katex === 'undefined') {
+      console.warn("Tusk: KaTeX not loaded yet, retrying...");
+      setTimeout(runEnginePipeline, 100); 
+      return;
+    }
 
-        // Render with KaTeX
-        document.getElementById('pod-input').style.display = 'block';
-        katex.render(input.value, renderInput, { displayMode: true });
-        
-        document.getElementById('pod-result').style.display = 'block';
-        katex.render(input.value, renderResult, { displayMode: true });
-      };
+    const input = document.getElementById('waInput');
+    const renderInput = document.getElementById('wa-input-render');
+    const renderResult = document.getElementById('wa-result-render');
+    
+    if (!input || !input.value.trim()) return;
 
-      document.addEventListener('astro:page-load', () => {
-        document.getElementById('waSubmit')?.addEventListener('click', window.runEnginePipeline);
-      });
-    </script>
+    // Reset UI
+    document.getElementById('pod-input').style.display = 'block';
+    document.getElementById('pod-result').style.display = 'block';
+
+    try {
+      // 2. Safe KaTeX call
+      katex.render(input.value, renderInput, { displayMode: true });
+      katex.render(input.value, renderResult, { displayMode: true });
+    } catch (err) {
+      console.error("KaTeX rendering error:", err);
+    }
+  }
+
+  // 3. Robust listener for Astro View Transitions
+  document.addEventListener('astro:page-load', () => {
+    const btn = document.getElementById('waSubmit');
+    const input = document.getElementById('waInput');
+    
+    if (btn) btn.onclick = runEnginePipeline;
+    if (input) {
+      input.onkeydown = (e) => { if (e.key === 'Enter') runEnginePipeline(); };
+    }
+  });
+</script>
 
     <style>
       /* Wolfram Dark Mode Aesthetic */
