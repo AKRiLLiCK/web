@@ -3,176 +3,90 @@ import Layout from '../layouts/Layout.astro';
 import Screen from '../components/Screen.astro';
 ---
 
-<Layout title="Tusk" wide={true}>
+<Layout title="TuskAlpha" wide={true}>
   <Screen>
-    <div class="banner tusk-banner">
-      <div class="tusk-icon">∫</div>
-      <div class="banner-content">
-        <h1 class="tusk-title">Tusk</h1>
-        <p class="tusk-subtitle">The Master Integration Engine</p>
-      </div>
-    </div>
-    <div class="page-content">
+    <!-- KaTeX integration -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71bZBTIQHQ" crossorigin="anonymous">
+    <script is:inline src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cpW21h6RZv/phavutF+GqIGc/9O29yWeQ8j82NenH0R1YdK3XlT3J6+zB38fJ/u" crossorigin="anonymous"></script>
 
-      <!-- Hero -->
-      <div class="tusk-hero">
-        <p class="tusk-tagline">A pure Rust TUI calculus engine that visualizes integration step-by-step using heuristic transformations and the Risch algorithm.</p>
-        <div class="tusk-badges">
-          <span class="ui-badge tusk-badge-rust">Rust</span>
-          <span class="ui-badge tusk-badge-mit">MIT License</span>
-          <span class="ui-badge tusk-badge-tui">TUI</span>
+    <div class="wa-container">
+      <header class="wa-header">
+        <div class="wa-logo">
+          <span class="wa-logo-tusk">Tusk</span><span class="wa-logo-alpha">Alpha</span>
+          <span class="wa-logo-sub">computational intelligence</span>
         </div>
-      </div>
-
-      <!-- Live Web Engine -->
-      <h2 id="demo">Live Web Engine</h2>
-      <div class="tusk-terminal" id="tuskTerminal">
-        <div class="term-titlebar">
-          <span class="term-dot red"></span>
-          <span class="term-dot yellow"></span>
-          <span class="term-dot green"></span>
-          <span class="term-title">tusk v0.1.0</span>
-        </div>
-        <div class="term-body">
-          <div class="term-row">
-            <span class="term-prompt">tusk ▸</span>
-            <input type="text" id="tuskInput" class="term-input" placeholder="Type an expression… e.g. int(x * sin(x), x)" autocomplete="off" spellcheck="false" />
-            <span class="term-ghost" id="tuskGhost"></span>
+        <div class="wa-search-wrapper">
+          <div class="wa-search-bar">
+            <input type="text" id="waInput" placeholder="Enter what you want to calculate or know about" autocomplete="off" spellcheck="false" />
+            <button id="waSubmit">=</button>
           </div>
-          <div class="term-output" id="tuskOutput">
-            <div class="term-hint">Try clicking: <code class="clickable-hint">x + 0</code>, <code class="clickable-hint">int(x * sin(x), x)</code>, <code class="clickable-hint">int(x * exp(x), x)</code></div>
+          <div class="wa-examples">
+            Examples: <span class="wa-ex">int(x)</span>, <span class="wa-ex">int(x * sin(x), x)</span>, <span class="wa-ex">int(x^2 + 3*x, x)</span>
           </div>
         </div>
-      </div>
+      </header>
 
-      <!-- Documentation -->
-      <h2 id="docs">Language Documentation</h2>
-      <div class="docs-grid">
-        <div class="docs-card">
-          <h3>Basic Arithmetic</h3>
-          <p>Tusk supports standard mathematical operators and precedence.</p>
-          <ul>
-            <li><code>+</code> Addition: <code>x + 1</code></li>
-            <li><code>-</code> Subtraction: <code>2 - x</code></li>
-            <li><code>*</code> Multiplication: <code>3 * x</code></li>
-            <li><code>/</code> Division: <code>x / 2</code></li>
-            <li><code>^</code> Exponentiation: <code>x^2</code></li>
-          </ul>
+      <div class="wa-content">
+        <!-- Input Interpretation Pod -->
+        <div class="wa-pod" id="pod-input" style="display: none;">
+          <h2 class="wa-pod-title">Input interpretation</h2>
+          <div class="wa-pod-content" id="wa-input-render"></div>
         </div>
-        <div class="docs-card">
-          <h3>Functions</h3>
-          <p>Built-in mathematical functions require parentheses.</p>
-          <ul>
-            <li><code>sin(x)</code> Sine</li>
-            <li><code>cos(x)</code> Cosine</li>
-            <li><code>exp(x)</code> Exponential</li>
-            <li><code>ln(x)</code> Natural Logarithm</li>
-          </ul>
-        </div>
-        <div class="docs-card">
-          <h3>Integration</h3>
-          <p>The <code>int()</code> command calculates the indefinite integral.</p>
-          <ul>
-            <li><code>int(expr, var)</code></li>
-            <li>Example: <code>int(x^2, x)</code></li>
-            <li>Example: <code>int(x * sin(x), x)</code></li>
-          </ul>
-        </div>
-      </div>
 
-      <!-- Pipeline -->
-      <h2 id="pipeline">Transformation Pipeline</h2>
-      <div class="pipeline-grid">
-        <div class="pipeline-card">
-          <div class="pipeline-num">01</div>
-          <h3>Phase Zero</h3>
-          <p>Algebraic simplification: constant folding, identity elimination (<code>x+0</code>, <code>x*1</code>), trig identities (<code>sin(0)=0</code>).</p>
+        <!-- Result Pod -->
+        <div class="wa-pod" id="pod-result" style="display: none;">
+          <h2 class="wa-pod-title">Result</h2>
+          <div class="wa-pod-content wa-result-content" id="wa-result-render"></div>
         </div>
-        <div class="pipeline-card">
-          <div class="pipeline-num">02</div>
-          <h3>Substitution</h3>
-          <p>Heuristic u-substitution matching — detects functional compositions and exact differentials inside integrands.</p>
-        </div>
-        <div class="pipeline-card">
-          <div class="pipeline-num">03</div>
-          <h3>ALPES</h3>
-          <p>Integration by Parts scored by the LIATE heuristic: <strong>L</strong>og &gt; <strong>A</strong>lgebraic &gt; <strong>L</strong>(dup) &gt; <strong>P</strong>(dup) &gt; <strong>E</strong>xp &gt; <strong>S</strong>in/Cos.</p>
-        </div>
-        <div class="pipeline-card">
-          <div class="pipeline-num">04</div>
-          <h3>Hermite Reduction</h3>
-          <p>Risch algorithm fallback for rational functions — square-free factorization and Rothstein-Trager decomposition.</p>
-        </div>
-      </div>
 
-      <!-- Architecture -->
-      <h2 id="arch">Architecture</h2>
-      <div class="arch-grid">
-        <div class="arch-file"><code>ast.rs</code><span>Recursive Expr enum + nom parser + Display</span></div>
-        <div class="arch-file"><code>engine.rs</code><span>TuskEngine orchestrator, Step/Transform traits</span></div>
-        <div class="arch-file"><code>heuristics.rs</code><span>Phase Zero, ALPES IBP, Substitution rules</span></div>
-        <div class="arch-file"><code>calculus.rs</code><span>Symbolic derive() and simple_integrate()</span></div>
-        <div class="arch-file"><code>risch.rs</code><span>Hermite Reduction for rational functions</span></div>
-        <div class="arch-file"><code>ui.rs</code><span>Ratatui TUI with time-travel + autocomplete</span></div>
-      </div>
-
-      <!-- Install -->
-      <h2 id="install">Install</h2>
-      <div class="tusk-terminal" style="margin-bottom: 2rem;">
-        <div class="term-titlebar">
-          <span class="term-dot red"></span>
-          <span class="term-dot yellow"></span>
-          <span class="term-dot green"></span>
-          <span class="term-title">terminal</span>
+        <!-- Step-by-step Pod -->
+        <div class="wa-pod" id="pod-steps" style="display: none;">
+          <h2 class="wa-pod-title">Step-by-step solution</h2>
+          <div class="wa-pod-content wa-steps-content" id="wa-steps-render"></div>
         </div>
-        <div class="term-body" style="padding: 1rem 1.2rem;">
-          <pre class="install-pre"><span class="term-comment"># Clone and build</span>
-<span class="term-cmd">git clone</span> https://github.com/AKRiLLiCK/tusk.git
-<span class="term-cmd">cd</span> tusk
-<span class="term-cmd">cargo run</span></pre>
-        </div>
-      </div>
 
-      <div class="tusk-cta">
-        <a href="https://github.com/AKRiLLiCK/tusk" target="_blank" class="ui-button tusk-btn-primary">View on GitHub</a>
+        <!-- Error Pod -->
+        <div class="wa-pod" id="pod-error" style="display: none;">
+           <h2 class="wa-pod-title">Error</h2>
+           <div class="wa-pod-content" id="wa-error-render" style="color: #dd0000;">Tusk doesn't understand your input.</div>
+        </div>
       </div>
     </div>
 
-    <script>
+    <script is:inline>
       document.addEventListener('astro:page-load', () => {
-        const input = document.getElementById('tuskInput') as HTMLInputElement;
-        const ghost = document.getElementById('tuskGhost');
-        const output = document.getElementById('tuskOutput');
-        if (!input || !ghost || !output) return;
+        const input = document.getElementById('waInput');
+        const submit = document.getElementById('waSubmit');
+        
+        const podInput = document.getElementById('pod-input');
+        const podSteps = document.getElementById('pod-steps');
+        const podResult = document.getElementById('pod-result');
+        const podError = document.getElementById('pod-error');
+        
+        const renderInput = document.getElementById('wa-input-render');
+        const renderSteps = document.getElementById('wa-steps-render');
+        const renderResult = document.getElementById('wa-result-render');
 
-        const COMMANDS = ['int(', 'sin(', 'cos(', 'exp(', 'ln('];
+        if (!input) return;
 
-        function getSuggestion(text: string): string {
-          const match = text.match(/([a-zA-Z]+)$/);
-          if (!match) return '';
-          const word = match[1];
-          for (const cmd of COMMANDS) {
-            if (cmd.startsWith(word) && cmd !== word) return cmd.slice(word.length);
-          }
-          return '';
-        }
+        // Examples
+        document.querySelectorAll('.wa-ex').forEach(el => {
+          el.addEventListener('click', () => {
+            input.value = el.textContent || '';
+            runEnginePipeline();
+          });
+        });
 
-        // Phase Zero simplification rules (mirrors the Rust engine)
-        type Expr =
-          | { type: 'const'; value: number }
-          | { type: 'var'; name: string }
-          | { type: 'add'; l: Expr; r: Expr }
-          | { type: 'sub'; l: Expr; r: Expr }
-          | { type: 'mul'; l: Expr; r: Expr }
-          | { type: 'pow'; base: Expr; exp: Expr }
-          | { type: 'sin'; inner: Expr }
-          | { type: 'cos'; inner: Expr }
-          | { type: 'exp'; inner: Expr }
-          | { type: 'ln'; inner: Expr }
-          | { type: 'int'; integrand: Expr; variable: string };
+        submit.addEventListener('click', runEnginePipeline);
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') runEnginePipeline();
+        });
 
-        function tokenize(s: string): string[] {
-          const tokens: string[] = [];
+        // ------------------
+        // Parser
+        // ------------------
+        function tokenize(s) {
+          const tokens = [];
           let i = 0;
           while (i < s.length) {
             if (/\s/.test(s[i])) { i++; continue; }
@@ -193,7 +107,7 @@ import Screen from '../components/Screen.astro';
           return tokens;
         }
 
-        function parseExpr(tokens: string[], pos: number): [Expr, number] {
+        function parseExpr(tokens, pos) {
           let [left, p] = parseTerm(tokens, pos);
           while (p < tokens.length && (tokens[p] === '+' || tokens[p] === '-')) {
             const op = tokens[p]; p++;
@@ -204,18 +118,18 @@ import Screen from '../components/Screen.astro';
           return [left, p];
         }
 
-        function parseTerm(tokens: string[], pos: number): [Expr, number] {
+        function parseTerm(tokens, pos) {
           let [left, p] = parsePower(tokens, pos);
           while (p < tokens.length && (tokens[p] === '*' || tokens[p] === '/')) {
             const op = tokens[p]; p++;
             const [right, p2] = parsePower(tokens, p);
-            left = op === '*' ? { type: 'mul', l: left, r: right } : { type: 'mul', l: { type: 'const', value: 1 }, r: right };
+            left = op === '*' ? { type: 'mul', l: left, r: right } : { type: 'div', num: left, den: right };
             p = p2;
           }
           return [left, p];
         }
 
-        function parsePower(tokens: string[], pos: number): [Expr, number] {
+        function parsePower(tokens, pos) {
           let [base, p] = parseFactor(tokens, pos);
           if (p < tokens.length && tokens[p] === '^') {
             p++;
@@ -225,19 +139,17 @@ import Screen from '../components/Screen.astro';
           return [base, p];
         }
 
-        function parseFactor(tokens: string[], pos: number): [Expr, number] {
+        function parseFactor(tokens, pos) {
           const t = tokens[pos];
           if (!t) return [{ type: 'const', value: 0 }, pos];
 
-          // Functions
           const funcs = ['sin', 'cos', 'exp', 'ln'];
           if (funcs.includes(t) && tokens[pos+1] === '(') {
             const [inner, p] = parseExpr(tokens, pos + 2);
             const end = tokens[p] === ')' ? p + 1 : p;
-            return [{ type: t as 'sin'|'cos'|'exp'|'ln', inner }, end];
+            return [{ type: t, inner }, end];
           }
 
-          // Integral
           if (t === 'int' && tokens[pos+1] === '(') {
             const [integrand, p] = parseExpr(tokens, pos + 2);
             let variable = 'x';
@@ -250,52 +162,66 @@ import Screen from '../components/Screen.astro';
             return [{ type: 'int', integrand, variable }, end];
           }
 
-          // Parens
           if (t === '(') {
             const [inner, p] = parseExpr(tokens, pos + 1);
             return [inner, tokens[p] === ')' ? p + 1 : p];
           }
 
-          // Number
           if (/^-?[0-9]/.test(t)) return [{ type: 'const', value: parseFloat(t) }, pos + 1];
-
-          // Variable
           if (/^[a-zA-Z]/.test(t)) return [{ type: 'var', name: t }, pos + 1];
 
           return [{ type: 'const', value: 0 }, pos + 1];
         }
 
-        function tryParse(s: string): Expr | null {
+        function tryParse(s) {
           try {
             const tokens = tokenize(s);
             if (tokens.length === 0) return null;
-            const [expr] = parseExpr(tokens, 0);
+            const [expr, pos] = parseExpr(tokens, 0);
+            if (pos < tokens.length) return null;
             return expr;
           } catch { return null; }
         }
 
-        function exprToStr(e: Expr): string {
+        // ------------------
+        // LaTeX Generator
+        // ------------------
+        function exprToLatex(e) {
           switch (e.type) {
             case 'const': return Number.isInteger(e.value) ? e.value.toString() : e.value.toFixed(2);
             case 'var': return e.name;
-            case 'add': return `(${exprToStr(e.l)} + ${exprToStr(e.r)})`;
-            case 'sub': return `(${exprToStr(e.l)} - ${exprToStr(e.r)})`;
-            case 'mul': {
-              if (e.l.type === 'const' && e.l.value === -1) return `-${exprToStr(e.r)}`;
-              return `(${exprToStr(e.l)} · ${exprToStr(e.r)})`;
+            case 'add': return `${exprToLatex(e.l)} + ${exprToLatex(e.r)}`;
+            case 'sub': {
+              const r = e.r.type === 'add' || e.r.type === 'sub' ? `\\left(${exprToLatex(e.r)}\\right)` : exprToLatex(e.r);
+              return `${exprToLatex(e.l)} - ${r}`;
             }
-            case 'pow': return `${exprToStr(e.base)}^${exprToStr(e.exp)}`;
-            case 'sin': return `sin(${exprToStr(e.inner)})`;
-            case 'cos': return `cos(${exprToStr(e.inner)})`;
-            case 'exp': return `exp(${exprToStr(e.inner)})`;
-            case 'ln': return `ln(${exprToStr(e.inner)})`;
-            case 'int': return `∫ ${exprToStr(e.integrand)} d${e.variable}`;
+            case 'mul': {
+              let l = exprToLatex(e.l);
+              let r = exprToLatex(e.r);
+              if (e.l.type === 'add' || e.l.type === 'sub') l = `\\left(${l}\\right)`;
+              if (e.r.type === 'add' || e.r.type === 'sub') r = `\\left(${r}\\right)`;
+              if (e.l.type === 'const' && e.l.value === -1) return `-${r}`;
+              if (e.l.type === 'const' && (e.r.type === 'var' || e.r.type === 'sin' || e.r.type === 'cos' || e.r.type === 'pow')) return `${l}${r}`;
+              return `${l} \\cdot ${r}`;
+            }
+            case 'div': return `\\frac{${exprToLatex(e.num)}}{${exprToLatex(e.den)}}`;
+            case 'pow': {
+              let b = exprToLatex(e.base);
+              if (e.base.type !== 'var' && e.base.type !== 'const') b = `\\left(${b}\\right)`;
+              return `{${b}}^{${exprToLatex(e.exp)}}`;
+            }
+            case 'sin': return `\\sin\\left(${exprToLatex(e.inner)}\\right)`;
+            case 'cos': return `\\cos\\left(${exprToLatex(e.inner)}\\right)`;
+            case 'exp': return `e^{${exprToLatex(e.inner)}}`;
+            case 'ln': return `\\ln\\left(${exprToLatex(e.inner)}\\right)`;
+            case 'int': return `\\int ${exprToLatex(e.integrand)} \\, d${e.variable}`;
           }
         }
 
-        interface Step { desc: string; expr: Expr }
-
-        function simplify(e: Expr): Expr | null {
+        // ------------------
+        // Heuristics Engine
+        // ------------------
+        function simplify(e) {
           if (e.type === 'add') {
             const sl = simplify(e.l); if (sl) return { type: 'add', l: sl, r: e.r };
             const sr = simplify(e.r); if (sr) return { type: 'add', l: e.l, r: sr };
@@ -321,6 +247,16 @@ import Screen from '../components/Screen.astro';
               return { type: 'mul', l: { type: 'const', value: e.l.value * e.r.l.value }, r: e.r.r };
             }
           }
+          if (e.type === 'div') {
+            const sn = simplify(e.num); if (sn) return { type: 'div', num: sn, den: e.den };
+            const sd = simplify(e.den); if (sd) return { type: 'div', num: e.num, den: sd };
+            if (e.num.type === 'const' && e.den.type === 'const' && e.den.value !== 0) {
+              const res = e.num.value / e.den.value;
+              if (Number.isInteger(res)) return { type: 'const', value: res };
+            }
+            if (e.num.type === 'const' && e.num.value === 0) return { type: 'const', value: 0 };
+            if (e.den.type === 'const' && e.den.value === 1) return e.num;
+          }
           if (e.type === 'pow') {
             if (e.exp.type === 'const' && e.exp.value === 0) return { type: 'const', value: 1 };
             if (e.exp.type === 'const' && e.exp.value === 1) return e.base;
@@ -334,7 +270,7 @@ import Screen from '../components/Screen.astro';
           return null;
         }
 
-        function heuristic(e: Expr): { expr: Expr, desc: string } | null {
+        function heuristic(e) {
           if (e.type === 'int') {
             const v = e.variable;
             const i = e.integrand;
@@ -342,6 +278,7 @@ import Screen from '../components/Screen.astro';
             if (i.type === 'cos' && i.inner.type === 'var' && i.inner.name === v) return { desc: 'Standard Integral', expr: { type: 'sin', inner: i.inner } };
             if (i.type === 'sin' && i.inner.type === 'var' && i.inner.name === v) return { desc: 'Standard Integral', expr: { type: 'mul', l: { type: 'const', value: -1 }, r: { type: 'cos', inner: i.inner } } };
             if (i.type === 'exp' && i.inner.type === 'var' && i.inner.name === v) return { desc: 'Standard Integral', expr: { type: 'exp', inner: i.inner } };
+            
             if (i.type === 'const') return { desc: 'Power Rule', expr: { type: 'mul', l: i, r: { type: 'var', name: v } } };
             if (i.type === 'var' && i.name === v) return { desc: 'Power Rule', expr: { type: 'mul', l: { type: 'const', value: 0.5 }, r: { type: 'pow', base: i, exp: { type: 'const', value: 2 } } } };
             if (i.type === 'pow' && i.base.type === 'var' && i.base.name === v && i.exp.type === 'const' && i.exp.value !== -1) {
@@ -352,20 +289,26 @@ import Screen from '../components/Screen.astro';
             
             if (i.type === 'mul' && i.l.type === 'var' && i.l.name === v) {
                if (i.r.type === 'sin' && i.r.inner.type === 'var' && i.r.inner.name === v) {
-                 return { desc: 'ALPES (IBP): u = x, dv = sin(x)', expr: { type: 'add', l: { type: 'mul', l: { type: 'mul', l: { type: 'const', value: -1 }, r: i.l }, r: { type: 'cos', inner: i.r.inner } }, r: { type: 'int', integrand: { type: 'cos', inner: i.r.inner }, variable: v } } };
+                 return { desc: 'ALPES (IBP): u = x, dv = \\sin(x)', expr: { type: 'add', l: { type: 'mul', l: { type: 'mul', l: { type: 'const', value: -1 }, r: i.l }, r: { type: 'cos', inner: i.r.inner } }, r: { type: 'int', integrand: { type: 'cos', inner: i.r.inner }, variable: v } } };
                }
                if (i.r.type === 'cos' && i.r.inner.type === 'var' && i.r.inner.name === v) {
-                 return { desc: 'ALPES (IBP): u = x, dv = cos(x)', expr: { type: 'sub', l: { type: 'mul', l: i.l, r: { type: 'sin', inner: i.r.inner } }, r: { type: 'int', integrand: { type: 'sin', inner: i.r.inner }, variable: v } } };
+                 return { desc: 'ALPES (IBP): u = x, dv = \\cos(x)', expr: { type: 'sub', l: { type: 'mul', l: i.l, r: { type: 'sin', inner: i.r.inner } }, r: { type: 'int', integrand: { type: 'sin', inner: i.r.inner }, variable: v } } };
                }
                if (i.r.type === 'exp' && i.r.inner.type === 'var' && i.r.inner.name === v) {
-                 return { desc: 'ALPES (IBP): u = x, dv = exp(x)', expr: { type: 'sub', l: { type: 'mul', l: i.l, r: { type: 'exp', inner: i.r.inner } }, r: { type: 'int', integrand: { type: 'exp', inner: i.r.inner }, variable: v } } };
+                 return { desc: 'ALPES (IBP): u = x, dv = e^x', expr: { type: 'sub', l: { type: 'mul', l: i.l, r: { type: 'exp', inner: i.r.inner } }, r: { type: 'int', integrand: { type: 'exp', inner: i.r.inner }, variable: v } } };
                }
             }
             if (i.type === 'mul' && i.l.type === 'const') {
                return { desc: 'Linearity', expr: { type: 'mul', l: i.l, r: { type: 'int', integrand: i.r, variable: v } } };
             }
+            if (i.type === 'div' && i.den.type === 'const') {
+               return { desc: 'Linearity', expr: { type: 'mul', l: { type: 'const', value: 1/i.den.value }, r: { type: 'int', integrand: i.num, variable: v } } };
+            }
             if (i.type === 'add') {
                return { desc: 'Sum Rule', expr: { type: 'add', l: { type: 'int', integrand: i.l, variable: v }, r: { type: 'int', integrand: i.r, variable: v } } };
+            }
+            if (i.type === 'sub') {
+               return { desc: 'Difference Rule', expr: { type: 'sub', l: { type: 'int', integrand: i.l, variable: v }, r: { type: 'int', integrand: i.r, variable: v } } };
             }
           }
           
@@ -381,16 +324,41 @@ import Screen from '../components/Screen.astro';
              const l = heuristic(e.l); if (l) return { desc: l.desc, expr: { type: 'mul', l: l.expr, r: e.r } };
              const r = heuristic(e.r); if (r) return { desc: r.desc, expr: { type: 'mul', l: e.l, r: r.expr } };
           }
+          if (e.type === 'div') {
+             const num = heuristic(e.num); if (num) return { desc: num.desc, expr: { type: 'div', num: num.expr, den: e.den } };
+             const den = heuristic(e.den); if (den) return { desc: den.desc, expr: { type: 'div', num: e.num, den: den.expr } };
+          }
           return null;
         }
 
-        function runEngine(expr: Expr): Step[] {
-          const steps: Step[] = [];
+        // ------------------
+        // UI Render Logic
+        // ------------------
+        function runEnginePipeline() {
+          const val = input.value;
+          if (!val.trim()) return;
+
+          podInput.style.display = 'none';
+          podSteps.style.display = 'none';
+          podResult.style.display = 'none';
+          podError.style.display = 'none';
+
+          const expr = tryParse(val);
+          if (!expr) {
+            podError.style.display = 'block';
+            return;
+          }
+
+          // Input interpretation
+          podInput.style.display = 'block';
+          katex.render(exprToLatex(expr), renderInput, { displayMode: true });
+
+          const steps = [];
           let current = expr;
           for (let i = 0; i < 20; i++) {
             const s = simplify(current);
             if (s) {
-              steps.push({ desc: 'Phase Zero', expr: s });
+              steps.push({ desc: 'Algebraic Simplification', expr: s });
               current = s;
               continue;
             }
@@ -402,298 +370,188 @@ import Screen from '../components/Screen.astro';
             }
             break;
           }
-          return steps;
-        }
 
-        function renderSteps(steps: Step[], final_expr: Expr) {
-          if (steps.length === 0) {
-            output!.innerHTML = `<div class="step-row final"><span class="step-marker">✓</span> <span class="step-desc">Parsed:</span> <span class="step-expr">${exprToStr(final_expr)}</span></div>`;
-            return;
-          }
-          let html = '';
-          steps.forEach((s, i) => {
-            html += `<div class="step-row"><span class="step-num">[${i+1}/${steps.length}]</span> <span class="step-desc">${s.desc}:</span> <span class="step-expr">${exprToStr(s.expr)}</span></div>`;
-          });
-          html += `<div class="step-row final"><span class="step-marker">✓</span> <span class="step-desc">Final Result:</span> <span class="step-expr">${exprToStr(final_expr)}</span></div>`;
-          output!.innerHTML = html;
-        }
+          // Render Result
+          podResult.style.display = 'block';
+          katex.render(exprToLatex(current), renderResult, { displayMode: true });
 
-        input.addEventListener('input', () => {
-          const val = input.value;
-          ghost!.textContent = getSuggestion(val);
-          const expr = tryParse(val);
-          if (!expr || val.trim() === '') {
-            output!.innerHTML = '<div class="term-hint">Try clicking: <code class="clickable-hint">x + 0</code>, <code class="clickable-hint">int(x * sin(x), x)</code>, <code class="clickable-hint">int(x * exp(x), x)</code></div>';
-            bindHints();
-            return;
-          }
-          const steps = runEngine(expr);
-          const final_expr = steps.length > 0 ? steps[steps.length - 1].expr : expr;
-          renderSteps(steps, final_expr);
-        });
-
-        function bindHints() {
-          document.querySelectorAll('.clickable-hint').forEach(el => {
-            el.addEventListener('click', () => {
-              input.value = el.textContent || '';
-              input.dispatchEvent(new Event('input'));
+          // Render Steps
+          if (steps.length > 0) {
+            podSteps.style.display = 'block';
+            let html = '';
+            steps.forEach((step, i) => {
+               html += `
+                 <div class="wa-step-item">
+                    <div class="wa-step-desc">${i+1}. ${step.desc}</div>
+                    <div class="wa-step-math" id="step-math-${i}"></div>
+                 </div>
+               `;
             });
-            el.style.cursor = 'pointer';
-            el.style.textDecoration = 'underline';
-          });
-        }
-        bindHints();
-
-        input.addEventListener('keydown', (e: KeyboardEvent) => {
-          if (e.key === 'Tab') {
-            e.preventDefault();
-            const suggestion = getSuggestion(input.value);
-            if (suggestion) {
-              input.value += suggestion;
-              input.dispatchEvent(new Event('input'));
-            }
+            renderSteps.innerHTML = html;
+            steps.forEach((step, i) => {
+               katex.render(exprToLatex(step.expr), document.getElementById(`step-math-${i}`), { displayMode: true });
+            });
           }
-        });
+        }
       });
     </script>
 
+    <style is:global>
+      /* Override the main Layout body style specifically for this page */
+      body {
+        background: #f4f5f6 !important;
+      }
+    </style>
+
     <style>
-      /* ── Tusk Banner ─────────────────────────── */
-      .tusk-banner {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        gap: 1.5rem;
-        background: linear-gradient(180deg, #1a1225 0%, #0d0a14 100%);
-        border-bottom: 2px solid #2a1f3d;
-        padding: 2.5rem 1.5rem;
-        text-align: center;
-      }
-      .tusk-icon {
-        font-size: clamp(3rem, 8vw, 4.5rem);
-        color: #b48cff;
-        text-shadow: 0 0 20px rgba(180, 140, 255, 0.4);
-        font-family: serif;
-        line-height: 1;
-      }
-      .tusk-title {
-        margin: 0;
-        font-size: clamp(1.8rem, 6vw, 2.8rem);
-        letter-spacing: 3px;
-        background: linear-gradient(135deg, #b48cff, #78dcb4);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      .tusk-subtitle {
-        margin: 0.3rem 0 0 0;
-        color: #666;
-        font-size: 0.85rem;
-        letter-spacing: 1px;
+      .wa-container {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        color: #333;
+        background: #f4f5f6;
+        min-height: 80vh;
       }
 
-      /* ── Hero ─────────────────────────────────── */
-      .tusk-hero {
+      .wa-header {
+        background: #ffffff;
+        border-bottom: 1px solid #e5e5e5;
+        padding: 3rem 1.5rem 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
-        padding: 1.5rem 0 1rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       }
-      .tusk-tagline {
-        color: #999;
-        font-size: 0.95rem;
-        max-width: 560px;
-        margin: 0 auto 1rem;
-        line-height: 1.6;
-      }
-      .tusk-badges { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; }
-      .tusk-badge-rust { color: #ff8264; border-color: rgba(255, 130, 100, 0.3); }
-      .tusk-badge-mit { color: #78dcb4; border-color: rgba(120, 220, 180, 0.3); }
-      .tusk-badge-tui { color: #b48cff; border-color: rgba(180, 140, 255, 0.3); }
 
-      /* ── Terminal ─────────────────────────────── */
-      .tusk-terminal {
-        border: 1px solid #2a2a3a;
-        border-radius: 10px;
-        overflow: hidden;
-        background: #0e0e16;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-        margin-bottom: 2rem;
+      .wa-logo {
+        margin-bottom: 1.5rem;
       }
-      .term-titlebar {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 12px;
-        background: #1a1a24;
-        border-bottom: 1px solid #2a2a3a;
+      .wa-logo-tusk {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #333;
       }
-      .term-dot { width: 10px; height: 10px; border-radius: 50%; }
-      .term-dot.red { background: #ff5f57; }
-      .term-dot.yellow { background: #febc2e; }
-      .term-dot.green { background: #28c840; }
-      .term-title { margin-left: auto; color: #555; font-size: 0.75rem; font-family: monospace; }
-      .term-body { padding: 1rem 1.2rem; }
-      .term-row {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        position: relative;
+      .wa-logo-alpha {
+        font-size: 2.2rem;
+        font-weight: 300;
+        color: #f96302;
       }
-      .term-prompt {
-        color: #b48cff;
-        font-family: monospace;
-        font-weight: bold;
-        font-size: 0.9rem;
-        flex-shrink: 0;
-      }
-      .term-input {
-        flex: 1;
-        background: none;
-        border: none;
-        color: #ffdc64;
-        font-family: monospace;
-        font-size: 0.9rem;
-        outline: none;
-        caret-color: #b48cff;
-      }
-      .term-input::placeholder { color: #3a3a4a; }
-      .term-ghost {
-        color: #3a3a50;
-        font-family: monospace;
-        font-size: 0.9rem;
-        pointer-events: none;
-        position: absolute;
-        left: 0;
-        white-space: pre;
-        opacity: 0;
-      }
-      .term-hint {
-        color: #444;
+      .wa-logo-sub {
+        display: block;
         font-size: 0.8rem;
-        margin-top: 0.8rem;
-        font-family: monospace;
+        color: #888;
+        letter-spacing: 1px;
+        margin-top: 2px;
       }
-      .term-hint code {
-        color: #666;
-        background: rgba(255,255,255,0.05);
-        padding: 1px 5px;
-        border-radius: 3px;
+
+      .wa-search-wrapper {
+        width: 100%;
+        max-width: 640px;
       }
-      .term-output { margin-top: 0.8rem; }
-      .step-row {
+
+      .wa-search-bar {
         display: flex;
-        flex-wrap: wrap;
-        align-items: baseline;
-        gap: 0.2rem 0.6rem;
-        padding: 4px 0;
-        font-family: monospace;
-        font-size: 0.82rem;
-        border-left: 2px solid #2a2a3a;
-        padding-left: 0.8rem;
-        margin-bottom: 2px;
-      }
-      .step-row.final { border-left-color: #78dcb4; }
-      .step-num { color: #ff8264; font-weight: bold; flex-shrink: 0; }
-      .step-marker { color: #78dcb4; font-weight: bold; flex-shrink: 0; }
-      .step-desc { color: #888; flex-shrink: 0; }
-      .step-expr { color: #78dcb4; }
-
-      .install-pre {
-        margin: 0;
-        font-family: monospace;
-        font-size: 0.85rem;
-        line-height: 1.8;
-        color: #aaa;
-        white-space: pre-wrap;
-        word-break: break-all;
-      }
-      .term-comment { color: #555; }
-      .term-cmd { color: #b48cff; font-weight: bold; }
-
-      /* ── Documentation ────────────────────────── */
-      .docs-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: 1rem;
-        margin-bottom: 2rem;
-      }
-      .docs-card {
-        background: rgba(255,255,255,0.02);
-        border: 1px solid #222;
-        border-radius: 8px;
-        padding: 1.2rem;
-      }
-      .docs-card h3 { color: #ffdc64; margin: 0 0 0.5rem; font-size: 1rem; }
-      .docs-card p { color: #aaa; font-size: 0.85rem; line-height: 1.4; margin-bottom: 0.8rem; }
-      .docs-card ul { margin: 0; padding-left: 1.2rem; color: #888; font-size: 0.82rem; line-height: 1.6; }
-      .docs-card code { color: #78dcb4; background: rgba(120,220,180,0.08); padding: 1px 4px; border-radius: 3px; font-size: 0.8rem; }
-
-      /* ── Pipeline ─────────────────────────────── */
-      .pipeline-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 1rem;
-        margin-bottom: 2rem;
-      }
-      .pipeline-card {
-        background: rgba(180, 140, 255, 0.04);
-        border: 1px solid #2a2a3a;
-        border-radius: 8px;
-        padding: 1.2rem;
-        position: relative;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
-      }
-      .pipeline-card h3 { color: #b48cff; margin: 0 0 0.5rem; font-size: 1rem; }
-      .pipeline-card p { color: #888; font-size: 0.82rem; line-height: 1.5; margin: 0; }
-      .pipeline-card code { color: #78dcb4; background: rgba(120,220,180,0.08); padding: 1px 4px; border-radius: 3px; font-size: 0.8rem; }
-      .pipeline-num {
-        position: absolute;
-        top: 0.8rem;
-        right: 1rem;
-        font-size: 1.8rem;
-        font-weight: 900;
-        color: rgba(180, 140, 255, 0.1);
-        font-family: monospace;
-      }
-
-      /* ── Architecture ─────────────────────────── */
-      .arch-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        gap: 0.6rem;
-        margin-bottom: 2rem;
-      }
-      .arch-file {
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        padding: 0.7rem 1rem;
-        background: rgba(255,255,255,0.03);
-        border: 1px solid #222;
-        border-radius: 6px;
-        font-size: 0.82rem;
-      }
-      .arch-file code {
-        color: #ffdc64;
-        background: rgba(255,220,100,0.08);
-        padding: 2px 6px;
+        width: 100%;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         border-radius: 4px;
-        font-weight: bold;
-        flex-shrink: 0;
+        overflow: hidden;
       }
-      .arch-file span { color: #777; }
 
-      /* ── CTA ──────────────────────────────────── */
-      .tusk-cta { text-align: center; padding-bottom: 2rem; }
-      .tusk-btn-primary {
-        background: linear-gradient(180deg, #3a2a5a 0%, #1a1225 100%) !important;
-        border-color: #4a3a6a !important;
-        color: #b48cff !important;
-        padding: 10px 28px !important;
-        font-size: 0.95rem !important;
+      .wa-search-bar input {
+        flex: 1;
+        border: 1px solid #ddd;
+        border-right: none;
+        padding: 1rem 1.2rem;
+        font-size: 1.1rem;
+        outline: none;
+        color: #333;
+        background: #fff;
       }
-      .tusk-btn-primary:active {
-        background: linear-gradient(180deg, #1a1225 0%, #0d0a14 100%) !important;
+
+      .wa-search-bar input:focus {
+        border-color: #f96302;
+      }
+
+      .wa-search-bar button {
+        background: #f96302;
+        color: #fff;
+        border: none;
+        padding: 0 1.5rem;
+        font-size: 1.8rem;
+        font-weight: 300;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .wa-search-bar button:hover {
+        background: #e55a00;
+      }
+
+      .wa-examples {
+        margin-top: 0.8rem;
+        font-size: 0.85rem;
+        color: #777;
+      }
+      .wa-ex {
+        color: #0066cc;
+        cursor: pointer;
+        margin: 0 0.2rem;
+      }
+      .wa-ex:hover {
+        text-decoration: underline;
+      }
+
+      .wa-content {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1.5rem;
+      }
+
+      .wa-pod {
+        background: #ffffff;
+        border: 1px solid #e5e5e5;
+        border-radius: 4px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        overflow: hidden;
+      }
+
+      .wa-pod-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #444;
+        background: #fdfdfd;
+        padding: 0.8rem 1.2rem;
+        margin: 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .wa-pod-content {
+        padding: 1.5rem;
+        overflow-x: auto;
+      }
+
+      .wa-result-content {
+        font-size: 1.2rem;
+      }
+
+      .wa-step-item {
+        margin-bottom: 1.2rem;
+      }
+      .wa-step-item:last-child {
+        margin-bottom: 0;
+      }
+      .wa-step-desc {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 0.4rem;
+        font-weight: 500;
+      }
+      .wa-step-math {
+        background: #fcfcfc;
+        padding: 1rem;
+        border-left: 3px solid #f96302;
+        border-radius: 0 4px 4px 0;
+        overflow-x: auto;
       }
     </style>
   </Screen>
