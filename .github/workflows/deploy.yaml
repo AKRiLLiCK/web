@@ -28,14 +28,10 @@ jobs:
           rustup target add wasm32-unknown-unknown
           curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
+      # Build Wasm directly into public/ so Astro sees it as a static asset
       - name: Build Wasm Engine
-        run: wasm-pack build ./tusk --target web --out-dir ../public/pkg
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build Astro Site
-        run: npm run build
+        working-directory: ./tusk
+        run: wasm-pack build --target web --out-dir ../public/pkg
 
       - name: Install dependencies
         run: npm install
@@ -47,3 +43,14 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
