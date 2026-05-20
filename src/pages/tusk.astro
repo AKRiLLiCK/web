@@ -142,7 +142,8 @@
   </div>
 
   <script type="module">
-    import init, { solve_latex, parse_to_latex } from `${import.meta.env.BASE_URL}pkg/tusk.js`;
+    // Changed backticks to a valid static string literal representation
+    import init, { solve_latex, parse_to_latex } from '/web/pkg/tusk.js';
 
     async function loadEngine() {
       try {
@@ -163,14 +164,12 @@
       const rawInput = input.value.trim();
       
       try {
-        // Evaluate Rust Engine
         const inputLatex = parse_to_latex(rawInput);
         const resultLatex = solve_latex(rawInput);
 
         document.getElementById('pod-input').style.display = 'block';
         document.getElementById('pod-result').style.display = 'block';
         
-        // Render Interface
         katex.render(inputLatex, renderInput, {
             throwOnError: false,
             displayMode: true
