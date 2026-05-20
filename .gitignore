@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Force tracking of the Wasm engine
+!public/pkg/*.js
+!public/pkg/*.wasm
