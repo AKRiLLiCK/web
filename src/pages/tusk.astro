@@ -37,31 +37,36 @@ import Screen from '../components/Screen.astro';
     <script is:inline>
   // Ensure we check for katex globally, or wait for it
   function runEnginePipeline() {
-    // 1. Check if KaTeX is loaded
-    if (typeof katex === 'undefined') {
-      console.warn("Tusk: KaTeX not loaded yet, retrying...");
-      setTimeout(runEnginePipeline, 100); 
-      return;
-    }
+  const input = document.getElementById('waInput');
+  const renderInput = document.getElementById('wa-input-render');
+  const renderResult = document.getElementById('wa-result-render');
+  
+  if (!input || !renderInput || !renderResult) return;
 
-    const input = document.getElementById('waInput');
-    const renderInput = document.getElementById('wa-input-render');
-    const renderResult = document.getElementById('wa-result-render');
-    
-    if (!input || !input.value.trim()) return;
+  const val = input.value.trim();
+  if (!val) return;
 
-    // Reset UI
-    document.getElementById('pod-input').style.display = 'block';
-    document.getElementById('pod-result').style.display = 'block';
+  const expr = tryParse(val);
+  if (!expr) return;
 
-    try {
-      // 2. Safe KaTeX call
-      katex.render(input.value, renderInput, { displayMode: true });
-      katex.render(input.value, renderResult, { displayMode: true });
-    } catch (err) {
-      console.error("KaTeX rendering error:", err);
-    }
+  // 1. Render original input
+  document.getElementById('pod-input').style.display = 'block';
+  katex.render(exprToLatex(expr), renderInput, { displayMode: true });
+
+  // 2. Run the transformation pipeline
+  let current = expr;
+  for (let i = 0; i < 20; i++) {
+    const s = simplify(current);
+    if (s) { current = s; continue; }
+    const h = heuristic(current);
+    if (h) { current = h.expr; continue; }
+    break; // Exit when no more rules apply
   }
+
+  // 3. CRITICAL: Render 'current' (the transformed expression), not 'expr'
+  document.getElementById('pod-result').style.display = 'block';
+  katex.render(exprToLatex(current), renderResult, { displayMode: true });
+}
 
   // 3. Robust listener for Astro View Transitions
   document.addEventListener('astro:page-load', () => {
