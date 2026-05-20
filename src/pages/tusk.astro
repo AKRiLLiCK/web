@@ -1,8 +1,122 @@
 ---
-import Layout from '../layouts/Layout.astro';
+// Tusk standalone frontend, isolated from global styles.
 ---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tusk - Computational Intelligence</title>
+  <link rel="icon" type="image/svg+xml" href="/web/favicon.svg" />
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
 
-<Layout title="Tusk" wide={true}>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --panel-bg: #1e1e1e;
+      --border: #333;
+      --accent: #f96302;
+      --text: #e0e0e0;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .tusk-app {
+      width: 100%;
+      max-width: 800px;
+      padding: 4rem 1rem;
+    }
+    .tusk-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .tusk-logo {
+      width: 56px;
+      height: 56px;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+    .subtitle {
+      color: #888;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .wa-search-bar {
+      display: flex;
+      width: 100%;
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .wa-search-bar input {
+      flex: 1;
+      padding: 1.2rem 1.5rem;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      outline: none;
+      font-family: monospace;
+    }
+    .wa-search-bar button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0 2rem;
+      cursor: pointer;
+      font-size: 1.5rem;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .wa-search-bar button:hover {
+      background: #e55a02;
+    }
+    .wa-pod {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .wa-pod-title {
+      background: #252525;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.8rem;
+      color: #aaa;
+      border-bottom: 1px solid var(--border);
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .wa-pod-content {
+      padding: 2.5rem 1.5rem;
+      overflow-x: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body>
   <div class="tusk-app">
     <header class="tusk-header">
       <img src="/web/tusk_logo.svg" alt="Tusk Logo" class="tusk-logo" />
@@ -10,14 +124,14 @@ import Layout from '../layouts/Layout.astro';
       <p class="subtitle">Computational Intelligence</p>
       
       <div class="wa-search-bar">
-        <input type="text" id="waInput" placeholder="Enter expression..." />
+        <input type="text" id="waInput" placeholder="int(x^2 + sin(x))" autocomplete="off" spellcheck="false" />
         <button id="waSubmit">=</button>
       </div>
     </header>
 
     <main class="wa-content">
       <div class="wa-pod" id="pod-input" style="display: none;">
-        <h2 class="wa-pod-title">Input</h2>
+        <h2 class="wa-pod-title">Input Interpretation</h2>
         <div class="wa-pod-content" id="wa-input-render"></div>
       </div>
       <div class="wa-pod" id="pod-result" style="display: none;">
@@ -28,55 +142,53 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <script type="module">
-  // IMPORT YOUR ACTUAL RUST LOGIC
-  import init, { solve } from `${import.meta.env.BASE_URL}pkg/tusk.js`;
+    import init, { solve_latex, parse_to_latex } from `${import.meta.env.BASE_URL}pkg/tusk.js`;
 
-  async function loadEngine() {
-    try {
-      await init();
-      console.log("Rust Engine Loaded.");
-    } catch (e) {
-      console.error("Wasm Init Failed:", e);
+    async function loadEngine() {
+      try {
+        await init();
+        console.log("Rust Engine Loaded.");
+      } catch (e) {
+        console.error("Wasm Init Failed:", e);
+      }
     }
-  }
-  loadEngine();
+    loadEngine();
 
-  window.runEnginePipeline = function() {
-    const input = document.getElementById('waInput');
-    const renderInput = document.getElementById('wa-input-render');
-    const renderResult = document.getElementById('wa-result-render');
-    
-    if (!input || !input.value.trim()) return;
-    const rawInput = input.value.trim();
-    
-    // EXECUTE RUST CODE
-    const result = solve(rawInput);
+    window.runEnginePipeline = function() {
+      const input = document.getElementById('waInput');
+      const renderInput = document.getElementById('wa-input-render');
+      const renderResult = document.getElementById('wa-result-render');
+      
+      if (!input || !input.value.trim()) return;
+      const rawInput = input.value.trim();
+      
+      try {
+        // Evaluate Rust Engine
+        const inputLatex = parse_to_latex(rawInput);
+        const resultLatex = solve_latex(rawInput);
 
-    document.getElementById('pod-input').style.display = 'block';
-    document.getElementById('pod-result').style.display = 'block';
-    renderInput.innerText = rawInput;
-    renderResult.innerText = result; // This is the output from your Rust solve() function
-  }
+        document.getElementById('pod-input').style.display = 'block';
+        document.getElementById('pod-result').style.display = 'block';
+        
+        // Render Interface
+        katex.render(inputLatex, renderInput, {
+            throwOnError: false,
+            displayMode: true
+        });
+        
+        katex.render(resultLatex, renderResult, {
+            throwOnError: false,
+            displayMode: true
+        });
+      } catch (err) {
+        console.error("Execution error:", err);
+      }
+    }
 
-  document.addEventListener('astro:page-load', () => {
     document.getElementById('waSubmit')?.addEventListener('click', window.runEnginePipeline);
     document.getElementById('waInput')?.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') window.runEnginePipeline();
     });
-  });
-</script>
-
-  <style>
-    .tusk-app { min-height: 100vh; width: 100%; background: #111; color: #eee; display: flex; flex-direction: column; align-items: center; padding: 4rem 1rem; }
-    .tusk-logo { width: 48px; height: 48px; margin-bottom: 1rem; }
-    .tusk-header { text-align: center; width: 100%; max-width: 800px; margin-bottom: 2rem; }
-    .subtitle { color: #888; font-size: 0.9rem; }
-    .wa-search-bar { display: flex; width: 100%; max-width: 800px; background: #1a1a1a; border: 1px solid #333; border-radius: 4px; overflow: hidden; }
-    .wa-search-bar input { flex: 1; padding: 1.2rem; background: transparent; border: none; color: #fff; font-size: 1.1rem; outline: none; }
-    .wa-search-bar button { background: #f96302; color: white; border: none; padding: 0 2rem; cursor: pointer; transition: background 0.2s; }
-    .wa-content { width: 100%; max-width: 800px; }
-    .wa-pod { background: #1a1a1a; border: 1px solid #333; margin-bottom: 1rem; border-radius: 4px; }
-    .wa-pod-title { background: #222; padding: 0.5rem 1rem; font-size: 0.75rem; color: #888; border-bottom: 1px solid #333; margin: 0; text-transform: uppercase; }
-    .wa-pod-content { padding: 2rem; word-break: break-all; font-family: monospace; }
-  </style>
-</Layout>
+  </script>
+</body>
+</html>
