@@ -45,51 +45,55 @@ import Screen from '../components/Screen.astro';
     </div>
 
     <script is:inline>
-      // Engine logic moved to global scope
-      function tryParse(s) { /* ... */ }
-      function exprToLatex(e) { /* ... */ }
-      function simplify(e) { /* ... */ }
-      function heuristic(e) { /* ... */ }
-
+      // Global scope functions - No syntax errors
+      window.tryParse = function(s) { /* your logic here */ return { type: 'const', value: 0 }; };
+      window.exprToLatex = function(e) { return "0"; };
+      
       function runEnginePipeline() {
         const input = document.getElementById('waInput');
-        // ... implementation from previous step ...
+        if (!input || !input.value.trim()) return;
+
+        // Reset UI
+        ['pod-input', 'pod-steps', 'pod-result', 'pod-error'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = 'none';
+        });
+
+        const expr = window.tryParse(input.value);
+        if (!expr) {
+          document.getElementById('pod-error').style.display = 'block';
+          return;
+        }
+
+        document.getElementById('pod-input').style.display = 'block';
+        katex.render(window.exprToLatex(expr), document.getElementById('wa-input-render'), { displayMode: true });
+        document.getElementById('pod-result').style.display = 'block';
+        katex.render(window.exprToLatex(expr), document.getElementById('wa-result-render'), { displayMode: true });
       }
 
       document.addEventListener('astro:page-load', () => {
-        document.getElementById('waSubmit').addEventListener('click', runEnginePipeline);
-        document.getElementById('waInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') runEnginePipeline(); });
+        const btn = document.getElementById('waSubmit');
+        if (btn) btn.addEventListener('click', runEnginePipeline);
       });
     </script>
 
     <style>
-      /* Layout containers inheriting global dark mode */
+      /* Ensure pods match the global 3DS theme */
       .wa-container { padding: 0; min-height: 80vh; }
+      .wa-content { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
       
       .wa-pod {
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid #333;
         border-radius: 8px;
-        margin: 1rem auto;
-        max-width: 800px;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        margin-bottom: 1.5rem;
       }
-
       .wa-pod-title {
         font-size: 0.9rem;
         padding: 0.8rem 1rem;
         border-bottom: 1px solid #333;
         color: #aaa;
         margin: 0;
-      }
-
-      .wa-pod-content { padding: 1.5rem; color: #eee; }
-      
-      .wa-step-math {
-        padding: 1rem;
-        border-left: 3px solid #666;
-        background: rgba(0,0,0,0.2);
-        margin-top: 0.5rem;
       }
     </style>
   </Screen>
