@@ -1,93 +1,66 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Screen from '../components/Screen.astro';
 ---
 
 <Layout title="Tusk" wide={true}>
-  <Screen>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <script is:inline defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-
-    <div class="wa-container">
-      <header class="banner">
-        <h1>Tusk</h1>
-        <span class="wa-logo-sub">computational intelligence</span>
-        <div class="wa-search-bar">
-          <input type="text" id="waInput" placeholder="Enter expression (e.g. int(x), x)..." />
-          <button id="waSubmit">=</button>
-        </div>
-      </header>
-
-      <div class="wa-content">
-        <div class="wa-pod" id="pod-input" style="display: none;">
-          <h2 class="wa-pod-title">Input</h2>
-          <div class="wa-pod-content" id="wa-input-render"></div>
-        </div>
-        <div class="wa-pod" id="pod-result" style="display: none;">
-          <h2 class="wa-pod-title">Result</h2>
-          <div class="wa-pod-content" id="wa-result-render"></div>
-        </div>
+  <div class="tusk-app">
+    <header class="tusk-header">
+      <img src="/web/tusk_logo.svg" alt="Tusk Logo" class="tusk-logo" />
+      <h1>Tusk</h1>
+      <p class="subtitle">computational intelligence</p>
+      
+      <div class="wa-search-bar">
+        <input type="text" id="waInput" placeholder="Enter expression (e.g. int(x+5))" />
+        <button id="waSubmit">=</button>
       </div>
-    </div>
+    </header>
 
-    <script is:inline>
-  // Declare the interface for window to satisfy TypeScript
-  /** @type {any} */
-  const win = window;
+    <main class="wa-content">
+      <div class="wa-pod" id="pod-input" style="display: none;">
+        <h2 class="wa-pod-title">Input</h2>
+        <div class="wa-pod-content" id="wa-input-render"></div>
+      </div>
+      <div class="wa-pod" id="pod-result" style="display: none;">
+        <h2 class="wa-pod-title">Result</h2>
+        <div class="wa-pod-content" id="wa-result-render"></div>
+      </div>
+    </main>
+  </div>
 
-  win.runEnginePipeline = function() {
-    // Check katex using window scope
-    if (typeof katex === 'undefined') {
-      setTimeout(win.runEnginePipeline, 100);
-      return;
+  <script is:inline>
+    /** @type {any} */
+    const win = window;
+    win.runEnginePipeline = function() {
+      const input = /** @type {HTMLInputElement} */ (document.getElementById('waInput'));
+      const renderInput = document.getElementById('wa-input-render');
+      const renderResult = document.getElementById('wa-result-render');
+      if (!input || !input.value.trim()) return;
+      
+      const rawInput = input.value.trim();
+      // Logic: Matches int(x+N) or int(x+N, x)
+      const match = rawInput.match(/int\(x\s*\+\s*(\d+)(?:,\s*x)?\)/);
+      let output = rawInput;
+      
+      if (match) { output = `0.5x^2 + ${match[1]}x`; } 
+      else if (rawInput.includes("int(x)")) { output = "0.5x^2"; }
+
+      document.getElementById('pod-input').style.display = 'block';
+      document.getElementById('pod-result').style.display = 'block';
+      renderInput.innerText = rawInput; // Simplify: Replace with Katex if available
+      renderResult.innerText = output;
     }
 
-    // Type-safe DOM access
-    const input = /** @type {HTMLInputElement} */ (document.getElementById('waInput'));
-    const renderInput = document.getElementById('wa-input-render');
-    const renderResult = document.getElementById('wa-result-render');
-        
-    if (!input || !renderInput || !renderResult || !input.value.trim()) return;
-    
-    const rawInput = input.value.trim();
-
-    // Regex now handles: int(x+N) OR int(x+N, x)
-    const match = rawInput.match(/int\(x\s*\+\s*(\d+)(?:,\s*x)?\)/);
-    let output = rawInput;
-
-    if (match) {
-        const c = match[1]; 
-        output = `0.5x^2 + ${c}x`;
-    } else if (rawInput.includes("int(x)")) {
-        output = "0.5x^2";
-}
-
-    document.getElementById('pod-input').style.display = 'block';
-    document.getElementById('pod-result').style.display = 'block';
-    katex.render(rawInput, renderInput, { displayMode: true });
-    katex.render(output, renderResult, { displayMode: true });
-  }
-
-  document.addEventListener('astro:page-load', () => {
-    const btn = document.getElementById('waSubmit');
-    const inp = /** @type {HTMLInputElement} */ (document.getElementById('waInput'));
-    
-    btn?.addEventListener('click', win.runEnginePipeline);
-    inp?.addEventListener('keydown', (e) => { 
-        if (e.key === 'Enter') win.runEnginePipeline(); 
+    document.addEventListener('astro:page-load', () => {
+      document.getElementById('waSubmit')?.addEventListener('click', win.runEnginePipeline);
     });
-  });
-</script>
+  </script>
 
-    <style>
-      .wa-container { background: #111; color: #eee; min-height: 100vh; }
-      .banner { background: #1a1a1a; border-bottom: 1px solid #333; padding: 2rem; text-align: center; }
-      .wa-search-bar { display: flex; max-width: 600px; margin: 1rem auto; background: #000; border: 1px solid #444; border-radius: 4px; }
-      .wa-search-bar input { flex: 1; padding: 1rem; background: transparent; border: none; color: #fff; }
-      .wa-search-bar button { background: #f96302; color: white; border: none; padding: 0 1.5rem; }
-      .wa-pod { background: #1a1a1a; border: 1px solid #333; border-radius: 4px; margin: 1rem auto; max-width: 800px; }
-      .wa-pod-title { background: #222; padding: 0.5rem 1rem; font-size: 0.8rem; color: #888; border-bottom: 1px solid #333; }
-      .wa-pod-content { padding: 1rem; }
-    </style>
-  </Screen>
+  <style>
+    .tusk-app { min-height: 100vh; width: 100%; background: #111; color: #eee; display: flex; flex-direction: column; align-items: center; padding: 4rem 1rem; }
+    .tusk-logo { width: 48px; height: 48px; margin-bottom: 1rem; }
+    .wa-search-bar { display: flex; width: 100%; max-width: 800px; background: #1a1a1a; border: 1px solid #333; border-radius: 4px; }
+    .wa-search-bar input { flex: 1; padding: 1.2rem; background: transparent; border: none; color: #fff; }
+    .wa-search-bar button { background: #f96302; color: white; border: none; padding: 0 2rem; }
+    .wa-pod { background: #1a1a1a; border: 1px solid #333; width: 100%; max-width: 800px; margin-top: 1rem; }
+  </style>
 </Layout>
