@@ -7,10 +7,10 @@ import Layout from '../layouts/Layout.astro';
     <header class="tusk-header">
       <img src="/web/tusk_logo.svg" alt="Tusk Logo" class="tusk-logo" />
       <h1>Tusk</h1>
-      <p class="subtitle">computational intelligence</p>
+      <p class="subtitle">Computational Intelligence</p>
       
       <div class="wa-search-bar">
-        <input type="text" id="waInput" placeholder="Enter expression (e.g. int(x+5))" />
+        <input type="text" id="waInput" placeholder="Enter expression..." />
         <button id="waSubmit">=</button>
       </div>
     </header>
@@ -27,40 +27,56 @@ import Layout from '../layouts/Layout.astro';
     </main>
   </div>
 
-  <script is:inline>
-    /** @type {any} */
-    const win = window;
-    win.runEnginePipeline = function() {
-      const input = /** @type {HTMLInputElement} */ (document.getElementById('waInput'));
+  <script type="module">
+    // IMPORT YOUR ACTUAL RUST LOGIC
+    import init, { solve } from '/pkg/tusk.js';
+
+    async function loadEngine() {
+      try {
+        await init();
+        console.log("Rust Engine Loaded.");
+      } catch (e) {
+        console.error("Wasm Init Failed:", e);
+      }
+    }
+    loadEngine();
+
+    window.runEnginePipeline = function() {
+      const input = document.getElementById('waInput');
       const renderInput = document.getElementById('wa-input-render');
       const renderResult = document.getElementById('wa-result-render');
+      
       if (!input || !input.value.trim()) return;
-      
       const rawInput = input.value.trim();
-      // Logic: Matches int(x+N) or int(x+N, x)
-      const match = rawInput.match(/int\(x\s*\+\s*(\d+)(?:,\s*x)?\)/);
-      let output = rawInput;
-      
-      if (match) { output = `0.5x^2 + ${match[1]}x`; } 
-      else if (rawInput.includes("int(x)")) { output = "0.5x^2"; }
+
+      // EXECUTE RUST CODE
+      const result = solve(rawInput);
 
       document.getElementById('pod-input').style.display = 'block';
       document.getElementById('pod-result').style.display = 'block';
-      renderInput.innerText = rawInput; // Simplify: Replace with Katex if available
-      renderResult.innerText = output;
+      renderInput.innerText = rawInput;
+      renderResult.innerText = result; // This is the output from your Rust solve() function
     }
 
     document.addEventListener('astro:page-load', () => {
-      document.getElementById('waSubmit')?.addEventListener('click', win.runEnginePipeline);
+      document.getElementById('waSubmit')?.addEventListener('click', window.runEnginePipeline);
+      document.getElementById('waInput')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') window.runEnginePipeline();
+      });
     });
   </script>
 
   <style>
     .tusk-app { min-height: 100vh; width: 100%; background: #111; color: #eee; display: flex; flex-direction: column; align-items: center; padding: 4rem 1rem; }
     .tusk-logo { width: 48px; height: 48px; margin-bottom: 1rem; }
-    .wa-search-bar { display: flex; width: 100%; max-width: 800px; background: #1a1a1a; border: 1px solid #333; border-radius: 4px; }
-    .wa-search-bar input { flex: 1; padding: 1.2rem; background: transparent; border: none; color: #fff; }
-    .wa-search-bar button { background: #f96302; color: white; border: none; padding: 0 2rem; }
-    .wa-pod { background: #1a1a1a; border: 1px solid #333; width: 100%; max-width: 800px; margin-top: 1rem; }
+    .tusk-header { text-align: center; width: 100%; max-width: 800px; margin-bottom: 2rem; }
+    .subtitle { color: #888; font-size: 0.9rem; }
+    .wa-search-bar { display: flex; width: 100%; max-width: 800px; background: #1a1a1a; border: 1px solid #333; border-radius: 4px; overflow: hidden; }
+    .wa-search-bar input { flex: 1; padding: 1.2rem; background: transparent; border: none; color: #fff; font-size: 1.1rem; outline: none; }
+    .wa-search-bar button { background: #f96302; color: white; border: none; padding: 0 2rem; cursor: pointer; transition: background 0.2s; }
+    .wa-content { width: 100%; max-width: 800px; }
+    .wa-pod { background: #1a1a1a; border: 1px solid #333; margin-bottom: 1rem; border-radius: 4px; }
+    .wa-pod-title { background: #222; padding: 0.5rem 1rem; font-size: 0.75rem; color: #888; border-bottom: 1px solid #333; margin: 0; text-transform: uppercase; }
+    .wa-pod-content { padding: 2rem; word-break: break-all; font-family: monospace; }
   </style>
 </Layout>
