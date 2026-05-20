@@ -9,11 +9,10 @@ import Screen from '../components/Screen.astro';
     <script is:inline src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cpW21h6RZv/phavutF+GqIGc/9O29yWeQ8j82NenH0R1YdK3XlT3J6+zB38fJ/u" crossorigin="anonymous"></script>
 
     <div class="wa-container">
-      <header class="wa-header">
-        <div class="wa-logo">
-          <span class="wa-logo-tusk">Tusk</span>
-          <span class="wa-logo-sub">computational intelligence</span>
-        </div>
+      <header class="banner">
+        <h1>Tusk</h1>
+        <span class="wa-logo-sub">computational intelligence</span>
+        
         <div class="wa-search-wrapper">
           <div class="wa-search-bar">
             <input type="text" id="waInput" placeholder="Enter expression (e.g., int(x * sin(x), x))" autocomplete="off" spellcheck="false" />
@@ -40,19 +39,19 @@ import Screen from '../components/Screen.astro';
 
         <div class="wa-pod" id="pod-error" style="display: none;">
            <h2 class="wa-pod-title">Error</h2>
-           <div class="wa-pod-content" id="wa-error-render" style="color: #dd0000;">Tusk doesn't understand your input.</div>
+           <div class="wa-pod-content" id="wa-error-render" style="color: #ff6b6b;">Tusk could not parse the input. Check your syntax.</div>
         </div>
       </div>
     </div>
 
     <script is:inline>
-      // Logic moved to global scope so runEnginePipeline can resolve them
-      function tokenize(s) { /* ... same as your implementation ... */ }
-      function parseExpr(tokens, pos) { /* ... same as your implementation ... */ }
-      function tryParse(s) { /* ... same as your implementation ... */ }
-      function exprToLatex(e) { /* ... same as your implementation ... */ }
-      function simplify(e) { /* ... same as your implementation ... */ }
-      function heuristic(e) { /* ... same as your implementation ... */ }
+      // Global engine functions move out of the event listener
+      function tokenize(s) { /* Implementation */ }
+      function parseExpr(tokens, pos) { /* Implementation */ }
+      function tryParse(s) { /* Implementation */ }
+      function exprToLatex(e) { /* Implementation */ }
+      function simplify(e) { /* Implementation */ }
+      function heuristic(e) { /* Implementation */ }
 
       function runEnginePipeline() {
         const input = document.getElementById('waInput');
@@ -60,16 +59,15 @@ import Screen from '../components/Screen.astro';
         const renderSteps = document.getElementById('wa-steps-render');
         const renderResult = document.getElementById('wa-result-render');
         
-        if (!input) return;
+        if (!input || !renderInput) return;
 
-        const val = input.value;
-        if (!val.trim()) return;
+        const val = input.value.trim();
+        if (!val) return;
 
-        // Reset UI
-        document.getElementById('pod-input').style.display = 'none';
-        document.getElementById('pod-steps').style.display = 'none';
-        document.getElementById('pod-result').style.display = 'none';
-        document.getElementById('pod-error').style.display = 'none';
+        // Reset display
+        ['pod-input', 'pod-steps', 'pod-result', 'pod-error'].forEach(id => {
+          document.getElementById(id).style.display = 'none';
+        });
 
         const expr = tryParse(val);
         if (!expr) {
@@ -80,11 +78,12 @@ import Screen from '../components/Screen.astro';
         document.getElementById('pod-input').style.display = 'block';
         katex.render(exprToLatex(expr), renderInput, { displayMode: true });
 
+        // Calculate steps
         const steps = [];
         let current = expr;
         for (let i = 0; i < 20; i++) {
           const s = simplify(current);
-          if (s) { steps.push({ desc: 'Algebraic Simplification', expr: s }); current = s; continue; }
+          if (s) { steps.push({ desc: 'Simplification', expr: s }); current = s; continue; }
           const h = heuristic(current);
           if (h) { steps.push({ desc: h.desc, expr: h.expr }); current = h.expr; continue; }
           break;
@@ -98,17 +97,18 @@ import Screen from '../components/Screen.astro';
           renderSteps.innerHTML = steps.map((s, i) => `
             <div class="wa-step-item">
               <div class="wa-step-desc">${i+1}. ${s.desc}</div>
-              <div class="wa-step-math" id="step-math-${i}"></div>
+              <div class="wa-step-math" id="step-${i}"></div>
             </div>`).join('');
-          steps.forEach((s, i) => katex.render(exprToLatex(s.expr), document.getElementById('step-math-' + i), { displayMode: true }));
+          steps.forEach((s, i) => katex.render(exprToLatex(s.expr), document.getElementById('step-' + i), { displayMode: true }));
         }
       }
 
+      // Re-bind listeners for Astro page transitions
       document.addEventListener('astro:page-load', () => {
-        const submit = document.getElementById('waSubmit');
-        const input = document.getElementById('waInput');
-        if (submit) submit.addEventListener('click', runEnginePipeline);
-        if (input) input.addEventListener('keydown', (e) => { if (e.key === 'Enter') runEnginePipeline(); });
+        const btn = document.getElementById('waSubmit');
+        const inp = document.getElementById('waInput');
+        if (btn) btn.addEventListener('click', runEnginePipeline);
+        if (inp) inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') runEnginePipeline(); });
       });
     </script>
   </Screen>
