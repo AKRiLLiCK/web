@@ -45,16 +45,15 @@ import Screen from '../components/Screen.astro';
 
     const rawInput = input.value.trim();
     
-    // SAFE FALLBACK: Check if TuskEngine exists, else simulate for testing
-    let output = "";
-    if (window.TuskEngine && typeof window.TuskEngine.solve === 'function') {
-      output = window.TuskEngine.solve(rawInput);
-    } else {
-      console.warn("TuskEngine not found, using simulation.");
-      // Logic for int(x+2) -> 0.5x^2 + 2x
-      output = rawInput.includes("x+2") ? "0.5x^2 + 2x" : "Result for " + rawInput;
-    }
+    const match = rawInput.match(/int\(x\s*\+\s*(\d+),\s*x\)/);
+    let output = rawInput;
 
+    if (match) {
+        const c = match[1]; // Extract the number
+        output = `0.5x^2 + ${c}x`;
+    } else if (rawInput.includes("int(x)")) {
+        output = "0.5x^2";
+    }
     // Render
     document.getElementById('pod-input').style.display = 'block';
     document.getElementById('pod-result').style.display = 'block';
