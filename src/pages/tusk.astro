@@ -1,5 +1,5 @@
 ---
-// Tusk standalone frontend, isolated from global styles.
+// src/pages/tusk.astro
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -147,11 +147,11 @@
     async function loadEngine() {
       try {
         await init();
-        console.log("Rust Engine Loaded.");
       } catch (e) {
         console.error("Wasm Init Failed:", e);
       }
     }
+    
     loadEngine();
 
     window.runEnginePipeline = function() {
