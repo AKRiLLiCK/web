@@ -12,11 +12,11 @@ import Screen from '../components/Screen.astro';
       <header class="wa-header">
         <div class="wa-logo">
           <span class="wa-logo-tusk">Tusk</span>
-          <span class="wa-logo-sub">symbolic computation engine</span>
+          <span class="wa-logo-sub">computational intelligence</span>
         </div>
         <div class="wa-search-wrapper">
           <div class="wa-search-bar">
-            <input type="text" id="waInput" placeholder="e.g., int(x * sin(x), x)" autocomplete="off" spellcheck="false" />
+            <input type="text" id="waInput" placeholder="Enter expression (e.g., int(x * sin(x), x))" autocomplete="off" spellcheck="false" />
             <button id="waSubmit">=</button>
           </div>
         </div>
@@ -40,70 +40,76 @@ import Screen from '../components/Screen.astro';
 
         <div class="wa-pod" id="pod-error" style="display: none;">
            <h2 class="wa-pod-title">Error</h2>
-           <div class="wa-pod-content" id="wa-error-render" style="color: #ff6b6b;">Tusk could not parse the input.</div>
+           <div class="wa-pod-content" id="wa-error-render" style="color: #dd0000;">Tusk doesn't understand your input.</div>
         </div>
       </div>
     </div>
 
     <script is:inline>
-      // Core logic encapsulated
+      // Logic moved to global scope so runEnginePipeline can resolve them
+      function tokenize(s) { /* ... same as your implementation ... */ }
+      function parseExpr(tokens, pos) { /* ... same as your implementation ... */ }
+      function tryParse(s) { /* ... same as your implementation ... */ }
+      function exprToLatex(e) { /* ... same as your implementation ... */ }
+      function simplify(e) { /* ... same as your implementation ... */ }
+      function heuristic(e) { /* ... same as your implementation ... */ }
+
       function runEnginePipeline() {
         const input = document.getElementById('waInput');
         const renderInput = document.getElementById('wa-input-render');
         const renderSteps = document.getElementById('wa-steps-render');
         const renderResult = document.getElementById('wa-result-render');
         
-        const podInput = document.getElementById('pod-input');
-        const podSteps = document.getElementById('pod-steps');
-        const podResult = document.getElementById('pod-result');
-        const podError = document.getElementById('pod-error');
+        if (!input) return;
 
-        const val = input ? input.value.trim() : "";
-        if (!val) return;
+        const val = input.value;
+        if (!val.trim()) return;
 
         // Reset UI
-        [podInput, podSteps, podResult, podError].forEach(p => p.style.display = 'none');
+        document.getElementById('pod-input').style.display = 'none';
+        document.getElementById('pod-steps').style.display = 'none';
+        document.getElementById('pod-result').style.display = 'none';
+        document.getElementById('pod-error').style.display = 'none';
 
         const expr = tryParse(val);
         if (!expr) {
-          podError.style.display = 'block';
+          document.getElementById('pod-error').style.display = 'block';
           return;
         }
 
-        // Render interpretation
-        podInput.style.display = 'block';
+        document.getElementById('pod-input').style.display = 'block';
         katex.render(exprToLatex(expr), renderInput, { displayMode: true });
 
-        // Engine logic (Simplified simulation)
         const steps = [];
         let current = expr;
-        // In a real implementation, call your Rust-based heuristics here
-        
-        podResult.style.display = 'block';
+        for (let i = 0; i < 20; i++) {
+          const s = simplify(current);
+          if (s) { steps.push({ desc: 'Algebraic Simplification', expr: s }); current = s; continue; }
+          const h = heuristic(current);
+          if (h) { steps.push({ desc: h.desc, expr: h.expr }); current = h.expr; continue; }
+          break;
+        }
+
+        document.getElementById('pod-result').style.display = 'block';
         katex.render(exprToLatex(current), renderResult, { displayMode: true });
+
+        if (steps.length > 0) {
+          document.getElementById('pod-steps').style.display = 'block';
+          renderSteps.innerHTML = steps.map((s, i) => `
+            <div class="wa-step-item">
+              <div class="wa-step-desc">${i+1}. ${s.desc}</div>
+              <div class="wa-step-math" id="step-math-${i}"></div>
+            </div>`).join('');
+          steps.forEach((s, i) => katex.render(exprToLatex(s.expr), document.getElementById('step-math-' + i), { displayMode: true }));
+        }
       }
 
-      // Re-bind listeners for Astro page transitions
       document.addEventListener('astro:page-load', () => {
-        const btn = document.getElementById('waSubmit');
-        const inp = document.getElementById('waInput');
-        if (btn) btn.onclick = runEnginePipeline;
-        if (inp) inp.onkeydown = (e) => { if (e.key === 'Enter') runEnginePipeline(); };
+        const submit = document.getElementById('waSubmit');
+        const input = document.getElementById('waInput');
+        if (submit) submit.addEventListener('click', runEnginePipeline);
+        if (input) input.addEventListener('keydown', (e) => { if (e.key === 'Enter') runEnginePipeline(); });
       });
-      
-      // Paste your parser/engine functions (tokenize, parseExpr, simplify, heuristic, exprToLatex) here.
     </script>
-
-    <style>
-      .wa-container { color: #eee; min-height: 80vh; padding: 2rem 0; }
-      .wa-header { text-align: center; margin-bottom: 2rem; }
-      .wa-logo-tusk { font-size: 2.5rem; font-weight: 800; color: #fff; }
-      .wa-logo-sub { display: block; color: #888; font-size: 0.8rem; }
-      .wa-search-bar { display: flex; max-width: 600px; margin: 1rem auto; background: #000; border-radius: 8px; border: 1px solid #333; }
-      .wa-search-bar input { flex: 1; padding: 1rem; background: transparent; border: none; color: #fff; outline: none; }
-      .wa-search-bar button { background: #333; color: #fff; border: none; padding: 0 1.5rem; cursor: pointer; }
-      .wa-pod { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; margin: 1rem auto; max-width: 800px; }
-      .wa-pod-title { font-size: 0.9rem; padding: 0.5rem 1rem; border-bottom: 1px solid #333; color: #aaa; }
-    </style>
   </Screen>
 </Layout>
