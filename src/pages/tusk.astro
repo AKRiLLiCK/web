@@ -258,7 +258,7 @@
       margin-bottom: 0.6rem;
       font-style: italic;
     }
-    .step-latex {
+    .step-transformation {
       padding: 0.85rem 1rem;
       background: rgba(255,255,255,0.025);
       border: 1px solid var(--border);
@@ -267,15 +267,26 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
       font-size: 1.15rem;
       transition: background 0.2s;
     }
-    .step-latex:hover {
+    .step-transformation:hover {
       background: rgba(255,255,255,0.04);
     }
-    .step-item.step-final .step-latex {
+    .step-item.step-final .step-transformation {
       border-color: rgba(52, 211, 153, 0.25);
       background: rgba(52, 211, 153, 0.04);
+    }
+    .step-arrow {
+      color: var(--accent);
+      font-size: 1rem;
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+    .step-latex-before {
+      opacity: 0.5;
     }
 
     @keyframes stepReveal {
@@ -406,26 +417,44 @@
 
         const detail = document.createElement('div');
         detail.className = 'step-detail';
-        detail.textContent = step.change_detail;
+        try {
+          // Render inline KaTeX for any text wrapped in $ $
+          detail.innerHTML = step.change_detail.replace(/\$([^\$]+)\$/g, (match, tex) => {
+            return katex.renderToString(tex, { throwOnError: false, displayMode: false });
+          });
+        } catch (e) {
+          detail.textContent = step.change_detail;
+        }
 
-        const latex = document.createElement('div');
-        latex.className = 'step-latex';
+        const transformation = document.createElement('div');
+        transformation.className = 'step-transformation';
 
         body.appendChild(rule);
         body.appendChild(detail);
-        body.appendChild(latex);
+        body.appendChild(transformation);
         item.appendChild(badge);
         item.appendChild(body);
         list.appendChild(item);
 
-        // Render KaTeX into the latex container
+        // Render before → after LaTeX
         try {
-          katex.render(step.after_latex, latex, {
-            throwOnError: false,
-            displayMode: true
-          });
+          if (!isFinal && step.before_latex && step.before_latex !== step.after_latex) {
+            const beforeEl = document.createElement('span');
+            beforeEl.className = 'step-latex-before';
+            katex.render(step.before_latex, beforeEl, { throwOnError: false, displayMode: false });
+            transformation.appendChild(beforeEl);
+
+            const arrow = document.createElement('span');
+            arrow.className = 'step-arrow';
+            arrow.textContent = '→';
+            transformation.appendChild(arrow);
+          }
+
+          const afterEl = document.createElement('span');
+          katex.render(step.after_latex, afterEl, { throwOnError: false, displayMode: false });
+          transformation.appendChild(afterEl);
         } catch (e) {
-          latex.textContent = step.after_latex;
+          transformation.textContent = step.after_latex;
         }
       });
     }
