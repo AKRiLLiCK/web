@@ -213,7 +213,7 @@ impl Transform for Substitution {
             let sim_du = simplify(&du).unwrap_or(du.clone());
             
             // Very simple constant multiple check: if num == du, it's ln(|den|)
-            if num == &sim_du || num == &du {
+            if **num == sim_du || **num == du {
                 return Some(Transformation {
                     new_state: Expr::Ln(den.clone()),
                     description: "Substitution: f'(x)/f(x) -> ln(f(x))".into(),
