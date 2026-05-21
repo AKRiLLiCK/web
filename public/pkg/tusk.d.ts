@@ -7,6 +7,8 @@ export function solve(input: string): string;
 
 export function solve_latex(input: string): string;
 
+export function solve_steps_json(input: string): string;
+
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
@@ -14,6 +16,7 @@ export interface InitOutput {
     readonly parse_to_latex: (a: number, b: number) => [number, number];
     readonly solve: (a: number, b: number) => [number, number];
     readonly solve_latex: (a: number, b: number) => [number, number];
+    readonly solve_steps_json: (a: number, b: number) => [number, number];
     readonly __wbindgen_externrefs: WebAssembly.Table;
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
