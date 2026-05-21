@@ -1,5 +1,5 @@
 ---
-title: "Columns vs. Layers: Code Meets Lebesgue"
+title: "Columns vs. Layers: Riemman vs Lebesgue"
 author: "Acrilic"
 publishDate: 2026-05-21
 docType: "Manual"
@@ -8,7 +8,7 @@ coverImage: "../../assets/covers/columns-vs-layers-lebesgue.png"
 downloadUrl: "/web/archive/Columns vs Layers Code Meets Lebesgue.pdf"
 ---
 
-*Columns vs. Layers: Code Meets Lebesgue* is an internal technical research note that maps the exact architectural boundaries separating formal differential fields from Lebesgue measure spaces. It strips away the abstract real-analysis fluff to analyze integration from a strict engineering and computational perspective, detailing how symbolic decision engines and measure-theoretic engines resolve singularities and handle the Fundamental Theorem of Calculus.
+*Columns vs. Layers: Riemman vs Lebesgue* is a technical research note that maps the exact architectural boundaries separating formal differential fields from Lebesgue measure spaces. It strips away the abstract real-analysis fluff to analyze integration from a strict engineering and computational perspective, detailing how symbolic decision engines and measure-theoretic engines resolve singularities and handle the Fundamental Theorem of Calculus.
 
 ### Core Sections Covered
 
