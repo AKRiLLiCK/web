@@ -1,6 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export function parse_to_latex(input: string): string;
+
 export function solve(input: string): string;
 
 export function solve_latex(input: string): string;
@@ -9,6 +11,7 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
+    readonly parse_to_latex: (a: number, b: number) => [number, number];
     readonly solve: (a: number, b: number) => [number, number];
     readonly solve_latex: (a: number, b: number) => [number, number];
     readonly __wbindgen_externrefs: WebAssembly.Table;
