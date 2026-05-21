@@ -19,23 +19,3 @@ pub fn solve(input: &str) -> String {
         Err(e) => format!("Error: {}", e),
     }
 }
-
-#[wasm_bindgen]
-pub fn parse_to_latex(input: &str) -> String {
-    match Expr::parse(input) {
-        Ok(expr) => expr.to_latex(),
-        Err(e) => format!("\\text{{Error: {}}}", e),
-    }
-}
-
-#[wasm_bindgen]
-pub fn solve_latex(input: &str) -> String {
-    match Expr::parse(input) {
-        Ok(expr) => {
-            let mut engine = TuskEngine::new(expr);
-            engine.run();
-            engine.current_expr.to_latex()
-        }
-        Err(e) => format!("\\text{{Error: {}}}", e),
-    }
-}

@@ -21,6 +21,7 @@ pub enum Expr {
     Pow(Box<Expr>, Box<Expr>),
     Sin(Box<Expr>),
     Cos(Box<Expr>),
+    Tan(Box<Expr>),
     Exp(Box<Expr>),
     Ln(Box<Expr>),
     Integral { integrand: Box<Expr>, variable: String },
@@ -31,48 +32,6 @@ impl Expr {
         expr(input)
             .map(|(_, e)| e)
             .map_err(|e| format!("Parse error: {e}"))
-    }
-
-    pub fn to_latex(&self) -> String {
-        match self {
-            Self::Var(v) => format!("{v}"),
-            Self::Const(c) => {
-                if *c == (*c as i64) as f64 { format!("{}", *c as i64) } 
-                else { format!("{c}") }
-            }
-            Self::Add(l, r) => format!("{} + {}", l.to_latex(), r.to_latex()),
-            Self::Sub(l, r) => format!("{} - {}", l.to_latex(), r.to_latex()),
-            Self::Mul(l, r) => {
-                let l_str = match **l {
-                    Self::Add(_, _) | Self::Sub(_, _) => format!("\\left({}\\right)", l.to_latex()),
-                    _ => l.to_latex(),
-                };
-                let r_str = match **r {
-                    Self::Add(_, _) | Self::Sub(_, _) => format!("\\left({}\\right)", r.to_latex()),
-                    _ => r.to_latex(),
-                };
-                format!("{} \\cdot {}", l_str, r_str)
-            },
-            Self::Div(l, r) => format!("\\frac{{{}}}{{{}}}", l.to_latex(), r.to_latex()),
-            Self::Pow(l, r) => {
-                let base = match **l {
-                    Self::Var(_) | Self::Const(_) | Self::Sin(_) | Self::Cos(_) | Self::Ln(_) | Self::Exp(_) => l.to_latex(),
-                    _ => format!("\\left({}\\right)", l.to_latex()),
-                };
-                format!("{{{}}}^{{{}}}", base, r.to_latex())
-            },
-            Self::Sin(i) => format!("\\sin\\left({}\\right)", i.to_latex()),
-            Self::Cos(i) => format!("\\cos\\left({}\\right)", i.to_latex()),
-            Self::Exp(i) => format!("e^{{{}}}", i.to_latex()),
-            Self::Ln(i) => format!("\\ln\\left({}\\right)", i.to_latex()),
-            Self::Integral { integrand, variable } => {
-                let inner = match **integrand {
-                    Self::Add(_, _) | Self::Sub(_, _) => format!("\\left({}\\right)", integrand.to_latex()),
-                    _ => integrand.to_latex(),
-                };
-                format!("\\int {} \\, d{}", inner, variable)
-            }
-        }
     }
 }
 
@@ -91,6 +50,7 @@ impl std::fmt::Display for Expr {
             Self::Pow(l, r) => write!(f, "({l}^{r})"),
             Self::Sin(i) => write!(f, "sin({i})"),
             Self::Cos(i) => write!(f, "cos({i})"),
+            Self::Tan(i) => write!(f, "tan({i})"),
             Self::Exp(i) => write!(f, "exp({i})"),
             Self::Ln(i) => write!(f, "ln({i})"),
             Self::Integral { integrand, variable } => {
@@ -138,6 +98,7 @@ fn parse_integral(input: &str) -> IResult<&str, Expr, Error<&str>> {
     Ok((input, Expr::Integral { integrand: Box::new(integrand), variable }))
 }
 
+// Parses function calls like sin(x), cos(x), exp(x), ln(x)
 fn parse_fn_call(input: &str) -> IResult<&str, Expr, Error<&str>> {
     let (input, name) = ws(alpha1).parse(input)?;
     let (input, _) = ws(char('(')).parse(input)?;
@@ -147,6 +108,7 @@ fn parse_fn_call(input: &str) -> IResult<&str, Expr, Error<&str>> {
     match name {
         "sin" => Ok((input, Expr::Sin(Box::new(arg)))),
         "cos" => Ok((input, Expr::Cos(Box::new(arg)))),
+        "tan" => Ok((input, Expr::Tan(Box::new(arg)))),
         "exp" => Ok((input, Expr::Exp(Box::new(arg)))),
         "ln"  => Ok((input, Expr::Ln(Box::new(arg)))),
         _ => Err(nom::Err::Failure(Error::new(name, nom::error::ErrorKind::Tag))),
