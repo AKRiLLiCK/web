@@ -435,7 +435,7 @@ hr {
 }
 
 .pastel-card h2 {
-  color: #fff;
+  color: var(--text-main);
   font-size: 1.4rem;
   margin-bottom: 0.5rem;
   border-bottom: none;
@@ -446,7 +446,7 @@ hr {
 }
 
 .pastel-card p {
-  color: #ddd;
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -463,6 +463,7 @@ hr {
 }
 
 .pastel-badge.pink { color: var(--pastel-pink); border-color: rgba(255,179,186,0.3); }
+.pastel-badge.blue { color: var(--pastel-blue); border-color: rgba(186,225,255,0.3); }
 .pastel-badge.green { color: var(--pastel-green); border-color: rgba(186,255,201,0.3); }
 .pastel-badge.purple { color: var(--pastel-purple); border-color: rgba(224,176,255,0.3); }
 
@@ -657,3 +658,24 @@ body.light-mode .squircle-icon.active {
 body.light-mode hr {
   border-color: #ddd;
 }
+
+body.light-mode .pastel-card {
+  background: linear-gradient(135deg, rgba(255,179,186,0.3) 0%, rgba(186,225,255,0.3) 100%);
+  border-color: rgba(0,0,0,0.15);
+  box-shadow: inset 0 0 15px rgba(255,255,255,0.8), 0 4px 8px rgba(0,0,0,0.1);
+}
+
+body.light-mode .pastel-card:hover {
+  border-color: rgba(0,0,0,0.3);
+  box-shadow: inset 0 0 15px rgba(255,255,255,0.9), 0 6px 12px rgba(0,0,0,0.15);
+}
+
+body.light-mode .pastel-badge {
+  background: rgba(0,0,0,0.06);
+  border-color: rgba(0,0,0,0.1);
+}
+
+body.light-mode .pastel-badge.pink { color: #d6336c; }
+body.light-mode .pastel-badge.blue { color: #1864ab; }
+body.light-mode .pastel-badge.green { color: #2b8a3e; }
+body.light-mode .pastel-badge.purple { color: #862e9c; }
