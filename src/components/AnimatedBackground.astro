@@ -1,17 +1,42 @@
 ---
-interface Props {
-  type: string;
-}
-
-const { type } = Astro.props;
-const themeClass = `theme-${type.toLowerCase().replace(/\s+/g, '-')}`;
 ---
 
-<div class={`animated-background ${themeClass}`} transition:persist="background">
+<div id="dynamic-bg" class="animated-background theme-night" transition:persist="background">
   <div class="css-wave wave-1"></div>
   <div class="css-wave wave-2"></div>
   <div class="css-wave wave-3"></div>
 </div>
+
+<script>
+  function applyTimeTheme() {
+    const bg = document.getElementById('dynamic-bg');
+    if (!bg) return;
+    
+    const hour = new Date().getHours();
+    let theme = 'theme-night';
+
+    if (hour >= 5 && hour < 8) {
+      theme = 'theme-dawn';
+    } else if (hour >= 8 && hour < 12) {
+      theme = 'theme-morning';
+    } else if (hour >= 12 && hour < 17) {
+      theme = 'theme-noon';
+    } else if (hour >= 17 && hour < 20) {
+      theme = 'theme-sunset';
+    } else if (hour >= 20 && hour < 22) {
+      theme = 'theme-dusk';
+    }
+
+    // Remove existing themes
+    bg.classList.remove('theme-dawn', 'theme-morning', 'theme-noon', 'theme-sunset', 'theme-dusk', 'theme-night');
+    bg.classList.add(theme);
+  }
+
+  // Apply on initial load and navigation
+  document.addEventListener('astro:page-load', applyTimeTheme);
+  // Also apply immediately if the script runs before the event
+  applyTimeTheme();
+</script>
 
 <style>
   .animated-background {
@@ -23,11 +48,8 @@ const themeClass = `theme-${type.toLowerCase().replace(/\s+/g, '-')}`;
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
-    /* Darker Gray/Black Background + Dots */
-    background: 
-      radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px),
-      linear-gradient(135deg, #0f0f0f 0%, #000000 100%);
     background-size: 4px 4px, 100% 100%;
+    transition: background 1s ease-in-out;
   }
 
   /* GPU-Accelerated CSS Waves */
@@ -39,62 +61,65 @@ const themeClass = `theme-${type.toLowerCase().replace(/\s+/g, '-')}`;
     left: -50%;
     border-radius: 40%;
     will-change: transform;
-    opacity: 0.15;
-    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+    opacity: 0.25;
     animation: rotate-wave linear infinite;
+    transition: background 1s ease-in-out;
   }
 
-  .wave-1 {
-    animation-duration: 25s;
-    background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
-    top: 30%;
-    left: -20%;
-  }
-
-  .wave-2 {
-    animation-duration: 35s;
-    background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%);
-    top: 40%;
-    left: 20%;
-  }
-
-  .wave-3 {
-    animation-duration: 45s;
-    background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-    top: 50%;
-    left: -10%;
-  }
+  .wave-1 { animation-duration: 25s; top: 30%; left: -20%; }
+  .wave-2 { animation-duration: 35s; top: 40%; left: 20%; }
+  .wave-3 { animation-duration: 45s; top: 50%; left: -10%; }
 
   @keyframes rotate-wave {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 
-  /* Projects Theme (Red) */
-  .theme-projects {
-    background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(135deg, #2c0b0e 0%, #000000 100%);
+  /* Night Theme (Default/Base) */
+  .theme-night {
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(135deg, #050b14 0%, #000000 100%);
   }
-  .theme-projects .wave-1 { background: linear-gradient(180deg, rgba(255,50,50,0.2) 0%, rgba(255,50,50,0) 100%); }
-  .theme-projects .wave-2 { background: linear-gradient(180deg, rgba(255,50,50,0.15) 0%, rgba(255,50,50,0) 100%); }
-  .theme-projects .wave-3 { background: linear-gradient(180deg, rgba(255,50,50,0.1) 0%, rgba(255,50,50,0) 100%); }
+  .theme-night .wave-1 { background: linear-gradient(180deg, rgba(20,40,80,0.2) 0%, rgba(20,40,80,0) 100%); }
+  .theme-night .wave-2 { background: linear-gradient(180deg, rgba(20,40,80,0.15) 0%, rgba(20,40,80,0) 100%); }
+  .theme-night .wave-3 { background: linear-gradient(180deg, rgba(20,40,80,0.1) 0%, rgba(20,40,80,0) 100%); }
 
-  /* Credentials Theme (Deep Blue) */
-  .theme-credentials {
-    background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(135deg, #0b1a2c 0%, #000000 100%);
+  /* Dawn Theme (05:00 - 07:59) */
+  .theme-dawn {
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(135deg, #2c1b3d 0%, #4a2a4b 100%);
   }
-  .theme-credentials .wave-1 { background: linear-gradient(180deg, rgba(50,150,255,0.2) 0%, rgba(50,150,255,0) 100%); }
-  .theme-credentials .wave-2 { background: linear-gradient(180deg, rgba(50,150,255,0.15) 0%, rgba(50,150,255,0) 100%); }
-  .theme-credentials .wave-3 { background: linear-gradient(180deg, rgba(50,150,255,0.1) 0%, rgba(50,150,255,0) 100%); }
+  .theme-dawn .wave-1 { background: linear-gradient(180deg, rgba(255,150,150,0.2) 0%, rgba(255,150,150,0) 100%); }
+  .theme-dawn .wave-2 { background: linear-gradient(180deg, rgba(255,200,100,0.15) 0%, rgba(255,200,100,0) 100%); }
+  .theme-dawn .wave-3 { background: linear-gradient(180deg, rgba(200,100,200,0.1) 0%, rgba(200,100,200,0) 100%); }
 
-  /* Archive Theme (Yellow-Green) */
-  .theme-archive {
-    background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(135deg, #1b2611 0%, #000000 100%);
+  /* Morning Theme (08:00 - 11:59) */
+  .theme-morning {
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(135deg, #1b3d5c 0%, #2a6f8b 100%);
   }
-  .theme-archive .wave-1 { background: linear-gradient(180deg, rgba(170,255,50,0.2) 0%, rgba(170,255,50,0) 100%); }
-  .theme-archive .wave-2 { background: linear-gradient(180deg, rgba(170,255,50,0.15) 0%, rgba(170,255,50,0) 100%); }
-  .theme-archive .wave-3 { background: linear-gradient(180deg, rgba(170,255,50,0.1) 0%, rgba(170,255,50,0) 100%); }
+  .theme-morning .wave-1 { background: linear-gradient(180deg, rgba(150,220,255,0.2) 0%, rgba(150,220,255,0) 100%); }
+  .theme-morning .wave-2 { background: linear-gradient(180deg, rgba(255,255,150,0.15) 0%, rgba(255,255,150,0) 100%); }
+  .theme-morning .wave-3 { background: linear-gradient(180deg, rgba(100,200,255,0.1) 0%, rgba(100,200,255,0) 100%); }
+
+  /* Noon Theme (12:00 - 16:59) */
+  .theme-noon {
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(135deg, #1b5c8c 0%, #2a8bba 100%);
+  }
+  .theme-noon .wave-1 { background: linear-gradient(180deg, rgba(200,240,255,0.2) 0%, rgba(200,240,255,0) 100%); }
+  .theme-noon .wave-2 { background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%); }
+  .theme-noon .wave-3 { background: linear-gradient(180deg, rgba(150,220,255,0.1) 0%, rgba(150,220,255,0) 100%); }
+
+  /* Sunset Theme (17:00 - 19:59) */
+  .theme-sunset {
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(135deg, #4a1c15 0%, #8c3b1b 100%);
+  }
+  .theme-sunset .wave-1 { background: linear-gradient(180deg, rgba(255,100,50,0.2) 0%, rgba(255,100,50,0) 100%); }
+  .theme-sunset .wave-2 { background: linear-gradient(180deg, rgba(255,200,50,0.15) 0%, rgba(255,200,50,0) 100%); }
+  .theme-sunset .wave-3 { background: linear-gradient(180deg, rgba(200,50,100,0.1) 0%, rgba(200,50,100,0) 100%); }
+
+  /* Dusk Theme (20:00 - 21:59) */
+  .theme-dusk {
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(135deg, #1b1c3d 0%, #2a154a 100%);
+  }
+  .theme-dusk .wave-1 { background: linear-gradient(180deg, rgba(100,100,255,0.2) 0%, rgba(100,100,255,0) 100%); }
+  .theme-dusk .wave-2 { background: linear-gradient(180deg, rgba(200,100,255,0.15) 0%, rgba(200,100,255,0) 100%); }
+  .theme-dusk .wave-3 { background: linear-gradient(180deg, rgba(50,50,150,0.1) 0%, rgba(50,50,150,0) 100%); }
 </style>
