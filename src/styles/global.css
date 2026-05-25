@@ -526,9 +526,15 @@ details.ds-toggle[open] > summary::before {
 /* Light Mode Overrides */
 body.light-mode {
   --chassis-bg: #f2f2f2;
+  --screen-bg: rgba(255, 255, 255, 0.2);
+  --screen-shadow: inset 0 0 20px rgba(255,255,255,0.4), 0 2px 8px rgba(0,0,0,0.05);
   --text-main: #111111;
   --text-muted: #444444;
   background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px);
+}
+
+body.light-mode .screen-inset {
+  border-color: #d0d0d0;
 }
 
 body.light-mode .banner {
