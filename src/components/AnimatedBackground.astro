@@ -4,9 +4,10 @@ interface Props {
 }
 
 const { type } = Astro.props;
+const themeClass = `theme-${type.toLowerCase().replace(/\s+/g, '-')}`;
 ---
 
-<div class="animated-background" transition:persist="background">
+<div class={`animated-background ${themeClass}`} transition:persist="background">
   <div class="css-wave wave-1"></div>
   <div class="css-wave wave-2"></div>
   <div class="css-wave wave-3"></div>
@@ -72,4 +73,28 @@ const { type } = Astro.props;
       transform: rotate(360deg);
     }
   }
+
+  /* Projects Theme (Red) */
+  .theme-projects {
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(135deg, #2c0b0e 0%, #000000 100%);
+  }
+  .theme-projects .wave-1 { background: linear-gradient(180deg, rgba(255,50,50,0.2) 0%, rgba(255,50,50,0) 100%); }
+  .theme-projects .wave-2 { background: linear-gradient(180deg, rgba(255,50,50,0.15) 0%, rgba(255,50,50,0) 100%); }
+  .theme-projects .wave-3 { background: linear-gradient(180deg, rgba(255,50,50,0.1) 0%, rgba(255,50,50,0) 100%); }
+
+  /* Credentials Theme (Deep Blue) */
+  .theme-credentials {
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(135deg, #0b1a2c 0%, #000000 100%);
+  }
+  .theme-credentials .wave-1 { background: linear-gradient(180deg, rgba(50,150,255,0.2) 0%, rgba(50,150,255,0) 100%); }
+  .theme-credentials .wave-2 { background: linear-gradient(180deg, rgba(50,150,255,0.15) 0%, rgba(50,150,255,0) 100%); }
+  .theme-credentials .wave-3 { background: linear-gradient(180deg, rgba(50,150,255,0.1) 0%, rgba(50,150,255,0) 100%); }
+
+  /* Archive Theme (Yellow-Green) */
+  .theme-archive {
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(135deg, #1b2611 0%, #000000 100%);
+  }
+  .theme-archive .wave-1 { background: linear-gradient(180deg, rgba(170,255,50,0.2) 0%, rgba(170,255,50,0) 100%); }
+  .theme-archive .wave-2 { background: linear-gradient(180deg, rgba(170,255,50,0.15) 0%, rgba(170,255,50,0) 100%); }
+  .theme-archive .wave-3 { background: linear-gradient(180deg, rgba(170,255,50,0.1) 0%, rgba(170,255,50,0) 100%); }
 </style>
