@@ -23,16 +23,6 @@ jobs:
           node-version: 22
           cache: 'npm'
 
-      - name: Setup Rust & wasm-pack
-        run: |
-          rustup target add wasm32-unknown-unknown
-          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-
-      # Build Wasm directly into public/ so Astro sees it as a static asset
-      - name: Build Wasm Engine
-        working-directory: ./tusk
-        run: wasm-pack build --target web --out-dir ../public/pkg
-
       - name: Install dependencies
         run: npm install
 

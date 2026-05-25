@@ -9,8 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "build:wasm": "wasm-pack build ./tusk --target web --out-dir ../public/pkg"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.3",
