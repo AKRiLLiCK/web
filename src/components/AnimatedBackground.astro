@@ -14,22 +14,35 @@
     
     const hour = new Date().getHours();
     let theme = 'theme-night';
+    let isLightMode = false;
 
     if (hour >= 5 && hour < 8) {
       theme = 'theme-dawn';
+      isLightMode = true;
     } else if (hour >= 8 && hour < 12) {
       theme = 'theme-morning';
+      isLightMode = true;
     } else if (hour >= 12 && hour < 17) {
       theme = 'theme-noon';
+      isLightMode = true;
     } else if (hour >= 17 && hour < 20) {
       theme = 'theme-sunset';
+      isLightMode = true;
     } else if (hour >= 20 && hour < 22) {
       theme = 'theme-dusk';
+      isLightMode = false;
     }
 
     // Remove existing themes
     bg.classList.remove('theme-dawn', 'theme-morning', 'theme-noon', 'theme-sunset', 'theme-dusk', 'theme-night');
     bg.classList.add(theme);
+
+    // Toggle body light-mode
+    if (isLightMode) {
+      document.body.classList.add('light-mode');
+    } else {
+      document.body.classList.remove('light-mode');
+    }
   }
 
   // Apply on initial load and navigation
