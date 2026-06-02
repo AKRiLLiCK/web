@@ -61,7 +61,7 @@ const totalSlots = 36; // 6 rows of 6
                     <div style="margin-bottom: 0.8rem;">
                         <span class="pastel-badge pink">He/Him</span>
                         <span class="pastel-badge blue">🇪🇸 ES (Native)</span>
-                        <span class="pastel-badge green">🇺🇸 EN (C1)</span>
+                        <span class="pastel-badge green">🇬🇧 EN (C1)</span>
                     </div>
                     <p>
                         <strong>Computer Engineering Student</strong>, founder
@@ -256,7 +256,7 @@ const totalSlots = 36; // 6 rows of 6
                                 <div class="home-menu-slot" title={tech.name}>
                                     <div class="software-badge">
                                         <img
-                                            src={`https://skillicons.dev/icons?i=${tech.icon}`}
+                                            src={tech.icon === 'd' ? '/web/dlang-skillicon.svg' : `https://skillicons.dev/icons?i=${tech.icon}`}
                                             width="48"
                                             height="48"
                                             alt={tech.name}
