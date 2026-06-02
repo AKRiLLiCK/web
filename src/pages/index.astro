@@ -3,33 +3,40 @@ import Layout from "../layouts/Layout.astro";
 import Screen from "../components/Screen.astro";
 
 const techStack = [
+    // Languages
     { name: "Rust", icon: "rust" },
     { name: "C", icon: "c" },
+    { name: "Dlang", icon: "d" },
     { name: "Java", icon: "java" },
     { name: "Python", icon: "python" },
     { name: "Bash", icon: "bash" },
     { name: "PowerShell", icon: "powershell" },
+    { name: "WebAssembly", icon: "wasm" },
+    { name: "HTML", icon: "html" },
+    { name: "CSS", icon: "css" },
+    
+    // Operating Systems
     { name: "Linux", icon: "linux" },
     { name: "Arch Linux", icon: "arch" },
     { name: "Debian", icon: "debian" },
     { name: "Kali Linux", icon: "kali" },
     { name: "NixOS", icon: "nix" },
     { name: "Windows", icon: "windows" },
-    { name: "HTML", icon: "html" },
-    { name: "CSS", icon: "css" },
+    
+    // Frameworks & Tools
     { name: "Astro", icon: "astro" },
     { name: "Arduino", icon: "arduino" },
     { name: "Godot", icon: "godot" },
+    { name: "Docker", icon: "docker" },
     { name: "Git", icon: "git" },
     { name: "GitHub", icon: "github" },
-    { name: "Docker", icon: "docker" },
+    
+    // Applications & Editors
     { name: "VSCode", icon: "vscode" },
     { name: "NeoVim", icon: "neovim" },
     { name: "IntelliJ IDEA", icon: "idea" },
     { name: "Obsidian", icon: "obsidian" },
     { name: "Discord", icon: "discord" },
-    { name: "Dlang", icon: "d" },
-    { name: "WebAssembly", icon: "wasm" },
 ];
 
 const totalSlots = 36; // 6 rows of 6
@@ -130,7 +137,7 @@ const totalSlots = 36; // 6 rows of 6
                 <h3 style="margin-top: 1.5rem; font-size: 1.2rem;">Engineering Profile</h3>
                 <ul style="padding-left: 1.5rem;">
                     <li style="margin-bottom: 0.5rem;"><strong>Systems Programming:</strong> Rust and C. Architectural focus targets ownership, zero-cost abstractions, minimal allocation and explicit error handling.</li>
-                    <li style="margin-bottom: 0.5rem;"><strong>Security Posture:</strong> Ethical hacking, red teaming and digital forensics. Operations mandate Ed25519 signed commits and zero-cost open-source pipeline scanning (Trivy, Gitleaks, Syft, OWASP ZAP).</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Security Posture:</strong> Ethical hacking, red teaming, blue teaming, purple teaming and digital forensics.</li>
                     <li style="margin-bottom: 0.5rem;"><strong>Hardware Design:</strong> Core logic architecture modeled via Logisim Evolution.</li>
                     <li><strong>Environments:</strong> Arch-based Linux (EndeavourOS), Debian and WSL.</li>
                 </ul>
