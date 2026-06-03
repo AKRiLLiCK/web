@@ -223,21 +223,13 @@ const basePath = import.meta.env.BASE_URL;
         border-radius: 3px 8px 8px 3px;
       }
 
-      /* PAPER (Folded Document) */
+      /* PAPER (Flat Document) */
       [data-type="Paper"] .card-cover-wrapper {
         aspect-ratio: 1 / 1.414;
         border-radius: 2px;
-        box-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-        background: #eee;
-      }
-      [data-type="Paper"] .card-cover-wrapper::after {
-        content: '';
-        position: absolute;
-        top: 0; right: 0;
-        border-width: 0 24px 24px 0;
-        border-style: solid;
-        border-color: #222 #222 rgba(255,255,255,0.8) rgba(255,255,255,0.8);
-        box-shadow: -2px 2px 4px rgba(0,0,0,0.3);
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.5);
+        background: #fff;
+        padding: 4px;
       }
       .archive-card[data-type="Paper"]:hover .card-cover-wrapper,
       .archive-card[data-type="Paper"]:focus .card-cover-wrapper {
@@ -245,7 +237,7 @@ const basePath = import.meta.env.BASE_URL;
         box-shadow: 5px 15px 20px rgba(0,0,0,0.6);
       }
       [data-type="Paper"] .card-cover {
-        border-radius: 2px;
+        border-radius: 1px;
       }
 
       /* ESSAY (Parchment / Classic Document) */
@@ -265,18 +257,18 @@ const basePath = import.meta.env.BASE_URL;
         border-radius: 0;
       }
 
-      /* MANUAL (Spiral Bound) */
+      /* MANUAL (Tape Bound) */
       [data-type="Manual"] .card-cover-wrapper {
         aspect-ratio: 4 / 5;
         border-radius: 4px 12px 12px 4px;
-        box-shadow: -8px 0px 0px #444, 4px 4px 12px rgba(0,0,0,0.7);
-        border-left: 12px dashed #222;
+        box-shadow: -4px 0px 0px #222, 4px 4px 12px rgba(0,0,0,0.7);
+        border-left: 14px solid #111;
         background: #111;
       }
       .archive-card[data-type="Manual"]:hover .card-cover-wrapper,
       .archive-card[data-type="Manual"]:focus .card-cover-wrapper {
         transform: translateY(-12px);
-        box-shadow: -8px 5px 5px #444, 8px 15px 20px rgba(0,0,0,0.6);
+        box-shadow: -4px 5px 5px #222, 8px 15px 20px rgba(0,0,0,0.6);
       }
       [data-type="Manual"] .card-cover {
         border-radius: 0 12px 12px 0;
@@ -377,16 +369,13 @@ const basePath = import.meta.env.BASE_URL;
       :global(body.light-mode) .archive-card[data-type="Book"]:focus .card-cover-wrapper {
         box-shadow: -1px 0px 0px #eee, 0px 20px 25px rgba(0,0,0,0.2);
       }
-      :global(body.light-mode) [data-type="Paper"] .card-cover-wrapper::after {
-        border-color: #fdfdfd #fdfdfd rgba(0,0,0,0.2) rgba(0,0,0,0.2);
-      }
       :global(body.light-mode) [data-type="Manual"] .card-cover-wrapper {
-        box-shadow: -8px 0px 0px #aaa, 4px 4px 12px rgba(0,0,0,0.2);
-        border-left: 12px dashed #666;
+        box-shadow: -4px 0px 0px #888, 4px 4px 12px rgba(0,0,0,0.2);
+        border-left: 14px solid #333;
       }
       :global(body.light-mode) .archive-card[data-type="Manual"]:hover .card-cover-wrapper,
       :global(body.light-mode) .archive-card[data-type="Manual"]:focus .card-cover-wrapper {
-        box-shadow: -8px 5px 5px #aaa, 8px 15px 20px rgba(0,0,0,0.2);
+        box-shadow: -4px 5px 5px #888, 8px 15px 20px rgba(0,0,0,0.2);
       }
       :global(body.light-mode) .catalog-title {
         text-shadow: none;
