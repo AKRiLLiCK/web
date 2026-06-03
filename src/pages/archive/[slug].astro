@@ -98,11 +98,21 @@ const formattedDate = publishDate.toISOString().split('T')[0];
       }
 
       .cover-container {
-        border: 4px solid #222;
-        border-radius: 4px;
+        border-radius: 3px 8px 8px 3px;
         background: #000;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.8), inset 0 0 5px rgba(255,255,255,0.1);
+        box-shadow: -4px 0px 0px #333, -6px 6px 15px rgba(0,0,0,0.9);
         overflow: hidden;
+        position: relative;
+      }
+      
+      .cover-container::before {
+        content: '';
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 5px;
+        background: linear-gradient(to right, rgba(255,255,255,0.5), rgba(255,255,255,0));
+        z-index: 2;
+        border-radius: 3px 0 0 3px;
       }
 
       .detail-cover {
@@ -122,7 +132,7 @@ const formattedDate = publishDate.toISOString().split('T')[0];
         color: var(--text-main);
         margin-bottom: 1rem;
         line-height: 1.2;
-        border-bottom: 2px solid #222;
+        border-bottom: 2px solid rgba(255,255,255,0.1);
         padding-bottom: 0.5rem;
       }
 
@@ -130,18 +140,19 @@ const formattedDate = publishDate.toISOString().split('T')[0];
         display: flex;
         flex-direction: column;
         gap: 0.8rem;
-        background: rgba(0,0,0,0.4);
-        border: 1px solid #333;
-        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 16px;
         padding: 1rem;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
       }
 
       .meta-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px dashed #333;
+        border-bottom: 1px dashed rgba(255,255,255,0.2);
         padding-bottom: 0.4rem;
       }
 
@@ -151,7 +162,7 @@ const formattedDate = publishDate.toISOString().split('T')[0];
       }
 
       .meta-label {
-        color: #777;
+        color: #999;
         font-size: 0.85rem;
         text-transform: uppercase;
         font-weight: bold;
@@ -165,23 +176,27 @@ const formattedDate = publishDate.toISOString().split('T')[0];
       }
 
       .separator {
-        border-color: #333;
+        border-color: rgba(255,255,255,0.1);
         margin: 2rem 0;
       }
 
       .tag {
         display: inline-block;
-        padding: 4px 10px;
-        border-radius: 4px;
+        padding: 4px 12px;
+        border-radius: 12px;
         font-size: 0.85rem;
-        font-family: monospace;
-        border: 1px solid;
+        font-family: sans-serif;
+        font-weight: bold;
+        border: none;
+        box-shadow: inset 0 2px 4px rgba(255,255,255,0.3), 0 2px 5px rgba(0,0,0,0.5);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
-      .tag-book { color: #bae1ff; border-color: rgba(186, 225, 255, 0.3); background: rgba(186, 225, 255, 0.1); }
-      .tag-paper { color: #ffffba; border-color: rgba(255, 255, 186, 0.3); background: rgba(255, 255, 186, 0.1); }
-      .tag-essay { color: #baffc9; border-color: rgba(186, 255, 201, 0.3); background: rgba(186, 255, 201, 0.1); }
-      .tag-manual { color: #ffdfba; border-color: rgba(255, 223, 186, 0.3); background: rgba(255, 223, 186, 0.1); }
-      .tag-devlog { color: #e0b0ff; border-color: rgba(224, 176, 255, 0.3); background: rgba(224, 176, 255, 0.1); }
+      .tag-book { color: #000; background: linear-gradient(180deg, #bae1ff 0%, #7dbdec 100%); }
+      .tag-paper { color: #000; background: linear-gradient(180deg, #ffffba 0%, #dede70 100%); }
+      .tag-essay { color: #000; background: linear-gradient(180deg, #baffc9 0%, #72d48a 100%); }
+      .tag-manual { color: #000; background: linear-gradient(180deg, #ffdfba 0%, #eaab65 100%); }
+      .tag-devlog { color: #000; background: linear-gradient(180deg, #e0b0ff 0%, #b268e3 100%); }
 
       .markdown-body {
         color: var(--text-muted);
@@ -205,60 +220,54 @@ const formattedDate = publishDate.toISOString().split('T')[0];
         align-items: center;
         justify-content: center;
         padding: 12px 28px;
-        background: linear-gradient(180deg, #3a3a3a 0%, #111 100%);
-        border: 2px solid #000;
-        border-radius: 12px;
-        box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), 0 4px 6px rgba(0,0,0,0.5), 0 0 0 1px #444;
+        background: linear-gradient(180deg, #444 0%, #222 100%);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 50px;
+        box-shadow: inset 0 1px 2px rgba(255,255,255,0.1), 0 4px 10px rgba(0,0,0,0.5);
         color: var(--text-main);
         font-weight: bold;
         text-transform: uppercase;
         font-size: 0.95rem;
         letter-spacing: 1px;
         cursor: pointer;
-        transition: all 0.1s;
+        transition: all 0.2s;
         text-decoration: none;
       }
 
       .squircle-btn:active {
-        box-shadow: inset 0 4px 8px rgba(0,0,0,0.8), 0 0 0 1px #222;
-        background: linear-gradient(180deg, #111 0%, #2a2a2a 100%);
+        box-shadow: inset 0 4px 8px rgba(0,0,0,0.8);
+        background: linear-gradient(180deg, #222 0%, #111 100%);
         transform: translateY(2px);
       }
 
       /* Light Mode Overrides */
       :global(body.light-mode) .metadata-table {
         background: rgba(255, 255, 255, 0.4);
-        border-color: #ddd;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        border-color: rgba(255,255,255,0.6);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.8);
       }
       :global(body.light-mode) .meta-row {
-        border-bottom-color: #ccc;
+        border-bottom-color: rgba(0,0,0,0.1);
       }
       :global(body.light-mode) .meta-label {
         color: #555;
       }
       :global(body.light-mode) .squircle-btn {
         background: linear-gradient(180deg, #fdfdfd 0%, #dcdcdc 100%);
-        border-color: #aaa;
-        box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), 0 4px 6px rgba(0,0,0,0.1), 0 0 0 1px #eee;
+        border-color: rgba(0,0,0,0.1);
+        box-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 4px 6px rgba(0,0,0,0.1);
         color: #111;
       }
       :global(body.light-mode) .squircle-btn:active {
         background: linear-gradient(180deg, #dcdcdc 0%, #ececec 100%);
-        box-shadow: inset 0 4px 8px rgba(0,0,0,0.1), 0 0 0 1px #ccc;
+        box-shadow: inset 0 4px 8px rgba(0,0,0,0.1);
       }
       :global(body.light-mode) .detail-title {
-        border-bottom-color: #ccc;
+        border-bottom-color: rgba(0,0,0,0.1);
       }
       :global(body.light-mode) .cover-container {
-        border-color: #ccc;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1), inset 0 0 5px rgba(255,255,255,0.5);
+        box-shadow: -4px 0px 0px #eee, -6px 6px 15px rgba(0,0,0,0.2);
       }
-      :global(body.light-mode) .tag-book { color: #005f9e; border-color: rgba(0, 95, 158, 0.3); background: rgba(0, 95, 158, 0.1); }
-      :global(body.light-mode) .tag-paper { color: #8a8a00; border-color: rgba(138, 138, 0, 0.3); background: rgba(138, 138, 0, 0.1); }
-      :global(body.light-mode) .tag-essay { color: #007a2a; border-color: rgba(0, 122, 42, 0.3); background: rgba(0, 122, 42, 0.1); }
-      :global(body.light-mode) .tag-manual { color: #b5651d; border-color: rgba(181, 101, 29, 0.3); background: rgba(181, 101, 29, 0.1); }
-      :global(body.light-mode) .tag-devlog { color: #7b00ff; border-color: rgba(123, 0, 255, 0.3); background: rgba(123, 0, 255, 0.1); }
     </style>
   </Screen>
 </Layout>
