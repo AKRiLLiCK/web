@@ -182,28 +182,35 @@ const basePath = import.meta.env.BASE_URL;
         background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.05) 100%);
       }
 
-      /* 3D Box Effect for the Book Cover */
+      /* Base Wrapper */
       .card-cover-wrapper {
         width: 100%;
-        aspect-ratio: 2 / 2.8;
-        background: #000;
         position: relative;
+        background: #000;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+        z-index: 1;
+      }
+      .card-cover {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* BOOK (Default 3D Box Effect) */
+      [data-type="Book"] .card-cover-wrapper {
+        aspect-ratio: 2 / 2.8;
         border-radius: 3px 8px 8px 3px;
         box-shadow: -4px 0px 0px #333, -6px 6px 15px rgba(0,0,0,0.9);
         transform-origin: left center;
         transform: rotateY(15deg);
-        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
-        z-index: 1;
       }
-
-      .archive-card:hover .card-cover-wrapper, 
-      .archive-card:focus .card-cover-wrapper {
+      .archive-card[data-type="Book"]:hover .card-cover-wrapper, 
+      .archive-card[data-type="Book"]:focus .card-cover-wrapper {
         transform: rotateY(0deg) translateY(-15px);
         box-shadow: -1px 0px 0px #333, 0px 20px 25px rgba(0,0,0,0.8);
       }
-      
-      /* Spine effect */
-      .card-cover-wrapper::before {
+      [data-type="Book"] .card-cover-wrapper::before {
         content: '';
         position: absolute;
         left: 0; top: 0; bottom: 0;
@@ -212,13 +219,88 @@ const basePath = import.meta.env.BASE_URL;
         z-index: 2;
         border-radius: 3px 0 0 3px;
       }
-
-      .card-cover {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
+      [data-type="Book"] .card-cover {
         border-radius: 3px 8px 8px 3px;
+      }
+
+      /* PAPER (Folded Document) */
+      [data-type="Paper"] .card-cover-wrapper {
+        aspect-ratio: 1 / 1.414;
+        border-radius: 2px;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+        background: #eee;
+      }
+      [data-type="Paper"] .card-cover-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 0; right: 0;
+        border-width: 0 24px 24px 0;
+        border-style: solid;
+        border-color: #222 #222 rgba(255,255,255,0.8) rgba(255,255,255,0.8);
+        box-shadow: -2px 2px 4px rgba(0,0,0,0.3);
+      }
+      .archive-card[data-type="Paper"]:hover .card-cover-wrapper,
+      .archive-card[data-type="Paper"]:focus .card-cover-wrapper {
+        transform: translateY(-10px) rotateZ(2deg);
+        box-shadow: 5px 15px 20px rgba(0,0,0,0.6);
+      }
+      [data-type="Paper"] .card-cover {
+        border-radius: 2px;
+      }
+
+      /* ESSAY (Parchment / Classic Document) */
+      [data-type="Essay"] .card-cover-wrapper {
+        aspect-ratio: 3 / 4;
+        border-radius: 0;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 4px 10px rgba(0,0,0,0.6);
+        border: 4px solid #fff;
+        background: #fff;
+      }
+      .archive-card[data-type="Essay"]:hover .card-cover-wrapper,
+      .archive-card[data-type="Essay"]:focus .card-cover-wrapper {
+        transform: translateY(-8px) scale(1.05);
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.5), 0 15px 25px rgba(0,0,0,0.8);
+      }
+      [data-type="Essay"] .card-cover {
+        border-radius: 0;
+      }
+
+      /* MANUAL (Spiral Bound) */
+      [data-type="Manual"] .card-cover-wrapper {
+        aspect-ratio: 4 / 5;
+        border-radius: 4px 12px 12px 4px;
+        box-shadow: -8px 0px 0px #444, 4px 4px 12px rgba(0,0,0,0.7);
+        border-left: 12px dashed #222;
+        background: #111;
+      }
+      .archive-card[data-type="Manual"]:hover .card-cover-wrapper,
+      .archive-card[data-type="Manual"]:focus .card-cover-wrapper {
+        transform: translateY(-12px);
+        box-shadow: -8px 5px 5px #444, 8px 15px 20px rgba(0,0,0,0.6);
+      }
+      [data-type="Manual"] .card-cover {
+        border-radius: 0 12px 12px 0;
+      }
+
+      /* DEVLOG (Screen / Terminal) */
+      [data-type="Devlog"] .card-cover-wrapper {
+        aspect-ratio: 16 / 9;
+        border-radius: 8px;
+        border: 2px solid #0f0;
+        box-shadow: 0 0 10px rgba(0,255,0,0.3);
+        background: #000;
+      }
+      .archive-card[data-type="Devlog"]:hover .card-cover-wrapper,
+      .archive-card[data-type="Devlog"]:focus .card-cover-wrapper {
+        transform: translateY(-8px);
+        box-shadow: 0 0 20px rgba(0,255,0,0.6);
+      }
+      [data-type="Devlog"] .card-cover {
+        border-radius: 6px;
+        opacity: 0.8;
+      }
+      .archive-card[data-type="Devlog"]:hover .card-cover {
+        opacity: 1;
       }
 
       .card-meta {
@@ -288,12 +370,23 @@ const basePath = import.meta.env.BASE_URL;
         background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.6) 100%);
         box-shadow: 0 15px 30px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1);
       }
-      :global(body.light-mode) .card-cover-wrapper {
+      :global(body.light-mode) [data-type="Book"] .card-cover-wrapper {
         box-shadow: -4px 0px 0px #eee, -6px 6px 15px rgba(0,0,0,0.2);
       }
-      :global(body.light-mode) .archive-card:hover .card-cover-wrapper, 
-      :global(body.light-mode) .archive-card:focus .card-cover-wrapper {
+      :global(body.light-mode) .archive-card[data-type="Book"]:hover .card-cover-wrapper, 
+      :global(body.light-mode) .archive-card[data-type="Book"]:focus .card-cover-wrapper {
         box-shadow: -1px 0px 0px #eee, 0px 20px 25px rgba(0,0,0,0.2);
+      }
+      :global(body.light-mode) [data-type="Paper"] .card-cover-wrapper::after {
+        border-color: #fdfdfd #fdfdfd rgba(0,0,0,0.2) rgba(0,0,0,0.2);
+      }
+      :global(body.light-mode) [data-type="Manual"] .card-cover-wrapper {
+        box-shadow: -8px 0px 0px #aaa, 4px 4px 12px rgba(0,0,0,0.2);
+        border-left: 12px dashed #666;
+      }
+      :global(body.light-mode) .archive-card[data-type="Manual"]:hover .card-cover-wrapper,
+      :global(body.light-mode) .archive-card[data-type="Manual"]:focus .card-cover-wrapper {
+        box-shadow: -8px 5px 5px #aaa, 8px 15px 20px rgba(0,0,0,0.2);
       }
       :global(body.light-mode) .catalog-title {
         text-shadow: none;

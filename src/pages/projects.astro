@@ -37,10 +37,6 @@ const types = [...new Set(portfolioItems.map(item => item.type))];
 
       <div class="search-filter-bar">
         <input type="text" id="projectSearch" class="search-input" placeholder="Search projects by name, badge, or keyword..." />
-        <select id="typeFilter" class="filter-dropdown">
-          <option value="all">All Types</option>
-          {types.map(type => <option value={type.toLowerCase()}>{type}</option>)}
-        </select>
       </div>
 
       <noscript>
@@ -69,26 +65,22 @@ const types = [...new Set(portfolioItems.map(item => item.type))];
     <script>
       document.addEventListener('astro:page-load', () => {
         const searchInput = document.getElementById('projectSearch') as HTMLInputElement;
-        const typeFilter = document.getElementById('typeFilter') as HTMLSelectElement;
         const projectCards = document.querySelectorAll('.project-card');
 
-        if (!searchInput || !typeFilter) return;
+        if (!searchInput) return;
 
         function filterCards() {
           const query = searchInput.value.toLowerCase();
-          const selectedType = typeFilter.value;
 
           projectCards.forEach(card => {
             const el = card as HTMLElement;
             const title = el.getAttribute('data-title') || '';
             const badges = el.getAttribute('data-badges') || '';
             const desc = el.getAttribute('data-desc') || '';
-            const type = el.getAttribute('data-type') || '';
 
             const matchesSearch = title.includes(query) || badges.includes(query) || desc.includes(query);
-            const matchesType = selectedType === 'all' || type === selectedType;
 
-            if (matchesSearch && matchesType) {
+            if (matchesSearch) {
               el.style.display = '';
             } else {
               el.style.display = 'none';
@@ -97,7 +89,6 @@ const types = [...new Set(portfolioItems.map(item => item.type))];
         }
 
         searchInput.addEventListener('input', filterCards);
-        typeFilter.addEventListener('change', filterCards);
       });
     </script>
     <style>
