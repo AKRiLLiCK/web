@@ -42,8 +42,11 @@ const basePath = import.meta.env.BASE_URL;
       </div>
 
       <div class="library-grid" id="catalogList">
-        {archiveEntries.map((entry) => (
+        {archiveEntries.map((entry) => {
+          const isNew = (new Date().valueOf() - entry.data.publishDate.valueOf()) <= 7 * 24 * 60 * 60 * 1000;
+          return (
           <a href={`${basePath}archive/${entry.id}`} class="archive-card catalog-row" data-type={entry.data.docType}>
+            {isNew && <div class="new-badge">NEW</div>}
             <div class="card-cover-wrapper">
               <Image 
                 src={entry.data.coverImage} 
@@ -57,10 +60,11 @@ const basePath = import.meta.env.BASE_URL;
             <div class="card-meta">
               <h2 class="catalog-title">{entry.data.title}</h2>
               <span class={`tag tag-${entry.data.docType.toLowerCase()} catalog-type`}>{entry.data.docType}</span>
+              <span class="catalog-date">{entry.data.publishDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
             </div>
             <span class="catalog-author" style="display: none;">{entry.data.author}</span>
           </a>
-        ))}
+        )})}
       </div>
     </div>
 
@@ -334,6 +338,28 @@ const basePath = import.meta.env.BASE_URL;
       .tag-manual { color: #000; background: linear-gradient(180deg, #ffdfba 0%, #eaab65 100%); }
       .tag-devlog { color: #000; background: linear-gradient(180deg, #e0b0ff 0%, #b268e3 100%); }
 
+      .new-badge {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: #f26522;
+        color: white;
+        font-weight: bold;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 12px;
+        z-index: 10;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        transform: rotate(10deg);
+        letter-spacing: 1px;
+      }
+
+      .catalog-date {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+      }
+
       /* Light Mode Overrides */
       :global(body.light-mode) .search-filter-bar {
         background: rgba(255, 255, 255, 0.4);
@@ -379,6 +405,9 @@ const basePath = import.meta.env.BASE_URL;
       }
       :global(body.light-mode) .catalog-title {
         text-shadow: none;
+      }
+      :global(body.light-mode) .catalog-date {
+        color: rgba(0, 0, 0, 0.6);
       }
     </style>
 
