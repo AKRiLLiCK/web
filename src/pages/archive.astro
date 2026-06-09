@@ -42,11 +42,9 @@ const basePath = import.meta.env.BASE_URL;
       </div>
 
       <div class="library-grid" id="catalogList">
-        {archiveEntries.map((entry) => {
-          const isNew = (new Date().valueOf() - entry.data.publishDate.valueOf()) <= 7 * 24 * 60 * 60 * 1000;
-          return (
+        {archiveEntries.map((entry) => (
           <a href={`${basePath}archive/${entry.id}`} class="archive-card catalog-row" data-type={entry.data.docType}>
-            {isNew && <div class="new-badge">NEW</div>}
+            {entry.data.publishDate.valueOf() >= (new Date().valueOf() - 7 * 24 * 60 * 60 * 1000) && <div class="new-badge">NEW</div>}
             <div class="card-cover-wrapper">
               <Image 
                 src={entry.data.coverImage} 
@@ -64,7 +62,7 @@ const basePath = import.meta.env.BASE_URL;
             </div>
             <span class="catalog-author" style="display: none;">{entry.data.author}</span>
           </a>
-        )})}
+        ))}
       </div>
     </div>
 
